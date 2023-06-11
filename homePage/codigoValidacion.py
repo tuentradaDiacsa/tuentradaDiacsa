@@ -30,7 +30,8 @@ def almacenaCelularValidador(celular,codigoValidacion):
     return
 
 def buscarCodigoEnBaseDatos(celularIngresado, codigoValidacionIngresado):
-    if smsValidacionCelular.objects.filter(celular = celularIngresado, codigoValidacion=codigoValidacionIngresado, estado=0).exists():
+    ultimo_registro = smsValidacionCelular.objects.filter(celular=celularIngresado).latest('correlativo')
+    if ultimo_registro.codigoValidacion == codigoValidacionIngresado and ultimo_registro.estado == 0:
         return True
     else:
         return False
