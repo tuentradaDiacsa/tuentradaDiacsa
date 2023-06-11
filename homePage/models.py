@@ -6,7 +6,7 @@ class Pagos(models.Model):
     cip = models.TextField() #Aleatorio 6 digitos
     pin = models.TextField(blank=True, null=True)       
     monto = models.TextField()
-    confirmado = models.DateTimeField(blank=True, null=True)         #Por defecto blanco
+    confirmado2 = models.DateTimeField(blank=True, null=True)         #Por defecto blanco
     smsTicketsPagados = models.DateTimeField(blank=True, null=True)               #Por defecto false
     nombre = models.TextField(max_length=40, blank=True, null=True)
     correo = models.TextField(max_length=20, blank=True, null=True)
@@ -24,10 +24,10 @@ class Tickets(models.Model):
     fechaHoraCambio         = models.DateTimeField(blank=True, null=True) #Fecha generacion igual a la del pin cambio igual a generacion pero con reinicio si se transfiere
     celular                 = models.TextField()
     whatsapp                = models.TextField(blank=True, null=True) 
-
+    
     tipo       = models.TextField()
     cip        = models.TextField()  #antes recibo
-    confirmado = models.DateTimeField(blank=True, null=True)
+    confirmado2 = models.DateTimeField(blank=True, null=True)         #Por defecto blanco
     
     nombre    = models.TextField(max_length=40, blank=True, null=True)
     correo    = models.TextField(max_length=50, blank=True, null=True)

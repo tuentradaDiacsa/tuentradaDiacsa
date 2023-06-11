@@ -80,10 +80,19 @@ WSGI_APPLICATION = 'tuEntrada.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:postgres@localhost/postgres',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tuentradadiacsa_trial',
+        'USER': 'tuentradadiacsa_trial_user',
+        'PASSWORD': 'L7MkbXb7ar4kZ9EHzXKJeRffYyBEIRik',
+        'HOST': 'dpg-ci2u58ak728i8tbn8u50-a.oregon-postgres.render.com',
+        'PORT': '5432',
+    }
+    #'default': dj_database_url.config(
+    #    default='postgresql://postgres:postgres@localhost/postgres',
+    #    conn_max_age=600
+    #)
+
 }
 
 
@@ -129,7 +138,7 @@ if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'homePage/templates'),
 ]
