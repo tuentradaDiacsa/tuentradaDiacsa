@@ -9,48 +9,56 @@
     <title>Tuentrada Pe</title>
     <!--Custom CSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="{% static 'resumenPage/styles.css' %}">
 </head>
 
-<body>
+<body id="bodyTodo">
     <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
         {% csrf_token %}
         <div class="header">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"></img></div>
+            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"
+                    onclick="javascript:location.reload(true)"></img></div>
         </div>
         <div class="resumenCompraBanner" id="resumenCompraBanner">
             <p>RESUMEN DE COMPRA</p>
         </div>
+        <img class="imagenEnCelular" src="{% static 'resumenPage/banner.png' %}" />
         <div class="containerTodo" id="containerTodo">
-            <div class="columnaEntradas"><img src="{% static 'resumenPage/banner.png' %}" width="400px"></img>
+            <div class="columnaEntradas"><img class="imagenesBanner" src="{% static 'resumenPage/banner.png' %}"
+                    width="100%"></img>
                 <div class="containerInformacionEvento">
-                    <h3 style="margin-bottom: 5px;">GRUPO 5 EN IQUITOS</h3>
-                    <i class="fas fa-map-marked-alt" style="padding-left: 10px; margin-top: -15px;"> Centro de
+                    <h3 class="tituloEvento">GRUPO 5 EN IQUITOS</h3>
+                    <i class="fas fa-map-marked-alt"> Centro de
                         convenciones del Pardo</i>
                     <div class="blankspace"></div>
-                    <i class="fas fa-calendar-alt" style="padding-left: 10px; margin-top: -15px;"> Domingo 25 de Junio
+                    <i class="fas fa-calendar-alt"> Domingo 25 de Junio
                         2023</i>
                     <div class="blankspace"></div>
-                    <i class="fas fa-clock" style="padding-left: 10px; margin-top: -15px;"> Inicio 3:00 PM</i>
+                    <i class="fas fa-clock"> Inicio 3:00 PM</i>
                     <div class="blankspace"></div>
                     <div class="linea-horizontal"></div>
-                    <h3>ENTRADAS</h3>
-                    {% for key, value in entradas.items %}
-                    <div id="{{key}}"
-                        style="display: grid; justify-content: center; align-items: center; grid-template-columns: 1fr 8fr 1fr;">
-                        <i class="fas fa-circle"></i>
-                        <p id="Nombre{{key}}"><b>{{ value.id }}</b></p>
-                        <p>× {{ value.cantidad }}</p>
-                        <input hidden id="ID{{key}}" name="ID{{key}}" value="ID{{value.id}}">
-                        <input hidden id="cantidad{{key}}" name="cantidad{{key}}" value="{{value.cantidad}}">
+                    <h3 class="entradasTitulo">ENTRADAS</h3>
+                    <div class="entradasInfo">
+                        {% for key, value in entradas.items %}
+                        <div id="{{key}}"
+                            style="margin-top:-20px; display: grid; justify-content: center; align-items: center; grid-template-columns: 1fr 8fr 1fr;">
+                            <i class="fas fa-circle" style="font-size: 10px;"></i>
+                            <p id="Nombre{{key}}" style="margin-right: 10px;"><b>{{ value.id }}</b></p>
+                            <p>× {{ value.cantidad }}</p>
+                            <input hidden id="ID{{key}}" name="ID{{key}}" value="ID{{value.id}}">
+                            <input hidden id="cantidad{{key}}" name="cantidad{{key}}" value="{{value.cantidad}}">
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+
                 </div>
             </div>
-            <div class="columnaBlanco">
-
-            </div>
+            <div class="dummy"></div>
             <div class="columnaPago">
                 <div class="tituloColumnaPago">INFORMACION DE PAGO</div>
                 <div class="containerEmpresa">Empresa: Iquitos PRODUCCIONES</div>
@@ -58,8 +66,7 @@
                     <div class="containerCIP">
                         <p>Con este codigo <b style="padding-left: 5px; padding-right: 5px;"><u>CIP</u> </b> page su
                             entrada</p>
-                        <div style="justify-content: center; display: flex; margin-top: -25px;font-size: 25px;"><i
-                                class="far fa-copy"></i> {{response.cip}}</div>
+                        <div class="cuadroCIP"><i class="far fa-copy"></i> {{response.cip}}</div>
                         <input hidden id="cip" name="cip" value="{{response.cip}}">
                     </div>
                     <div class="containerMonto">
@@ -74,31 +81,31 @@
                 <div class="containerPagarCon">
                     <div class="pagarConColumna1">
                         <div><b>Pagar con:</b></div>
-                        <div style="justify-content: center; display: flex;margin-top: 10px;"><img
-                                src="{% static 'resumenPage/qr.png' %}" width="150px"></img></div>
+                        <div style="justify-content: center; display: flex;margin-top: 10px; height: auto;"><img
+                                class="qrimage" src="{% static 'resumenPage/qr.png' %}" width="150px"></img></div>
                     </div>
                     <div class="pagarConColumna2">
 
                         <div
-                            style="justify-content: center; display: flex; align-items: center; margin-top: 20px; width: 225;">
+                            style="justify-content: center; display: flex; align-items: center; margin-top: 20px; width: 100%;">
                             <img style="border-radius: 10px;" src="{% static 'comprarPage/yapeicon.png' %}"
-                                width="80px"></img>
-                            <div style="min-width: 20px;"></div>
+                                width="50px"></img>
+                            <div style="min-width: 10%;"></div>
                             <img style="border-radius: 10px;" src="{% static 'comprarPage/plinicon.png' %}"
-                                width="80px"></img>
+                                width="50px"></img>
                         </div>
                         <div
-                            style="justify-content: center; display: grid; align-items: end; margin-top: 20px; width: 225px;">
+                            style="justify-content: center; display: grid; align-items: end; margin-top: 20px; width: 100%">
                             <div
-                                style="margin: 20px; width: 200px; height: 40px; align-items: center; border-radius: 10px; background-color: red; justify-content: end; display: flex; font-size: 24px; padding-right: 10px;">
-                                <i class="far fa-copy" style="padding-right: 8px;"></i>
+                                style="width: 100%; height: 40px; align-items: center; border-radius: 10px; background-color: red; justify-content: end; display: flex; font-size: 24px; padding-right: 10px;">
+                                <i class="far fa-copy" style="padding: 8px, 0, 8px, 0;"></i>
                                 965 605 750
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <div>
+                <div class="mensajes">
                     <div>
                         <p style="font-size: 14px; margin-top: -5px;"><b>1.</b> Ingresa a Yape o Plin.</p>
                     </div>
@@ -117,7 +124,7 @@
                     </div>
                 </div>
 
-                <div class="pagarConColumna1"><b>Pagar con:</b></div>
+                <div class="pagarConColumna1" style="margin-bottom: -170px;margin-top: 20px;"><b>Pagar con:</b></div>
                 <div class="containerCuentasBCP">
                     <div class="containerCuentas">
                         <div class="containerCuenta1">
@@ -125,7 +132,7 @@
                             <i class="far fa-copy" style="padding-left: 10px;"></i>
                         </div>
                         <div class="containerCuenta2">
-                            <p style="margin-left: 10px;">CC Interbancaria: 002-39000984036602731</p>
+                            <p style="margin-left: 10px;">CCI: 002-39000984036602731</p>
                             <i class="far fa-copy" style="padding-left: 10px;"></i>
                         </div>
                     </div>
@@ -157,6 +164,30 @@
                     <div class="CancelarBoton" onclick="cancelar()">CANCELAR</div>
                     <input hidden id="boton" name="boton" value="">
                 </div>
+            </div>
+
+            <div class="containerInformacionEventoCelular">
+                <h3 class="tituloEvento">GRUPO 5 EN IQUITOS</h3>
+                <i class="fas fa-map-marked-alt" style="padding-left: 10px; margin-top: -15px;"> Centro de
+                    convenciones del Pardo</i>
+                <div class="blankspace"></div>
+                <i class="fas fa-calendar-alt" style="padding-left: 10px; margin-top: -15px;"> Domingo 25 de Junio
+                    2023</i>
+                <div class="blankspace"></div>
+                <i class="fas fa-clock" style="padding-left: 10px; margin-top: -15px;"> Inicio 3:00 PM</i>
+                <div class="blankspace"></div>
+                <div class="linea-horizontal"></div>
+                <h3 class="entradasTitulo">ENTRADAS</h3>
+                {% for key, value in entradas.items %}
+                <div id="{{key}}" style="display: grid; justify-content: center; align-items: center; grid-template-columns: 1fr 8fr
+                    1fr;">
+                    <i class="fas fa-circle"></i>
+                    <p id="Nombre{{key}}"><b>{{ value.id }}</b></p>
+                    <p>× {{ value.cantidad }}</p>
+                    <input hidden id="ID{{key}}" name="ID{{key}}" value="ID{{value.id}}">
+                    <input hidden id="cantidad{{key}}" name="cantidad{{key}}" value="{{value.cantidad}}">
+                </div>
+                {% endfor %}
             </div>
 
         </div>
