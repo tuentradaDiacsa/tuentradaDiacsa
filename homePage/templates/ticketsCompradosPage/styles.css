@@ -3,7 +3,7 @@ html {
 }
 
 .header {
-    background-color: rgba(255, 0, 67, 0.97);
+    background-color: #FF0043;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     height: 45px;
     width: 100%;
@@ -21,7 +21,7 @@ html {
 }
 
 .footer {
-    background-color: rgba(255, 0, 67, 0.97);
+    background-color: #FF0043;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     height: 45px;
     width: 100%;
@@ -57,7 +57,7 @@ body {
     padding: 0;
     height: 60px;
     width: 100%;
-    background-color: rgba(178, 146, 227, 0.97);
+    background-color: #7643F6;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,8 +69,16 @@ body {
 }
 
 .containerTicketsDescargar {
+    justify-items: center;
     display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
+    margin-bottom: 60px;
+}
+
+.entradaContainer {
+    height: 50px;
+    width: 300px;
 }
 
 .containerDescarga {
@@ -80,7 +88,7 @@ body {
     justify-content: center;
     align-items: center;
 
-    background-color: #4CAF50;
+    background-color: #7643F6;
     width: 300px;
     border-radius: 12px;
     color: white;
@@ -671,4 +679,24 @@ input {
     flex: 1;
     width: 200px;
     text-align: right;
+}
+
+@media(max-width : 1100px) {
+    .containerTicketsDescargar {
+        justify-items: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: center;
+        margin-bottom: 60px;
+    }
+}
+
+@media(max-width : 600px) {
+    .containerTicketsDescargar {
+        justify-items: center;
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-content: center;
+        margin-bottom: 60px;
+    }
 }
