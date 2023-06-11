@@ -1,3 +1,7 @@
+window.onbeforeunload = function () {
+    location.reload(true);
+}
+
 ScrollReveal().reveal('.resumenCompraBanner, .containerTodo', {
     delay: 200, // Retraso en milisegundos antes de que aparezca cada elemento
     distance: '50px', // Distancia de desplazamiento desde la posición original
