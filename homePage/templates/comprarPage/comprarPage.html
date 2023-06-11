@@ -93,13 +93,13 @@
                 <div>Celular</div>
                 <input type="text" placeholder="Numero de celular" maxlength="9" onkeypress="return soloNumeros(event)"
                     id="celular" name="celular">
-                <button type="button" onclick="enviarSMS()">SMS</button>
+                <button type="button" id="buttonSMS" onclick="enviarSMS()">SMS</button>
             </div>
             <div class="contenedorCodigo" id="contenedorCodigo">
                 <div>Codigo</div>
                 <input type="text" placeholder="Codigo validacion" maxlength="6" id="codigo" name="codigo"
-                    onkeypress="return uppercase(event)">
-                <button type="button" onclick="enviarCodigo()">Validar</button>
+                    oninput="uppercase(event)">
+                <button type="button" id="buttonValidar" onclick="enviarCodigo()">Validar</button>
             </div>
             <div class="contenedorPin" id="contenedorPin">
                 <div>PIN</div>
