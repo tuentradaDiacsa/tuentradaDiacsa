@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
                 ('tipo', models.PositiveIntegerField()),
                 ('descripcion', models.TextField()),
                 ('precio', models.PositiveIntegerField()),
-                ('cantidad', models.PositiveBigIntegerField()),
+                ('cantidad', models.PositiveBigIntegerField(default=100)),
             ],
         ),
     ]

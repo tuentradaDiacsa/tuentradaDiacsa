@@ -21,9 +21,4 @@ class Migration(migrations.Migration):
                 'db_table': 'CelularesyCodigosValidacion',
             },
         ),
-        migrations.AddField(
-            model_name='tipos',
-            name='cantidad',
-            field=models.PositiveBigIntegerField(default=100),
-        ),
     ]
