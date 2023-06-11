@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuentrada Pe</title>
+    <!--Custom CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="stylesheet" href="{% static 'validarPage/styles.css' %}">
+</head>
+
+<body>
+    <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
+        {% csrf_token %}
+        <div class="header">
+            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"></img></div>
+        </div>
+        <div class="todoEntradas">
+            <div class="seleccionarFechaBanner">Verificar ticket</div>
+            <div class="contenedorPin" id="contenedorPin">
+                <div># Ticket</div>
+                <input type="text" placeholder="Numero de ticket" maxlength="6" id="ticket" name="ticket"
+                    onkeypress="return soloNumeros(event)">
+            </div>
+            <div class="contenedorDNI" id="contenedorDNI">
+                <div>PIN</div>
+                <input type="password" placeholder="Ingresar PIN" maxlength="6" id="cip" name="cip"
+                    onkeypress="return soloNumeros(event)">
+
+            </div>
+            <div class="comprarBotonFinal" id="comprarBotonFinal" onclick="verificar()">Verificar</div>
+            <div class="datosCompradorTexto" id="datosCompradorTexto">
+                <p id="resultado"> </p>
+            </div>
+        </div>
+
+        <div class="blankspace2"></div>
+
+        <div class="footer">
+            <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
+            </div>
+        </div>
+        <!-- Scripts -->
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            var comprarPageUrl = "{% url 'comprarPage' %}";
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="{% static 'validarPage/script.js' %}"></script>
+    </form>
+
+</body>
+
+</html>

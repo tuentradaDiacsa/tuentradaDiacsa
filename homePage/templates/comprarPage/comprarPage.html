@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuentrada Pe</title>
+    <!--Custom CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="stylesheet" href="{% static 'comprarPage/styles.css' %}">
+</head>
+
+<body>
+    <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
+        {% csrf_token %}
+        <div class="header">
+            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"
+                    onclick="javascript:location.reload(true)"></img></div>
+        </div>
+        <div class="banner"><img src="{% static 'comprarPage/banner.png' %}" width="100%"></img></div>
+        <div class="seleccionarFechaBanner">
+            <p>SELECCIONAR FECHA</p>
+        </div>
+        <div class="blankspace"></div>
+        <div class="Absolute-Center">
+            <div class="fechaBotonBanner" id="fechaBotonBanner">
+                <p>Domingo 25 de Junio</p>
+                <div id="fechaSinCheck"><i class="far fa-circle" id="circleIcon"></i></div>
+                <div hidden id="fechaConCheck"><i class="far fa-check-circle" id="circleCheckIcon"></i></div>
+            </div>
+        </div>
+        <div class="blankspace"></div>
+        <div hidden class="todoEntradas" id="todoEntradas">
+            <div class="imagenIzquierda">
+                <img src="{% static 'comprarPage/zonas.png' %}" alt="Imagen" id="imagenZonas">
+            </div>
+            <div class="entradaPorFilas">
+                {% for entrada in entradas %}
+                <div class="entradaFila{{entrada.id}}">
+                    <div class="entradaColumna1"><i class="fas fa-circle"></i></div>
+                    <div class="entradaColumna2">{{entrada.descripcion}}</div>
+                    <div class="entradaColumna3">
+                        <p id="entradaPrecio{{entrada.id}}">S/. {{entrada.precio}}</p>
+                    </div>
+                    <div class="entradaColumna4"><i class="fas fa-minus-circle"
+                            onclick="disminuir('{{entrada.id}}')"></i>
+                    </div>
+                    <div class="entradaColumna5">
+                        <p id="cantidadVisible{{entrada.id}}">00</p>
+                        <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
+                    </div>
+                    <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.id}}')"></i>
+                    </div>
+                    <div class="entradaColumna7">
+                        <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="totalEntradasDiv">
+                    <div class="totalMontoDiv">
+                        <div class="totalTexto">
+                            <p>Total S/.</p>
+                        </div>
+                        <div class="dummy"> </div>
+                        <div class="totalEstatico">
+                            <p id="totalEstatico">0</p>
+                        </div>
+                    </div>
+                    <div></div>
+                    <div class="totalBotonDiv" id="comprarBoton" onclick="comprar()">COMPRAR</div>
+                    <input hidden id="boton" name="boton" value="">
+                </div>
+            </div>
+        </div>
+        <div class="blankspace"></div>
+
+        <div class="datosCompradorTexto" id="datosCompradorTexto">
+            <p>Datos del comprador</p>
+        </div>
+
+        <div class="blankspace"></div>
+        <div class="todoObligatorio" id="todoObligatorio">
+            <div class="contenedorCelular" id="contenedorCelular">
+                <div>Celular</div>
+                <input type="text" placeholder="Numero de celular" maxlength="9" onkeypress="return soloNumeros(event)"
+                    id="celular" name="celular">
+                <button type="button" onclick="enviarSMS()">SMS</button>
+            </div>
+            <div class="contenedorCodigo" id="contenedorCodigo">
+                <div>Codigo</div>
+                <input type="text" placeholder="Codigo validacion" maxlength="6" id="codigo" name="codigo"
+                    onkeypress="return uppercase(event)">
+                <button type="button" onclick="enviarCodigo()">Validar</button>
+            </div>
+            <div class="contenedorPin" id="contenedorPin">
+                <div>PIN</div>
+                <input type="text" placeholder="Ingrese PIN" maxlength="10" id="pin" name="pin"
+                    onkeypress="return soloNumeros(event)">
+                <button type="button">Validar</button>
+            </div>
+            <!-- <div class="contenedorMedioPago" id="contenedorMedioPago">
+                <div><input type="radio" name="opciones" value="Yape"></div>
+                <div><img src="{% static 'comprarPage/yapeicon.png' %}" alt="Icono 1" class="icono"></div>
+                <div><input type="radio" name="opciones" value="Plin"></div>
+                <div><img src="{% static 'comprarPage/plinicon.png' %}" alt="Icono 1" class="icono"></div>
+                <div><input type="radio" name="opciones" value="Transferencia"></div>
+                <div><img src="{% static 'comprarPage/bcpicon.png' %}" alt="Icono 1" class="icono"></div>
+            </div> -->
+            <div class="contenedorNombre" id="contenedorNombre">
+                <div class="labelInput">Nombre</div>
+                <input type="text" placeholder="Nombres y apellidos" maxlength="59" id="nombre" name="nombre">
+                <button type="button">Validar</button>
+            </div>
+            <div class="contenedorDNI" id="contenedorDNI">
+                <div class="labelInput">DNI</div>
+                <input type="text" placeholder="Numero de DNI" maxlength="8" id="dni" name="dni"
+                    onkeypress="return soloNumeros(event)">
+                <button type="button">Validar</button>
+            </div>
+            <div class="contenedorCorreo" id="contenedorCorreo">
+                <div class="labelInput">Correo</div>
+                <input type="text" placeholder="Correo electronico" maxlength="50" id="correo" name="correo">
+                <button type="button">Validar</button>
+            </div>
+
+            <div class="contenedorPregunta" id="contenedorPregunta1">
+                <div class="labelInput">Pregunta</div>
+                <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                    {% for pregunta in preguntas %}
+                    <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button">Validar</button>
+            </div>
+
+            <div class="contenedorRespuesta" id="contenedorRespuesta1">
+                <div class="labelInput"></div>
+                <input type="text" placeholder="Respuesta a la pregunta 1" maxlength="59" id="respuesta1"
+                    name="respuesta1" style="margin-top: -25px;">
+                <button type="button">Validar</button>
+            </div>
+
+            <div class="contenedorPregunta" id="contenedorPregunta2">
+                <div class="labelInput">Pregunta</div>
+                <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                    {% for pregunta in preguntas %}
+                    <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button">Validar</button>
+            </div>
+
+            <div class="contenedorRespuesta" id="contenedorRespuesta2">
+                <div class="labelInput"></div>
+                <input type="text" placeholder="Respuesta a la pregunta 2" maxlength="59" id="respuesta2"
+                    name="respuesta2" style="margin-top: -25px;">
+                <button type="button">Validar</button>
+            </div>
+
+
+        </div>
+        <div class="comprarBotonFinal" id="comprarBotonFinal" onclick="comprar()">COMPRAR</div>
+        <div class="blankspace2"></div>
+        <div class="footer">
+            <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
+            </div>
+        </div>
+        <!-- Scripts -->
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            var comprarPageUrl = "{% url 'comprarPage' %}";
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="{% static 'comprarPage/script.js' %}"></script>
+    </form>
+
+</body>
+
+</html>

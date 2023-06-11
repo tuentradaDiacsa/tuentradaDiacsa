@@ -1,0 +1,770 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.header {
+    background-color: #FF0043;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    height: 45px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 9999;
+}
+
+.imagenHeader {
+    margin-left: 10%;
+    width: 50%;
+}
+
+.footer {
+    background-color: #FF0043;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    height: 45px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    grid-template-columns: 1fr;
+    display: grid;
+    justify-content: right;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: white;
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    justify-content: center;
+}
+
+.banner {
+    width: 100%;
+    margin-top: 45px;
+    display: flex;
+    justify-content: center;
+}
+
+.seleccionarFechaBanner {
+    margin: 0;
+    padding: 0;
+    height: 60px;
+    width: 100%;
+    background-color: #7643F6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+
+}
+
+.blankspace {
+    margin-top: 30px;
+}
+
+.blankspace2 {
+    margin-top: 200px;
+}
+
+
+.fechaBotonBanner {
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    align-items: center;
+    position: relative;
+    background-color: #FF0043;
+    margin-top: 20px;
+    height: 60px;
+    width: 300px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.fechaBotonBanner:hover {
+    opacity: 0.8;
+    /* Cambio de opacidad al pasar el mouse */
+}
+
+
+
+.fechaBotonBanner p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    /* Ajusta el espacio entre la letra y los iconos */
+}
+
+.todoEntradas {
+    margin-top: 10px;
+    justify-content: center;
+    display: none;
+    visibility: hidden;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 150px 30px 50px 30px 150px 150px;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . ."
+        ". . . . . .";
+}
+
+.imagenIzquierda {
+    float: left;
+    margin-right: 10px;
+    /* Opcional: ajusta el margen derecho según tus necesidades */
+}
+
+.entradaPorFilas {
+    overflow: hidden;
+    /* Para limpiar el float y evitar colapsos de altura */
+}
+
+.entradaFila1,
+.entradaFila2,
+.entradaFila3,
+.entradaFila4,
+.entradaFila5,
+.entradaFila6,
+.entradaFila7 {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    height: 60px;
+    width: 700px;
+    background-color: white;
+    display: grid;
+    grid-template-columns: 50px 300px 100px 40px 60px 40px 70px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16 px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    /* Agrega la sombra aquí */
+}
+
+.entradaFila1 {
+    color: yellow;
+    background-color: #ededed;
+}
+
+.entradaFila2 {
+    color: #01A0E2;
+    background-color: #ededed;
+}
+
+.entradaFila3 {
+    color: lawngreen;
+    background-color: #ededed;
+}
+
+.entradaFila4 {
+    color: #EC1074;
+    background-color: #ededed;
+}
+
+.entradaFila5 {
+    color: #C203F1;
+    background-color: #ededed;
+}
+
+.entradaFila6 {
+    color: #F9970E;
+    background-color: #ededed;
+}
+
+.entradaFila7 {
+    color: yellow;
+    background-color: #ededed;
+}
+
+.entradaColumna1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-size: 25px;
+    margin-left: -15px;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+.entradaColumna2 {
+    color: black;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+}
+
+
+.entradaColumna4,
+.entradaColumna6 {
+    color: #858484;
+    font-size: 25px;
+    margin-left: 25px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.entradaColumna4:hover,
+.entradaColumna6:hover {
+    color: #C203F1;
+    cursor: pointer;
+}
+
+
+.entradaColumna5 {
+    color: black;
+    font-size: 20px;
+    margin-left: 25px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.entradaColumna3 {
+    font-size: 20px;
+    color: black;
+    margin-left: 25px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+
+.entradaColumna7 {
+    color: #FF0043;
+    margin-left: 25px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.totalEntradasDiv {
+    display: grid;
+    grid-template-columns: 400px 50px 200px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.totalMontoDiv {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    height: 60px;
+    width: 400px;
+    background-color: white;
+    display: grid;
+    grid-template-columns: 200px 50px 100px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16 px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.totalBotonDiv,
+.comprarBotonFinal {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: #FF0043;
+    height: 60px;
+    width: 200px;
+    border-radius: 10px;
+    color: white;
+
+}
+
+.comprarBotonFinal {
+    display: none;
+    visibility: hidden;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-top: 20px;
+    left: 40%;
+    height: 60px;
+    width: 20%;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+/*.totalBotonDiv:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}*/
+.Absolute-Center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+}
+
+
+
+.datosCompradorTexto {
+    margin: 0;
+    padding: 0;
+    height: 60px;
+    width: 100%;
+    background-color: #7643F6;
+    display: none;
+    visibility: hidden;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+}
+
+.todoObligatorio {
+    margin-top: 10px;
+    justify-content: center;
+    display: none;
+    visibility: hidden;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+
+.contenedorCelular,
+.contenedorCodigo,
+.contenedorPin,
+.contenedorNombre,
+.contenedorDNI,
+.contenedorCorreo,
+.contenedorPregunta,
+.contenedorRespuesta {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    height: 60px;
+    width: 600px;
+    display: grid;
+    grid-template-columns: 100px 250px 100px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16 px;
+    border-radius: 10px;
+}
+
+.contenedorCodigo {
+    display: none;
+    visibility: hidden;
+}
+
+.contenedorPin,
+.contenedorNombre,
+.contenedorDNI,
+.contenedorCorreo,
+.contenedorPregunta,
+.contenedorRespuesta {
+    display: none;
+    visibility: hidden;
+}
+
+.contenedorPin input,
+.contenedorCelular input,
+.contenedorCodigo input,
+.contenedorNombre input,
+.contenedorDNI input,
+.contenedorCorreo input,
+.contenedorPregunta select,
+.contenedorRespuesta input {
+    padding: 10px;
+    width: 200px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.contenedorNombre input,
+.contenedorRespuesta input {
+    width: 300px;
+}
+
+.contenedorPregunta select {
+    width: 320px;
+}
+
+.contenedorCelular button,
+.contenedorCodigo button {
+    width: 100px;
+    padding: 10px;
+    margin-left: 10px;
+    background-color: #7643F6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.contenedorCelular button:hover,
+.contenedorCodigo button:hover {
+    opacity: 0.8;
+}
+
+.contenedorPin button,
+.contenedorNombre button,
+.contenedorDNI button,
+.contenedorCorreo button,
+.contenedorPregunta button,
+.contenedorRespuesta button {
+
+    visibility: hidden;
+}
+
+.contenedorMedioPago {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    height: 60px;
+    width: 600px;
+    display: none;
+    visibility: hidden;
+    grid-template-columns: 120px 50px 120px 50px 120px 50px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16 px;
+    border-radius: 10px;
+}
+
+.icono {
+    width: 30px;
+    height: auto;
+}
+
+
+@media (pointer: coarse) {
+    .seleccionarFechaBanner {
+        height: 50px;
+        align-items: center;
+        font-size: 25px;
+    }
+
+    .fechaBotonBanner {
+        margin-top: 0px;
+    }
+
+    #imagenZonas {
+        width: 100%;
+    }
+
+    .entradaPorFilas {
+        width: 100%;
+    }
+
+    .entradaFila1,
+    .entradaFila2,
+    .entradaFila3,
+    .entradaFila4,
+    .entradaFila5,
+    .entradaFila6,
+    .entradaFila7 {
+        height: 70px;
+        margin-left: 2%;
+        width: 96%;
+        grid-template-columns: 5% 40% 16% 7% 10% 7% 15%;
+    }
+
+    .entradaColumna1 {
+        margin-left: 10px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        font-size: 10px;
+    }
+
+    .entradaColumna2 {
+        font-weight: bold;
+        font-size: 13px;
+        margin-left: 10px;
+        margin-right: 10px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+    }
+
+
+    .entradaColumna4,
+    .entradaColumna6,
+    .entradaColumna4:hover,
+    .entradaColumna6:hover {
+        color: gray;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        justify-items: center;
+    }
+
+    .entradaColumna5 {
+        color: black;
+        font-size: 20px;
+        margin-left: 15px;
+        display: flex;
+        justify-content: center;
+        justify-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .entradaColumna3 {
+        color: black;
+        display: flex;
+        justify-content: start;
+        justify-items: center;
+        font-size: 13px;
+    }
+
+
+    .entradaColumna7 {
+        color: #FF0043;
+        display: flex;
+        margin-right: 10px;
+        justify-content: end;
+        align-items: center;
+        font-size: 12px;
+    }
+
+    .entradaColumna4:active,
+    .entradaColumna6:active {
+        color: #7643F6;
+        cursor: pointer;
+    }
+
+    .totalEntradasDiv {
+        justify-self: center;
+        justify-content: start;
+        align-items: center;
+        display: flex;
+        width: 96%;
+        margin-top: 15px;
+        margin-left: 2%;
+    }
+
+    .totalMontoDiv {
+        margin: 0;
+        width: 50%;
+        justify-self: center;
+        justify-items: center;
+        display: flex;
+        align-items: center;
+    }
+
+    .totalBotonDiv {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        justify-self: end;
+        width: 40%;
+        margin: 0;
+        margin-right: 0;
+        margin-left: auto;
+        background-color: #858484;
+    }
+
+    .datosCompradorTexto {
+        height: 50px;
+        align-items: center;
+        font-size: 25px;
+    }
+
+    .todoObligatorio {
+        margin-left: 2%;
+        width: 96%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .contenedorCodigo {
+        visibility: hidden;
+    }
+
+    .contenedorPin,
+    .contenedorNombre,
+    .contenedorDNI,
+    .contenedorCorreo,
+    .contenedorPregunta,
+    .contenedorRespuesta {
+        display: none;
+        visibility: hidden;
+    }
+
+
+    .contenedorCelular,
+    .contenedorCodigo {
+        margin: 0;
+        margin-left: 2%;
+        padding: 0;
+        height: 60px;
+        width: 96%;
+        grid-template-columns: 30% 40% 30%;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Poppins', sans-serif;
+        font-size: 16 px;
+        border-radius: 10px;
+    }
+
+
+    .contenedorPin,
+    .contenedorNombre,
+    .contenedorDNI,
+    .contenedorCorreo,
+    .contenedorPregunta,
+    .contenedorRespuesta {
+        margin: 0;
+        margin-left: 2%;
+        padding: 0;
+        height: 60px;
+        width: 96%;
+        grid-template-columns: 35% 64% 1%;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Poppins', sans-serif;
+        font-size: 16 px;
+        border-radius: 10px;
+    }
+
+    .labelInput {
+        width: 95%;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .contenedorCelular input,
+    .contenedorCodigo input,
+    .contenedorPin input,
+    .contenedorNombre input,
+    .contenedorDNI input,
+    .contenedorCorreo input,
+    .contenedorPregunta select,
+    .contenedorRespuesta input {
+        width: 85%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contenedorPregunta select {
+        width: 95%;
+    }
+
+    .contenedorCelular button,
+    .contenedorCodigo button,
+    .contenedorPin button,
+    .contenedorNombre button,
+    .contenedorDNI button,
+    .contenedorCorreo button,
+    .contenedorPregunta button,
+    .contenedorRespuesta button {
+        width: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        justify-self: end;
+    }
+
+    .contenedorPin button,
+    .contenedorNombre button,
+    .contenedorDNI button,
+    .contenedorCorreo button,
+    .contenedorPregunta button,
+    .contenedorRespuesta button {
+
+        visibility: hidden;
+        width: 95%;
+    }
+
+    .comprarBotonFinal {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background-color: #858484;
+        height: 60px;
+        width: 200px;
+        border-radius: 10px;
+        color: white;
+
+        display: none;
+        visibility: hidden;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-top: 20px;
+        left: 25%;
+        height: 60px;
+        width: 50%;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+    }
+
+}
