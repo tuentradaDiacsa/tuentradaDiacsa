@@ -183,10 +183,15 @@ function enviarCodigo() {
                 document.getElementById("codigo").setAttribute("disabled", "disabled");
                 validado = true
             }
+            else {
+                alert("El codigo ingresado no es correcto.");
+            }
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
+
             console.error('Error:', error);
+
         }
     });
 }
