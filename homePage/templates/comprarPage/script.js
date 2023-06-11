@@ -1,3 +1,11 @@
+window.onbeforeunload = function () {
+    document.getElementById("comprarForm").reset();
+};
+
+window.addEventListener('pageshow', function (event) {
+    var form = document.getElementById('comprarForm');
+    form.reset();
+});
 ScrollReveal().reveal('.banner, .seleccionarFechaBanner, .fechaBotonBanner', {
     delay: 200, // Retraso en milisegundos antes de que aparezca cada elemento
     distance: '50px', // Distancia de desplazamiento desde la posición original
@@ -32,20 +40,20 @@ document.getElementById("comprarBoton").addEventListener("mouseover", function (
 
 document.getElementById("comprarBoton").addEventListener("mouseleave", function () {
     // Acciones a realizar cuando el cursor sale del div (hover)
-    document.getElementById("comprarBoton").style.cursor  = "auto";
+    document.getElementById("comprarBoton").style.cursor = "auto";
     document.getElementById("comprarBoton").style.opacity = "1";
 });
 
 document.getElementById("comprarBotonFinal").addEventListener("mouseover", function () {
     if (camposLlenos()) {
-        document.getElementById("comprarBotonFinal").style.cursor  = "pointer";
+        document.getElementById("comprarBotonFinal").style.cursor = "pointer";
         document.getElementById("comprarBotonFinal").style.opacity = "0.8";
     }
 });
 
 document.getElementById("comprarBotonFinal").addEventListener("mouseleave", function () {
     // Acciones a realizar cuando el cursor sale del div (hover)
-    document.getElementById("comprarBotonFinal").style.cursor  = "auto";
+    document.getElementById("comprarBotonFinal").style.cursor = "auto";
     document.getElementById("comprarBotonFinal").style.opacity = "1";
 });
 
@@ -62,10 +70,10 @@ function aumentar(id) {
     document.getElementById("cantidadVisible" + id.toString()).innerText = (value + 1).toString().padStart(2, '0');
     document.getElementById("cantidadHidden" + id.toString()).value = value + 1;
     calcularTotal();
-    document.getElementById("todoObligatorio").style.visibility     = "visible";
-    document.getElementById("todoObligatorio").style.display        = "grid";
+    document.getElementById("todoObligatorio").style.visibility = "visible";
+    document.getElementById("todoObligatorio").style.display = "grid";
     document.getElementById("datosCompradorTexto").style.visibility = "visible";
-    document.getElementById("datosCompradorTexto").style.display    = "flex";
+    document.getElementById("datosCompradorTexto").style.display = "flex";
 }
 function calcularTotal() {
     var total = 0;
@@ -74,12 +82,12 @@ function calcularTotal() {
     }
     document.getElementById("totalEstatico").innerText = total.toString();
     if (total == 0) {
-        document.getElementById("todoObligatorio").style.visibility     = "hidden";
-        document.getElementById("todoObligatorio").style.display        = "none";
+        document.getElementById("todoObligatorio").style.visibility = "hidden";
+        document.getElementById("todoObligatorio").style.display = "none";
         document.getElementById("datosCompradorTexto").style.visibility = "hidden";
-        document.getElementById("datosCompradorTexto").style.display    = "none";
-        document.getElementById("comprarBotonFinal").style.display      = "none";
-        document.getElementById("comprarBotonFinal").style.visibility   = "hidden";
+        document.getElementById("datosCompradorTexto").style.display = "none";
+        document.getElementById("comprarBotonFinal").style.display = "none";
+        document.getElementById("comprarBotonFinal").style.visibility = "hidden";
     }
 }
 
@@ -101,7 +109,7 @@ function soloNumeros(event) {
     return true;
 }
 
-
+var SMSenviado = false;
 function enviarSMS() {
     console.log(document.getElementById("celular").value.trim().length)
     if (document.getElementById("celular").value.trim().length !== 9) {
@@ -120,6 +128,11 @@ function enviarSMS() {
             document.getElementById("contenedorCodigo").style.visibility = "visible";
             document.getElementById("contenedorCodigo").style.display = "grid";
             console.log(response);
+            SMSenviado = true;
+            tiempo = 60;
+            document.getElementById("buttonSMS").style.backgroundColor = "#858484";
+            document.getElementById("buttonSMS").innerText = tiempo.toString()
+            document.getElementById("buttonSMS").disabled = true;
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
@@ -166,6 +179,9 @@ function enviarCodigo() {
                 document.getElementById("contenedorRespuesta2").style.display = "grid";
                 document.getElementById("comprarBotonFinal").style.display = "flex";
                 document.getElementById("comprarBotonFinal").style.visibility = "visible";
+                document.getElementById("celular").setAttribute("disabled", "disabled");
+                document.getElementById("codigo").setAttribute("disabled", "disabled");
+                validado = true
             }
         },
         error: function (xhr, status, error) {
@@ -173,6 +189,11 @@ function enviarCodigo() {
             console.error('Error:', error);
         }
     });
+}
+var validado = false
+function uppercase(event) {
+    var input = event.target;
+    input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 function comprar() {
     if (camposLlenos()) {
@@ -213,6 +234,31 @@ function miFuncion() {
 
 }
 setInterval(miFuncion, 500);
+tiempo = 60;
+function miFuncion2() {
+    if (validado) {
+        document.getElementById("buttonSMS").style.backgroundColor = "#858484";
+        document.getElementById("buttonSMS").disabled = true;
+        document.getElementById("buttonSMS").innerText = "SMS"
+        document.getElementById("buttonValidar").style.backgroundColor = "#858484";
+        document.getElementById("buttonValidar").disabled = true;
+        document.getElementById("buttonValidar").innerText = "Validado"
+    }
+    else if (SMSenviado) {
+        tiempo = tiempo - 1
+        document.getElementById("buttonSMS").style.backgroundColor = "#858484";
+        document.getElementById("buttonSMS").innerText = tiempo.toString()
+        document.getElementById("buttonSMS").disabled = true;
+        if (tiempo <= 0) SMSenviado = false;
+    }
+    else {
+        document.getElementById("buttonSMS").style.backgroundColor = "#7643F6";
+        document.getElementById("buttonSMS").innerText = "SMS"
+        document.getElementById("buttonSMS").disabled = false;
+    }
+
+}
+setInterval(miFuncion2, 999);
 
 /*
 
