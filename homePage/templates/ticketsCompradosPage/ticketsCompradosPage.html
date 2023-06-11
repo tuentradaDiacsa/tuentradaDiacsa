@@ -31,10 +31,11 @@
             {% for entrada in entradas %}
             <div id="entradaContainer" class="containerDescarga">
                 <i class="fas fa-circle" style="font-size: 12px;"></i>
-                <p id="Nombre{{ forloop.counter }}" style="font-size: 12px;"><b>{{ entrada.tipo_ticket }} N° {{
-                        entrada.numero_ticket}}</b></p>
+                <p id="Nombre{{ forloop.counter }}" style="font-size: 12px;"><b>{{ entrada.tipo_ticket }} <br> N°
+                        {{entrada.numero_ticket}}</b></p>
                 <i id="download{{ entrada.numero_ticket}}" class="fas fa-download downloadIcono"
-                    style="font-size: 20px;" data-url="{% url 'descargar_boleto' entrada.numero_ticket %}"
+                    style="font-size: 20px; margin-left: 15px;"
+                    data-url="{% url 'descargar_boleto' entrada.numero_ticket %}"
                     onclick="download2('{{ entrada.numero_ticket}}', '{{ forloop.counter }}')"></i>
             </div>
             {% endfor %}
@@ -103,7 +104,10 @@
                     iframeDocument.close();
 
                     // Imprimir el contenido del iframe
-                    iframe.contentWindow.print();
+                    iframe.onload = function () {
+                        // Imprimir el contenido del iframe una vez cargado completamente
+                        iframe.contentWindow.print();
+                    };
                 }
             };
             xhr.send();
