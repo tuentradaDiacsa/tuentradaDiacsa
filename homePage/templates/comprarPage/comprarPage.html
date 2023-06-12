@@ -55,56 +55,55 @@
                         <p id="entradaPrecio{{entrada.id}}">S/. {{entrada.precio}}</p>
                     </div>
                     {% if forloop.counter < 4 %} <div class="entradaColumna4"><i class="fas fa-minus-circle"
-                            onclick="disminuir('{{entrada.id}}')"></i>
-                </div>
-                <div class="entradaColumna5">
-                    <p id="cantidadVisible{{entrada.id}}">00</p>
-                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
-                </div>
-                <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.id}}')"></i>
-                </div>
-                {% elif forloop.counter == 4%}
-                <div></div>
-                <div><select id="boxes1" name="boxes1" class="form-select" onchange="seleccionado()">
+                            onclick="disminuir('{{entrada.id}}')"></i></div>
+                    <div class="entradaColumna5">
+                        <p id="cantidadVisible{{entrada.id}}">00</p>
+                        <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
+                    </div>
+                    <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.id}}')"></i>
+                    </div>
+                    {% elif forloop.counter == 4%}
+                    <div></div>
+                    <div class="custom-select"><select id="boxes1" name="boxes1" onchange="seleccionado()">
                         <option value="ninguno"> --- </option>
                         {% for boxs in boxes1 %}
                         <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
                         {% endfor %}
                     </select>
-                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
-                </div>
-                <div></div>
-                {% elif forloop.counter == 5%}
-                <div></div>
-                <div><select id="boxes2" name="boxes2" class="form-select" onchange="seleccionado()">
+                    <input hidden name="cantidadHidden5" id="cantidadHidden5" value="0">
+                    </div>
+                    <div id="opcionSeleccionadabox1" style="font-size: 17px;"></div>
+                    <div></div>
+                    {% elif forloop.counter == 5%}
+                    <div></div>
+                    <div class="custom-select"> <select id="boxes2" name="boxes2"  onchange="seleccionado()">
                         <option value="ninguno"> --- </option>
                         {% for boxs in boxes2 %}
                         <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
                         {% endfor %}
-                    </select>
-                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
+                        </select>
+                    <input hidden name="cantidadHidden6" id="cantidadHidden6" value="0">
+                    </div>
+                    <div id="opcionSeleccionadabox2" style="font-size: 17px;"></div>
+                    <div></div>
+                    {% elif forloop.counter == 6%}
+                    <div></div>
+                    <div class="custom-select"><select id="boxes3" name="boxes3" onchange="seleccionado()">
+                            <option value="ninguno"> --- </option>
+                            {% for boxs in boxes3 %}
+                            <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
+                            {% endfor %}
+                        </select>
+                        <input hidden name="cantidadHidden4" id="cantidadHidden4" value="0">
+                    </div>
+                    <div id="opcionSeleccionadabox3" style="font-size: 17px;"></div>
+                    <div></div>
+                    {% endif %}
+                    <div class="entradaColumna7">
+                        <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
+                    </div>
                 </div>
-                <div></div>
-                {% elif forloop.counter == 6%}
-                <div></div>
-                <div><select id="boxes3" name="boxes3" class="form-select" onchange="seleccionado()">
-                        <option value="ninguno"> --- </option>
-                        {% for boxs in boxes3 %}
-                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
-                        {% endfor %}
-                    </select>
-                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
-                </div>
-                <div></div>
-                {% endif %}
-                <div class="entradaColumna7">
-                    <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
-
-
-
-                </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
             <div class="totalEntradasDiv">
                 <div class="totalMontoDiv">
                     <div class="totalTexto">
@@ -126,19 +125,20 @@
         <div class="datosCompradorTexto" id="datosCompradorTexto">
             <p>Datos del comprador</p>
         </div>
-
+        <input hidden type="text" id="celular2" name="celular2" value="{{ celular }}">  
+        <input hidden type="text" id="codigo2" name="codigo2" value="{{ codigo }}">
         <div class="blankspace"></div>
         <div class="todoObligatorio" id="todoObligatorio">
             <div class="contenedorCelular" id="contenedorCelular">
                 <div>Celular</div>
                 <input type="text" placeholder="Numero de celular" maxlength="9" onkeypress="return soloNumeros(event)"
-                    id="celular" name="celular">
+                    id="celular" name="celular" value="{{ celular }}">                 
                 <button type="button" id="buttonSMS" onclick="enviarSMS()">SMS</button>
             </div>
             <div class="contenedorCodigo" id="contenedorCodigo">
                 <div>Codigo</div>
                 <input type="text" placeholder="Codigo validacion" maxlength="6" id="codigo" name="codigo"
-                    oninput="uppercase(event)">
+                    oninput="uppercase(event)" value="{{ codigo }}">            
                 <button type="button" id="buttonValidar" onclick="enviarCodigo()">Validar</button>
             </div>
             <div id="celularigualwhatsapp" class="celularigualwhatsapp">
@@ -228,7 +228,7 @@
                 <div class="contenedorRespuesta" id="contenedorRespuesta3">
                     <div class="labelInput"></div>
                     <input type="text" placeholder="Respuesta a la pregunta 3" maxlength="59" id="respuesta3"
-                        name="respuesta2" style="margin-top: -25px;">
+                        name="respuesta3" style="margin-top: -25px;">
                     <button type="button">Validar</button>
                 </div>
 
@@ -238,9 +238,6 @@
                         onkeypress="return soloNumeros(event)">
                     <button type="button">Validar</button>
                 </div>
-
-
-
             </div>
             <div class="comprarBotonFinal" id="comprarBotonFinal" onclick="comprar()">COMPRAR</div>
 
