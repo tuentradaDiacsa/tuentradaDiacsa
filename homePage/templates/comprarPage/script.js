@@ -150,6 +150,7 @@ function enviarCodigo() {
         success: function (response) {
             console.log(response.data)
             if (response.data.toString() == "Codigo correcto") {
+                document.getElementById("buttonSMS").style.visibility = "hidden"
                 document.getElementsByName("mi_combobox")[0].selectedIndex = 0
                 document.getElementsByName("mi_combobox")[1].selectedIndex = 1
                 document.getElementsByName("mi_combobox")[2].selectedIndex = 2
