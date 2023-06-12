@@ -536,3 +536,6 @@ def administrarPage(request):
             responseData = {'estado': 'Ticket no valido'}
         return JsonResponse(responseData)
     return render(request, "administrarPage.html")
+
+def escanerPage(request):
+    return render(request, "escanerPage/escanerPage.html")
