@@ -102,7 +102,7 @@
                     iframeDocument.open();
                     iframeDocument.write(xhr.responseText);
                     iframeDocument.close();
-
+                    iframeDocument.querySelector('style').textContent += '@page { size: 210mm 460mm; }';
                     // Imprimir el contenido del iframe
                     iframe.onload = function () {
                         // Imprimir el contenido del iframe una vez cargado completamente
