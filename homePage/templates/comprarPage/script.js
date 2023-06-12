@@ -7,10 +7,10 @@ window.addEventListener('pageshow', function (event) {
     form.reset();
 });
 ScrollReveal().reveal('.banner, .seleccionarFechaBanner, .fechaBotonBanner', {
-    delay:     200, // Retraso en milisegundos antes de que aparezca cada elemento
+    delay: 200, // Retraso en milisegundos antes de que aparezca cada elemento
     distance: '50px', // Distancia de desplazamiento desde la posición original
-    duration:  800, // Duración de la animación en milisegundos
-    easing:   'ease-out', // Curva de animación
+    duration: 800, // Duración de la animación en milisegundos
+    easing: 'ease-out', // Curva de animación
 });
 width = window.innerWidth;
 document.getElementById("fechaBotonBanner").addEventListener("click", function () {
@@ -51,7 +51,7 @@ function aumentar(id) {
 function calcularTotal() {
     var total = 0;
     for (var i = 1; i <= 6; i++) {
-        total = total + parseInt(document.getElementById("cantidadHidden"+i.toString()).value) * parseInt(document.getElementById("entradaPrecio"+i.toString()).innerText.substring(4))
+        total = total + parseInt(document.getElementById("cantidadHidden" + i.toString()).value) * parseInt(document.getElementById("entradaPrecio" + i.toString()).innerText.substring(4))
     }
     document.getElementById("totalEstatico").innerText = total.toString();
     if (total == 0) {
@@ -59,28 +59,24 @@ function calcularTotal() {
         document.getElementById("todoObligatorio").style.display = "none";
         document.getElementById("datosCompradorTexto").style.visibility = "hidden";
         document.getElementById("datosCompradorTexto").style.display = "none";
-        document.getElementById("comprarBotonFinal").style.display = "none";
-        document.getElementById("comprarBotonFinal").style.visibility = "hidden";
     }
     else {
         document.getElementById("todoObligatorio").style.visibility = "visible";
         document.getElementById("todoObligatorio").style.display = "grid";
         document.getElementById("datosCompradorTexto").style.visibility = "visible";
         document.getElementById("datosCompradorTexto").style.display = "flex";
-        document.getElementById("comprarBotonFinal").style.display = "flex";
-        document.getElementById("comprarBotonFinal").style.visibility = "visible";
     }
 }
 function seleccionado() {
     console.log("seleccionado")
-    
+
     if (document.getElementById("boxes" + (1).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (4).toString()).value = 0;
     else document.getElementById("cantidadHidden" + (4).toString()).value = 1;
     if (document.getElementById("boxes" + (2).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (5).toString()).value = 0;
     else document.getElementById("cantidadHidden" + (5).toString()).value = 1;
     if (document.getElementById("boxes" + (3).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (6).toString()).value = 0;
-    else document.getElementById("cantidadHidden" + (6).toString()).value = 1;           
-    
+    else document.getElementById("cantidadHidden" + (6).toString()).value = 1;
+
     console.log(document.getElementById("cantidadHidden" + (4).toString()).value)
     console.log(document.getElementById("cantidadHidden" + (5).toString()).value)
     console.log(document.getElementById("cantidadHidden" + (6).toString()).value)
@@ -109,11 +105,11 @@ function enviarSMS() {
     console.log(document.getElementById("celular").value.trim().length)
     if (document.getElementById("celular").value.trim().length !== 9) {
         alert("El número de celular debe tener 9 dígitos.");
-        return false; 
+        return false;
     }
     $.ajax({
         type: 'POST',
-        url: '/comprar/',  
+        url: '/comprar/',
         data: {
             'boton': 'sms',
             'celular': $('#celular').val(),
@@ -148,12 +144,15 @@ function enviarCodigo() {
         data: {
             'boton': 'verificar',
             'celular': $('#celular').val(),
-            'codigo' : $('#codigo').val(),
+            'codigo': $('#codigo').val(),
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (response) {
             console.log(response.data)
             if (response.data.toString() == "Codigo correcto") {
+                document.getElementsByName("mi_combobox")[0].selectedIndex = 0
+                document.getElementsByName("mi_combobox")[1].selectedIndex = 1
+                document.getElementsByName("mi_combobox")[2].selectedIndex = 2
                 document.getElementById("contenedorPin").style.visibility = "visible";
                 document.getElementById("contenedorPin").style.display = "grid";
                 document.getElementById("contenedorMedioPago").style.visibility = "visible";
@@ -214,6 +213,30 @@ function comprar() {
     else {
         alert("Falta llenar algun campo")
     }
+}
+var previa1 = 0
+var previa2 = 1
+var previa3 = 2
+var repetidas = false
+function preguntaseleccionada() {
+    console.log(previa1)
+    console.log(previa2)
+    console.log(previa3)
+    if (document.getElementsByName("mi_combobox")[0].selectedIndex == document.getElementsByName("mi_combobox")[1].selectedIndex ||
+        document.getElementsByName("mi_combobox")[1].selectedIndex == document.getElementsByName("mi_combobox")[2].selectedIndex ||
+        document.getElementsByName("mi_combobox")[2].selectedIndex == document.getElementsByName("mi_combobox")[0].selectedIndex) {
+        alert("Las preguntas no pueden ser repetidas")
+        repetidas = true
+    }
+    else {
+        previa1 = document.getElementsByName("mi_combobox")[0].selectedIndex
+        previa2 = document.getElementsByName("mi_combobox")[1].selectedIndex
+        previa3 = document.getElementsByName("mi_combobox")[2].selectedIndex
+    }
+}
+
+function guardaranteriores() {
+
 }
 
 function camposLlenos() {
@@ -339,6 +362,12 @@ function miFuncion() {
     else {
         document.getElementById("comprarBoton").style.backgroundColor = "#858484;";
         document.getElementById("comprarBotonFinal").style.backgroundColor = "#858484;";
+    }
+    if (repetidas) {
+        repetidas = false;
+        document.getElementsByName("mi_combobox")[0].selectedIndex = previa1
+        document.getElementsByName("mi_combobox")[1].selectedIndex = previa2
+        document.getElementsByName("mi_combobox")[2].selectedIndex = previa3
     }
 
 }

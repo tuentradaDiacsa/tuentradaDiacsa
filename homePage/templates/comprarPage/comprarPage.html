@@ -55,55 +55,56 @@
                         <p id="entradaPrecio{{entrada.tipo}}">S/. {{entrada.precio}}</p>
                     </div>
                     {% if forloop.counter < 4 %} <div class="entradaColumna4"><i class="fas fa-minus-circle"
-                            onclick="disminuir('{{entrada.tipo}}')"></i></div>
-                    <div class="entradaColumna5">
-                        <p id="cantidadVisible{{entrada.tipo}}">00</p>
-                        <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.tipo}}" value="0">
-                    </div>
-                    <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.tipo}}')"></i>
-                    </div>
-                    {% elif forloop.counter == 4%}
-                    <div></div>
-                    <div class="custom-select"><select id="boxes1" name="boxes1" onchange="seleccionado()">
+                            onclick="disminuir('{{entrada.tipo}}')"></i>
+                </div>
+                <div class="entradaColumna5">
+                    <p id="cantidadVisible{{entrada.tipo}}">00</p>
+                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.tipo}}" value="0">
+                </div>
+                <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.tipo}}')"></i>
+                </div>
+                {% elif forloop.counter == 4%}
+                <div></div>
+                <div class="custom-select"><select id="boxes1" name="boxes1" onchange="seleccionado()">
                         <option value="ninguno"> --- </option>
                         {% for boxs in boxes1 %}
                         <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
                         {% endfor %}
                     </select>
                     <input hidden name="cantidadHidden4" id="cantidadHidden4" value="0">
-                    </div>
-                    <div id="opcionSeleccionadabox1" style="font-size: 17px;"></div>
-                    <div></div>
-                    {% elif forloop.counter == 5%}
-                    <div></div>
-                    <div class="custom-select"> <select id="boxes2" name="boxes2"  onchange="seleccionado()">
+                </div>
+                <div id="opcionSeleccionadabox1" style="font-size: 17px;"></div>
+                <div></div>
+                {% elif forloop.counter == 5%}
+                <div></div>
+                <div class="custom-select"> <select id="boxes2" name="boxes2" onchange="seleccionado()">
                         <option value="ninguno"> --- </option>
                         {% for boxs in boxes2 %}
                         <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
                         {% endfor %}
-                        </select>
+                    </select>
                     <input hidden name="cantidadHidden5" id="cantidadHidden5" value="0">
-                    </div>
-                    <div id="opcionSeleccionadabox2" style="font-size: 17px;"></div>
-                    <div></div>
-                    {% elif forloop.counter == 6%}
-                    <div></div>
-                    <div class="custom-select"><select id="boxes3" name="boxes3" onchange="seleccionado()">
-                            <option value="ninguno"> --- </option>
-                            {% for boxs in boxes3 %}
-                            <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
-                            {% endfor %}
-                        </select>
-                        <input hidden name="cantidadHidden6" id="cantidadHidden6" value="0">
-                    </div>
-                    <div id="opcionSeleccionadabox3" style="font-size: 17px;"></div>
-                    <div></div>
-                    {% endif %}
-                    <div class="entradaColumna7">
-                        <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
-                    </div>
                 </div>
-                {% endfor %}
+                <div id="opcionSeleccionadabox2" style="font-size: 17px;"></div>
+                <div></div>
+                {% elif forloop.counter == 6%}
+                <div></div>
+                <div class="custom-select"><select id="boxes3" name="boxes3" onchange="seleccionado()">
+                        <option value="ninguno"> --- </option>
+                        {% for boxs in boxes3 %}
+                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
+                        {% endfor %}
+                    </select>
+                    <input hidden name="cantidadHidden6" id="cantidadHidden6" value="0">
+                </div>
+                <div id="opcionSeleccionadabox3" style="font-size: 17px;"></div>
+                <div></div>
+                {% endif %}
+                <div class="entradaColumna7">
+                    <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
+                </div>
+            </div>
+            {% endfor %}
             <div class="totalEntradasDiv">
                 <div class="totalMontoDiv">
                     <div class="totalTexto">
@@ -125,20 +126,20 @@
         <div class="datosCompradorTexto" id="datosCompradorTexto">
             <p>Datos del comprador</p>
         </div>
-        <input hidden type="text" id="celular2" name="celular2" value="{{ celular }}">  
+        <input hidden type="text" id="celular2" name="celular2" value="{{ celular }}">
         <input hidden type="text" id="codigo2" name="codigo2" value="{{ codigo }}">
         <div class="blankspace"></div>
         <div class="todoObligatorio" id="todoObligatorio">
             <div class="contenedorCelular" id="contenedorCelular">
                 <div>Celular</div>
                 <input type="text" placeholder="Numero de celular" maxlength="9" onkeypress="return soloNumeros(event)"
-                    id="celular" name="celular" value="{{ celular }}">                 
+                    id="celular" name="celular" value="{{ celular }}">
                 <button type="button" id="buttonSMS" onclick="enviarSMS()">SMS</button>
             </div>
             <div class="contenedorCodigo" id="contenedorCodigo">
                 <div>Codigo</div>
                 <input type="text" placeholder="Codigo validacion" maxlength="6" id="codigo" name="codigo"
-                    oninput="uppercase(event)" value="{{ codigo }}">            
+                    oninput="uppercase(event)" value="{{ codigo }}">
                 <button type="button" id="buttonValidar" onclick="enviarCodigo()">Validar</button>
             </div>
             <div id="celularigualwhatsapp" class="celularigualwhatsapp">
@@ -183,7 +184,7 @@
 
                 <div class="contenedorPregunta" id="contenedorPregunta1">
                     <div class="labelInput">Pregunta</div>
-                    <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                    <select name="mi_combobox" placeholder="Pregunta de seguridad" onchange="preguntaseleccionada()">
                         {% for pregunta in preguntas %}
                         <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
                         {% endfor %}
@@ -200,7 +201,7 @@
 
                 <div class="contenedorPregunta" id="contenedorPregunta2">
                     <div class="labelInput">Pregunta</div>
-                    <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                    <select name="mi_combobox" placeholder="Pregunta de seguridad" onchange="preguntaseleccionada()">
                         {% for pregunta in preguntas %}
                         <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
                         {% endfor %}
@@ -217,7 +218,8 @@
 
                 <div class="contenedorPregunta" id="contenedorPregunta3">
                     <div class="labelInput">Pregunta</div>
-                    <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                    <select name="mi_combobox" placeholder="Pregunta de seguridad" onchange="preguntaseleccionada()"
+                        onclick="guardaranteriores()">
                         {% for pregunta in preguntas %}
                         <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
                         {% endfor %}
