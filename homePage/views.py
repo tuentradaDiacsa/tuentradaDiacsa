@@ -29,6 +29,8 @@ import os
 from django.contrib.sites.shortcuts import get_current_site
 from django.views import View
 
+from .encripdecripEntradas import encriptador
+from .generaCodigoSeguridad import generacodigoseguridad
 
 def get_dynamic_base_url(request):
     current_site = get_current_site(request)
@@ -40,8 +42,8 @@ def get_dynamic_base_url(request):
     return f'{scheme}://{current_site.domain}{static_url}'
 
 
-def generar_qr_code_url(ticket, cip):
-    data = "Ticket: {}, CIP: {}".format(ticket, cip)
+def generar_qr_code_url(datoencriptado):
+    data = datoencriptado#"Ticket: {}, CIP: {}".format(ticket, cip)
     qr = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
@@ -55,8 +57,9 @@ def generar_qr_code_url(ticket, cip):
 def descargar_boleto(request, entrada_id):
     try:
         ticket_obj = Tickets.objects.get(ticket=entrada_id)
-        cip = ticket_obj.cip
-        qr_buffer = generar_qr_code_url(entrada_id, cip)
+        codigoseguridad  = ticket_obj.codigoseguridad
+        codigoseguridad_encriptador = encriptador(entrada_id, codigoseguridad)
+        qr_buffer = generar_qr_code_url(codigoseguridad_encriptador)
         qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
         qr_url = "data:image/png;base64," + qr_base64
         context = {
@@ -68,9 +71,9 @@ def descargar_boleto(request, entrada_id):
             'Lugar': "Hangar de Iquitos",
             'Ubicacion': "Calle Muy Bonita 234 Iquitos Peru",
             'fecha': "21-06-2023",
-            'hora': "7:00 pm",
+            'hora': "3:00 pm",
             'Zona': getattr(ticket_obj, 'tipo', 'No completado'),
-            'qr_image': qr_url,
+            #'qr_image': qr_url,
         }
 
     except Tickets.DoesNotExist:
@@ -225,16 +228,16 @@ def calculamonto(request):
 class comprarPage(View):
     def get(self, request):
         preguntas = Preguntas.objects.all()
-        entradas = Tipos.objects.all()
-        boxes1 = boxesRestante1.objects.filter(ocupado=False)
-        boxes2 = boxesRestante2.objects.filter(ocupado=False)
-        boxes3 = boxesRestante3.objects.filter(ocupado=False)
+        entradas  = Tipos.objects.all()
+        boxes1    = boxesRestante1.objects.filter(ocupado=False)
+        boxes2    = boxesRestante2.objects.filter(ocupado=False)
+        boxes3    = boxesRestante3.objects.filter(ocupado=False)
         datos = {
             'preguntas': preguntas,
-            'entradas': entradas,
-            'boxes1': boxes1,
-            'boxes2': boxes2,
-            'boxes3': boxes3
+            'entradas' : entradas,
+            'boxes1'   : boxes1,
+            'boxes2'   : boxes2,
+            'boxes3'   : boxes3
         }
         identifica_compra = request.session.get('compra_redirect', False)
         if (identifica_compra):
@@ -254,21 +257,22 @@ class comprarPage(View):
     def post(self, request):
         if request.method == 'POST':
             preguntas = Preguntas.objects.all()
-            entradas = Tipos.objects.all()
-            boxes1 = boxesRestante1.objects.filter(ocupado=False)
-            boxes2 = boxesRestante2.objects.filter(ocupado=False)
-            boxes3 = boxesRestante3.objects.filter(ocupado=False)
+            entradas  = Tipos.objects.all()
+            boxes1    = boxesRestante1.objects.filter(ocupado=False)
+            boxes2    = boxesRestante2.objects.filter(ocupado=False)
+            boxes3    = boxesRestante3.objects.filter(ocupado=False)
             datos = {
                 'preguntas': preguntas,
-                'entradas': entradas,
-                'boxes1': boxes1,
-                'boxes2': boxes2,
-                'boxes3': boxes3
+                'entradas' : entradas,
+                'boxes1'   : boxes1,
+                'boxes2'   : boxes2,
+                'boxes3'   : boxes3
             }
             print("POST COMPRAR ENTRADA")
             if request.POST.get('boton') == 'sms':
                 print("Boton SMS presionado")
                 celular = request.POST.get('celular')
+                datos['celular'] = celular
                 codigoValidacion = generaCodigoValidacion(6)
                 if codigoValidacion == "":
                     print(
@@ -283,7 +287,9 @@ class comprarPage(View):
             elif request.POST.get('boton') == 'verificar':
                 print("Boton verificar presionado")
                 celular = request.POST.get('celular')
+                datos['celular'] = celular
                 codigoValidacionIngresado = request.POST.get('codigo')
+                datos['codigo'] = codigoValidacionIngresado
                 responseData = {'data': 'Codigo incorrecto'}
                 if (buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado)):
                     print("Codigo Correcto!!!")
@@ -291,21 +297,23 @@ class comprarPage(View):
                 return JsonResponse(responseData)
 
             elif request.POST.get('boton') == 'comprar':
-                celular = request.POST.get('celular')
-                codigo = request.POST.get('codigo')
-                pin = request.POST.get('pin')
-                nombre = request.POST.get('nombre')
-                dni = request.POST.get('dni')
-                correo = request.POST.get('correo')
-                pregunta1 = request.POST.get('pregunta1')
+                celular    = request.POST.get('celular2')
+                codigo     = request.POST.get('codigo2')
+                pin        = request.POST.get('pin')
+                nombre     = request.POST.get('nombre')
+                dni        = request.POST.get('dni')
+                correo     = request.POST.get('correo')
+                pregunta1  = request.POST.get('pregunta1')
                 respuesta1 = request.POST.get('respuesta1')
-                pregunta2 = request.POST.get('pregunta2')
+                pregunta2  = request.POST.get('pregunta2')
                 respuesta2 = request.POST.get('respuesta2')
-                box1 = request.POST.get('boxes1')
-                box2 = request.POST.get('boxes2')
-                box3 = request.POST.get('boxes3')
+                pregunta3  = request.POST.get('pregunta3')
+                respuesta3 = request.POST.get('respuesta3')
+                box1       = request.POST.get('boxes1')
+                box2       = request.POST.get('boxes2')
+                box3       = request.POST.get('boxes3')
                 # print("antes de cip")
-                cip = generaCIP(6)
+                cip        = generaCIP(6)
                 # print(cip)
                 entradasCantidad = []
                 for i in range(Tipos.objects.count()):
@@ -313,18 +321,19 @@ class comprarPage(View):
                     entradasCantidad.append(
                         request.POST.get('cantidadHidden'+str(i+1)))
                 # print(entradasCantidad)
-                responseData = {'celular': celular,
-                                'codigo': codigo,
-                                'pin': pin,
-                                'nombre': nombre,
-                                'dni': dni,
-                                'correo': correo,
+                responseData = {'celular'   : celular,
+                                'codigo'    : codigo,
+                                'pin'       : pin,
+                                'nombre'    : nombre,
+                                'dni'       : dni,
+                                'correo'    : correo,
                                 'respuesta1': respuesta1,
                                 'respuesta2': respuesta2,
-                                'cip': cip,
-                                'box1': box1,
-                                'box2': box2,
-                                'box3': box3,
+                                'respuesta3': respuesta3,
+                                'cip'       : cip,
+                                'box1'      : box1,
+                                'box2'      : box2,
+                                'box3'      : box3,
                                 }
                 print(responseData)
                 entradasElegidas = {}
@@ -352,7 +361,7 @@ class comprarPage(View):
                 return redirect(request.path)
 
             elif request.POST.get('boton') == 'confirmarCompra':
-                print("Boton confirmar compra presionado")
+                #print("Boton confirmar compra presionado")
                 # boxes comprados
                 box1 = request.POST.get('box1')
                 box2 = request.POST.get('box2')
@@ -372,9 +381,8 @@ class comprarPage(View):
                 nuevaCompra.pregunta1 = request.POST.get('pregunta1')
                 nuevaCompra.pregunta2 = request.POST.get('pregunta2')
                 nuevaCompra.save()
-
+                #print("Termino de almacenar pago")
                 # TICKET
-                entradasArreglo = {}
                 ticketsCantidad = 0
                 ultimoTicket = Tickets.objects.count()
                 # monto = 0
@@ -384,26 +392,22 @@ class comprarPage(View):
                         continue
                     ticketsCantidad = ticketsCantidad + 1
                     ultimoTicket = ultimoTicket + 1
-
-                    #################
-                    # campo = "cantidadEntradasTipo"+str(i)
-                    # cantidad = int(request.POST.get("cantidadentrada"+str(i)))
-                    # print("Cantidad entrada tipo "+str())
-                    # print(cantidad)
-                    # entradasArreglo[campo] = cantidad
-                    # monto += (entradas[i].precio)*cantidad
-                    #################
+                    #print(i)
+                    k=i
+                    if(i==3): k = 4
+                    if(i==4): k = 5
+                    if(i==5): k = 3
 
                     for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
-
+                        #print(j)
                         # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(id = i + 1).precio)
                         ticket = Tickets()
                         ticket.ticket = generaNumeroTicket()
-                        ticket.codigoseguridad = "12345678"
+                        ticket.codigoseguridad = generacodigoseguridad()
                         ticket.pin = request.POST.get('pin')
                         ticket.fechaHoraCambio = timezone.now()
                         ticket.celular = request.POST.get('celular')
-                        ticket.tipo = str(i+1)
+                        ticket.tipo = Tipos.objects.get(id=k+1).descripcion
                         ticket.numeroBox = "0"
                         if int(request.POST.get('tipoentrada'+str(i+1))) == 4:
                             ticket.numeroBox = box1
@@ -445,6 +449,7 @@ class comprarPage(View):
                 # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", {"entradas" : entradas})
                 request.session['tickets_redirect'] = "tickets"
                 request.session['contexto'] = datosConfirmar
+                print("Llega hasta redirect")
                 return redirect(request.path)
                 return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", datosConfirmar)
                 # entradas = Tipos.objects.all()
