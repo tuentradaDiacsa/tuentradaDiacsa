@@ -11,6 +11,7 @@ urlpatterns = [
     path('descargar_boleto/<entrada_id>/', views.descargar_boleto, name='descargar_boleto'),
     #path('descargar_boleto/<int:entrada_id>/', views.descargar_boleto, name='descargar_boleto'),
     #path('descargar_boleto/(?P<entrada_id>\d+)/$', views.descargar_boleto, name='descargar_boleto'),
+    path("escaner/", views.escanerPage, name="escanerPage"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
