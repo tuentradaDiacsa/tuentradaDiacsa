@@ -399,7 +399,7 @@ class comprarPage(View):
                     if(i==5): k = 3
 
                     for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
-                        auxiliarDisminuyeEntradas = Tipos.objects.get(id=k)
+                        auxiliarDisminuyeEntradas = Tipos.objects.get(id=k+1)
                         auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-1
                         auxiliarDisminuyeEntradas.save()
                         
