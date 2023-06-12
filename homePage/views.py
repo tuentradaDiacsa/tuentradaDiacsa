@@ -413,8 +413,8 @@ class comprarPage(View):
 def administrarPage(request):
     if request.POST.get('submit') == "validar":
         return render(request, "validarPage/validarPage.html")
-    elif request.POST.get('submit') == "actualizar":
-        None
+    elif request.POST.get('submit') == "transferir":
+        return render(request, "transferirPage/transferirPage.html")
     elif request.POST.get('submit') == "vender":
         None
     elif request.POST.get('submit') == "comprar":
