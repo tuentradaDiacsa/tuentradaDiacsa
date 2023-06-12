@@ -228,7 +228,8 @@ def calculamonto(request):
 class comprarPage(View):
     def get(self, request):
         preguntas = Preguntas.objects.all()
-        entradas  = Tipos.objects.all()
+        entradas  = Tipos.objects.all().order_by('tipo')
+
         boxes1    = boxesRestante1.objects.filter(ocupado=False)
         boxes2    = boxesRestante2.objects.filter(ocupado=False)
         boxes3    = boxesRestante3.objects.filter(ocupado=False)
