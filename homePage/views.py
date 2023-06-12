@@ -399,6 +399,11 @@ class comprarPage(View):
                     if(i==5): k = 3
 
                     for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
+                        auxiliarDisminuyeEntradas = Tipos.objects.get(id=k)
+                        auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-1
+                        auxiliarDisminuyeEntradas.save()
+                        
+                        Tipos.objects.get(id=k+1).descripcion
                         #print(j)
                         # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(id = i + 1).precio)
                         ticket = Tickets()
