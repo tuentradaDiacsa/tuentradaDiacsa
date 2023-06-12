@@ -35,7 +35,7 @@ class Tickets(models.Model):
     whatsapp = models.TextField(blank=True, null=True)
 
     tipo = models.TextField()
-    numeroBox = models.CharField(max_length=5, default='0')
+    numeroBox = models.TextField(max_length=5, default='0')
     cip = models.TextField()  # antes recibo
     confirmado2 = models.DateTimeField(
         blank=True, null=True)  # Por defecto blanco
