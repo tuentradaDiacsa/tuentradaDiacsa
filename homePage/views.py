@@ -32,47 +32,81 @@ from django.views import View
 from .encripdecripEntradas import encriptador
 from .generaCodigoSeguridad import generacodigoseguridad
 
-def get_dynamic_base_url(request):
-    current_site = get_current_site(request)
-    scheme = 'https' if request.is_secure() else 'http'
+import re
 
-    # Combinar con la ruta base de los archivos estáticos
-    static_url = '/static/'  # Esto debería coincidir con tu configuración STATIC_URL
+def reemplazar_letras(cadena):
+    # Utilizar expresiones regulares para buscar palabras y reemplazar letras
+    resultado = re.sub(r'\b(\w)(\w+)(\w)\b', lambda match: match.group(1) + 'X' * len(match.group(2)) + match.group(3), cadena)
+    return resultado
 
-    return f'{scheme}://{current_site.domain}{static_url}'
-
+def reemplazar_ultimos_caracteres(cadena):
+    longitud = len(cadena)
+    if(longitud==1):
+        return "X"
+    if(longitud==2):
+        return cadena[0]+"X"
+    if(longitud==3):
+        return cadena[0]+"X"+cadena[2]
+    if(longitud==4):
+        return cadena[0]+"XX"+cadena[3]
+    if(longitud==5):
+        return cadena[0]+"XXX"+cadena[4]
+    if(longitud==6):
+        return cadena[0]+"XXXX"+cadena[5]
+    if(longitud>=7):
+        return cadena[:-6]+"XXXX"+cadena[-2:]
+    return cadena
+    
+    #if len(cadena) >= 9:
+    #    nueva_cadena = cadena[:-6] + "X" * 4 + cadena[-2:]
+    #elif len(cadena) >= 8:
+    #    nueva_cadena = cadena[:-6] + "X" * (len(cadena) - 4) + cadena[-1:]
+    #else:
+    #    nueva_cadena = cadena
+    #return nueva_cadena
 
 def generar_qr_code_url(datoencriptado):
     data = datoencriptado#"Ticket: {}, CIP: {}".format(ticket, cip)
-    qr = qrcode.QRCode(version=1, box_size=10, border=4)
+    qr   = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
-    qr_image = qr.make_image(fill="black", back_color="white")
+    qr_image  = qr.make_image(fill="black", back_color="white")
     qr_buffer = io.BytesIO()
     qr_image.save(qr_buffer, format="PNG")
     qr_buffer.seek(0)
     return qr_buffer
 
-
 def descargar_boleto(request, entrada_id):
     try:
         ticket_obj = Tickets.objects.get(ticket=entrada_id)
-        codigoseguridad  = ticket_obj.codigoseguridad
-        codigoseguridad_encriptador = encriptador(entrada_id, codigoseguridad)
-        qr_buffer = generar_qr_code_url(codigoseguridad_encriptador)
-        qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
-        qr_url = "data:image/png;base64," + qr_base64
+        #codigoseguridad  = ticket_obj.codigoseguridad
+        #codigoseguridad_encriptador = encriptador(entrada_id, codigoseguridad)
+        #qr_buffer = generar_qr_code_url(codigoseguridad_encriptador)
+        #qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
+        #qr_url = "data:image/png;base64," + qr_base64
+        if(getattr(ticket_obj, 'numeroBox', '0') !='0'): numeroBox = " - Box "+getattr(ticket_obj, 'numeroBox', '0')
+        else: numeroBox = ""
+
+        if(getattr(ticket_obj, 'nombre', 'No completado')!="No completado"): campoNombreApellido = reemplazar_letras(getattr(ticket_obj, 'nombre', 'No completado'))
+        else: campoNombreApellido = "No completado"
+
+        if(getattr(ticket_obj, 'dni', 'No completado')!="No completado"): campodni = reemplazar_ultimos_caracteres(getattr(ticket_obj, 'dni', 'No completado'))
+        else: campodni = "No completado"
+        
+        if(getattr(ticket_obj, 'celular', 'No completado')!="No completado"): campocelular = reemplazar_ultimos_caracteres(getattr(ticket_obj, 'celular', 'No completado'))
+        else: campocelular = "No completado"
+
         context = {
             'ID_Ticket': entrada_id,
-            'nombre_y_apellido': getattr(ticket_obj, 'nombre', 'No completado'),
-            'dni': getattr(ticket_obj, 'dni', 'No completado'),
-            'telefono': getattr(ticket_obj, 'celular', 'No completado'),
-            'whatsapp': getattr(ticket_obj, 'celular', 'No completado'),
-            'Lugar': "Hangar de Iquitos",
-            'Ubicacion': "Calle Muy Bonita 234 Iquitos Peru",
-            'fecha': "21-06-2023",
+            'nombre_y_apellido': campoNombreApellido,
+            'dni': campodni,
+            'telefono': campocelular,
+            'whatsapp': campocelular,
+            'Lugar': "Centro Convenciones del Pardo",
+            'Ubicacion': "Calle Alzamora / Av. Mariscal Cáceres",
+            'fecha': "Domingo 25 de Junio 2023",
             'hora': "3:00 pm",
-            'Zona': getattr(ticket_obj, 'tipo', 'No completado'),
+            'Zona': getattr(ticket_obj, 'tipo', 'No completado')+numeroBox,
             #'qr_image': qr_url,
         }
 
@@ -90,35 +124,6 @@ def descargar_boleto(request, entrada_id):
     # response.write(pdf_data)
 
     return HttpResponse(html_content)  # response
-
-
-def generar_pdf_desde_html(html_content):
-    pdf_data = pdfkit.from_string(html_content, False)
-    return pdf_data
-
-
-def obtener_entrada(entrada_id):
-    datosentrada = {}
-    datosentrada[id] = entrada_id
-    return datosentrada
-
-
-def descargar_boleto2(request, entrada_id):
-    datosEntrada = {
-        'ID_Ticket': 2,
-        'nombre_y_apellido': "Andre Bolaños",
-        'dni': 44036805,
-        'telefono': 975976333,
-        'whatsapp': 975976333,
-        'Lugar': "Hangar de Iquitos",
-        'Ubicacion': "Calle Muy Bonita 234 Iquitos Peru",
-        'fecha': "21-06-2023",
-        'hora': "7:00 pm",
-        'Zona': "Box 1",
-
-    }
-    return render(request, "entradas/plantillaentrada1.html", datosEntrada)
-
 
 '''
 def descargar_boleto(request, entrada_id):
@@ -175,55 +180,8 @@ def descargar_boleto(request, entrada_id):
 '''
 
 
-TipoEntradas = ["Platinum", "Box", "Motor y Motivo",
-                "General", "Alimaña", "Palco"]
-
-
-def armaEntradas(entradasArreglo):
-    '''
-    ticket1 = {}
-    ticket1["tipo_ticket"]="Platinum"
-    ticket1["numero_ticket"]=1
-    ticket1["cip"]="ABC123"
-
-    ticket2 = {}
-    ticket2["tipo_ticket"]="VIP"
-    ticket2["numero_ticket"]=2
-    ticket2["cip"]="456XYZ"
-    '''
-    arregloAenviar = []
-    auxiliar = {}
-    print(entradasArreglo)
-    for indice, entrada in enumerate(entradasArreglo):
-
-        print(entrada)
-        print(entrada[0])
-        print("Paso cantidad")
-        for i in range(int(entrada)):
-            auxiliar = {}
-            auxiliar["tipo_ticket"] = TipoEntradas[indice]
-            auxiliar["numero_ticket"] = generaNumeroTicket(indice)
-            auxiliar["cip"] = generaCIP()
-            arregloAenviar.append()
-
-    return arregloAenviar  # [ticket1,ticket2]
-
-
 def homePage(request):
     return render(request, "homePage/homePage.html")
-
-
-def calculamonto(request):
-    print("entradaID: ", request.POST.get("entradaID"+str(i+1)),
-          "cantidad: ", request.POST.get("entradasFilaID"+str(i+1)))
-
-# def descargar_boleto(request, entrada_id):
-    # Lógica para obtener el archivo PDF del boleto basado en entrada_id
-    # boleto = obtener_boleto_pdf(entrada_id)
-    # obtener_boleto_pdf(entrada_id)
-    # Devuelve el archivo PDF como una respuesta de archivo
-    # return #FileResponse(boleto, as_attachment=True, filename='boleto.pdf')
-
 
 class comprarPage(View):
     def get(self, request):
@@ -370,15 +328,15 @@ class comprarPage(View):
                 # PAGO
                 nuevaCompra = Pagos()
                 nuevaCompra.fechaHora = timezone.now()
-                nuevaCompra.celular = request.POST.get('celular')
-                nuevaCompra.cip = request.POST.get('cip')
-                nuevaCompra.pin = request.POST.get('pin')
-                nuevaCompra.monto = request.POST.get('montoaPagar')
+                nuevaCompra.celular   = request.POST.get('celular')
+                nuevaCompra.cip       = request.POST.get('cip')
+                nuevaCompra.pin       = request.POST.get('pin')
+                nuevaCompra.monto     = request.POST.get('montoaPagar')
                 # confirmado
                 # sms tickets pagados
-                nuevaCompra.nombre = request.POST.get('nombre')
-                nuevaCompra.correo = request.POST.get('correo')
-                nuevaCompra.dni = request.POST.get('dni')
+                nuevaCompra.nombre    = request.POST.get('nombre')
+                nuevaCompra.correo    = request.POST.get('correo')
+                nuevaCompra.dni       = request.POST.get('dni')
                 nuevaCompra.pregunta1 = request.POST.get('pregunta1')
                 nuevaCompra.pregunta2 = request.POST.get('pregunta2')
                 nuevaCompra.save()
@@ -404,32 +362,32 @@ class comprarPage(View):
                         #print(j)
                         # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(tipo = tipoactualInt).precio)
                         ticket = Tickets()
-                        ticket.ticket = generaNumeroTicket()
+                        ticket.ticket          = generaNumeroTicket()
                         ticket.codigoseguridad = generacodigoseguridad()
-                        ticket.pin = request.POST.get('pin')
+                        ticket.pin             = request.POST.get('pin')
                         ticket.fechaHoraCambio = timezone.now()
-                        ticket.celular = request.POST.get('celular')
-                        ticket.tipo = Tipos.objects.get(tipo=tipoactualInt).descripcion
-                        ticket.numeroBox = "0"
+                        ticket.celular         = request.POST.get('celular')
+                        ticket.tipo            = Tipos.objects.get(tipo=tipoactualInt).descripcion
+                        ticket.numeroBox       = "0"
                         if tipoactualInt == 4:
                             ticket.numeroBox = box1
-                            z = boxesRestante1.objects.get(box = box1)
-                            z.ocupado = True
-                            z.save()
+                            auxiliarDisminuyeBox1 = boxesRestante1.objects.get(box=box1)
+                            auxiliarDisminuyeBox1.ocupado = True
+                            auxiliarDisminuyeBox1.save()
                         if tipoactualInt == 5:
                             ticket.numeroBox = box2
-                            z = boxesRestante2.objects.get(box = box2)
-                            z.ocupado = True
-                            z.save()
+                            auxiliarDisminuyeBox2 = boxesRestante2.objects.get(box=box2)
+                            auxiliarDisminuyeBox2.ocupado = True
+                            auxiliarDisminuyeBox2.save()
                         if tipoactualInt == 6:
-                            z = boxesRestante3.objects.get(box = box3)
-                            z.ocupado = True
-                            z.save()
                             ticket.numeroBox = box3
-                        ticket.cip = request.POST.get('cip')
-                        ticket.nombre = request.POST.get('nombre')
-                        ticket.correo = request.POST.get('correo')
-                        ticket.dni = request.POST.get('dni')
+                            auxiliarDisminuyeBox3 = boxesRestante3.objects.get(box=box3)
+                            auxiliarDisminuyeBox3.ocupado = True
+                            auxiliarDisminuyeBox3.save()
+                        ticket.cip       = request.POST.get('cip')
+                        ticket.nombre    = request.POST.get('nombre')
+                        ticket.correo    = request.POST.get('correo')
+                        ticket.dni       = request.POST.get('dni')
                         ticket.pregunta1 = request.POST.get('pregunta1')
                         ticket.pregunta2 = request.POST.get('pregunta2')
                         # "id": Tipos.objects.get(tipo = tipoactualInt).descripcion,
@@ -440,85 +398,15 @@ class comprarPage(View):
                         auxiliar["numero_ticket"] = ticket.ticket
                         entradasArgumento.append(auxiliar)
 
-                # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", {'response': responseData, 'entradas': entradasElegidas, 'precioTotal': str(montoPagar)})
-                # entradasArgumento = armaEntradas(entradasArreglo)
                 datosConfirmar = {
                     'entradas': entradasArgumento,
                 }
 
-                # entradas = {}
-                # for i in range (4):
-                #    key = f"entrada{str(i)}"
-                #    value = {
-                #        "id": Tipos.objects.get(id = i + 1).descripcion, #nombre de la entrada
-                # mas cosas
-                # mas
-                #
-                #
-                #    }
-                #    entradas[key] = value
-                # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", {"entradas" : entradas})
                 request.session['tickets_redirect'] = "tickets"
                 request.session['contexto'] = datosConfirmar
                 print("Llega hasta redirect")
                 return redirect(request.path)
-                return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", datosConfirmar)
-                # entradas = Tipos.objects.all()
-                # monto = 0
 
-                # #cantidadEntradasTipo1 = request.POST.get("cantidadEntradasTipo1")
-                # #cantidadEntradasTipo2 = request.POST.get("cantidadEntradasTipo2")
-                # #cantidadEntradasTipo3 = request.POST.get("cantidadEntradasTipo3")
-                # #cantidadEntradasTipo4 = request.POST.get("cantidadEntradasTipo4")
-                # entradasArreglo = {}
-                # for i in range (4):
-                #     campo = "cantidadEntradasTipo"+str(i)
-                #     cantidad = int(request.POST.get("cantidadEntradasTipo"+str(i+1)))
-                #     entradasArreglo[campo] = cantidad
-                #     monto += (entradas[i].precio)*cantidad
-
-                # celular = request.POST.get('celular')
-                # print(celular)
-                # codigo = request.POST.get('codigo')
-                # print(codigo)
-                # pin = request.POST.get('pin')
-                # print(pin)
-                # medioPago = request.POST.get('medioPago')
-                # print(medioPago)
-                # nombre = request.POST.get('nombre')
-                # print(nombre)
-                # correo = request.POST.get('correo')
-                # print(correo)
-                # dni = request.POST.get('dni')
-                # print(dni)
-                # pregunta1 = request.POST.get('pregunta1')
-                # print(pregunta1)
-                # pregunta2 = request.POST.get('pregunta2')
-                # print(pregunta2)
-                # monto = request.POST.get('monto')
-                # print(monto)
-                # print("Pasa por POST Confirmar")
-
-                # pagoAguardar = Pagos()
-                # #pagoAguardar.fechaHora =         #Actual
-                # pagoAguardar.celular = celular
-                # #pagoAguardar.recibo =
-                # pagoAguardar.pin = pin
-                # pagoAguardar.monto = monto
-                # #pagoAguardar.confirmado =
-                # #pagoAguardar.sms =
-                # pagoAguardar.nombre = nombre
-                # pagoAguardar.correo = correo
-                # pagoAguardar.dni = dni
-                # pagoAguardar.pregunta1 = pregunta1
-                # pagoAguardar.pregunta2 = pregunta2
-
-                # entradasArgumento = armaEntradas(entradasArreglo)
-                # print(entradasArgumento)
-                # datosConfirmar = {
-                #     'entradas': entradasArgumento,
-                # }
-                # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html",datosConfirmar)
         return render(request, "comprarPage/comprarPage.html", datos)
 
 
