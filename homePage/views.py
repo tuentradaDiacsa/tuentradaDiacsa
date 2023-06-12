@@ -258,7 +258,7 @@ class comprarPage(View):
     def post(self, request):
         if request.method == 'POST':
             preguntas = Preguntas.objects.all()
-            entradas  = Tipos.objects.all()
+            entradas  = Tipos.objects.all().order_by('tipo')
             boxes1    = boxesRestante1.objects.filter(ocupado=False)
             boxes2    = boxesRestante2.objects.filter(ocupado=False)
             boxes3    = boxesRestante3.objects.filter(ocupado=False)
@@ -347,9 +347,9 @@ class comprarPage(View):
                     key = f"entrada{j}"
                     montoPagar = montoPagar + \
                         int(entradasCantidad[i]) * \
-                        int(Tipos.objects.get(id=i + 1).precio)
+                        int(Tipos.objects.get(tipo=i + 1).precio)
                     value = {
-                        "id": Tipos.objects.get(id=i + 1).descripcion,
+                        "id": Tipos.objects.get(tipo=i + 1).descripcion,
                         "cantidad": entradasCantidad[i],
                         "tipo": str(i+1)
                     }
@@ -395,25 +395,22 @@ class comprarPage(View):
                     ultimoTicket = ultimoTicket + 1
                     #print(i)
                     k=i
-                    if(i==3): k = 4
-                    if(i==4): k = 5
-                    if(i==5): k = 3
-
+        
                     for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
-                        auxiliarDisminuyeEntradas = Tipos.objects.get(id=k+1)
+                        auxiliarDisminuyeEntradas = Tipos.objects.get(tipo=k+1)
                         auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-1
                         auxiliarDisminuyeEntradas.save()
                         
-                        Tipos.objects.get(id=k+1).descripcion
+                        Tipos.objects.get(tipo=k+1).descripcion
                         #print(j)
-                        # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(id = i + 1).precio)
+                        # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(tipo = i + 1).precio)
                         ticket = Tickets()
                         ticket.ticket = generaNumeroTicket()
                         ticket.codigoseguridad = generacodigoseguridad()
                         ticket.pin = request.POST.get('pin')
                         ticket.fechaHoraCambio = timezone.now()
                         ticket.celular = request.POST.get('celular')
-                        ticket.tipo = Tipos.objects.get(id=k+1).descripcion
+                        ticket.tipo = Tipos.objects.get(tipo=k+1).descripcion
                         ticket.numeroBox = "0"
                         if int(request.POST.get('tipoentrada'+str(i+1))) == 4:
                             ticket.numeroBox = box1
@@ -427,7 +424,7 @@ class comprarPage(View):
                         ticket.dni = request.POST.get('dni')
                         ticket.pregunta1 = request.POST.get('pregunta1')
                         ticket.pregunta2 = request.POST.get('pregunta2')
-                        # "id": Tipos.objects.get(id = i + 1).descripcion,
+                        # "id": Tipos.objects.get(tipo = i + 1).descripcion,
                         ticket.save()
                         auxiliar = {}
                         auxiliar["tipo_ticket"] = Tipos.objects.get(
