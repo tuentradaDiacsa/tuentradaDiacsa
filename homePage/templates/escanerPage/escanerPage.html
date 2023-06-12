@@ -5,11 +5,32 @@
 <head>
     <title>Html-Qrcode Demo</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link rel="stylesheet" href="{% static 'escanerPage/styles.css' %}">
+</head>
+
 <body>
-    <div id="qr-reader" style="width:500px"></div>
+    <div class="header">
+        <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"
+                onclick="javascript:location.reload(true)"></img></div>
+    </div>
+    <div class="seleccionarFechaBanner">Lector de entradas</div>
+
+    <div id="qr-reader" class="qrDetector"></div>
+
     <div id="qr-reader-results"></div>
+    <div class="footer">
+        <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
+        </div>
+    </div>
 </body>
-<script src="https://unpkg.com/html5-qrcode"></script>
+
 <script>
     function docReady(fn) {
         // see if DOM is already available
@@ -32,6 +53,21 @@
                 // Handle on success condition with the decoded message.
                 console.log(`Scan result ${decodedText}`, decodedResult);
             }
+            $.ajax({
+                type: 'POST',
+                url: '/administrar/',  // Reemplaza esto con la URL de tu vista de Django
+                data: {
+                    'lectura': decodedText,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (response) {
+                    console.log(l)
+                },
+                error: function (xhr, status, error) {
+                    // Lógica para manejar el error
+                    console.error('Error:', error);
+                }
+            });
         }
 
         var html5QrcodeScanner = new Html5QrcodeScanner(
@@ -39,7 +75,7 @@
         html5QrcodeScanner.render(onScanSuccess);
     });
 </script>
-</head>
+
 
 
 </html>
