@@ -72,12 +72,12 @@ function calcularTotal() {
 function seleccionado() {
     console.log("seleccionado")
     
-    if (document.getElementById("boxes" + (1).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (5).toString()).value = 0;
+    if (document.getElementById("boxes" + (1).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (4).toString()).value = 0;
+    else document.getElementById("cantidadHidden" + (4).toString()).value = 1;
+    if (document.getElementById("boxes" + (2).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (5).toString()).value = 0;
     else document.getElementById("cantidadHidden" + (5).toString()).value = 1;
-    if (document.getElementById("boxes" + (2).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (6).toString()).value = 0;
-    else document.getElementById("cantidadHidden" + (6).toString()).value = 1;
-    if (document.getElementById("boxes" + (3).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (4).toString()).value = 0;
-    else document.getElementById("cantidadHidden" + (4).toString()).value = 1;           
+    if (document.getElementById("boxes" + (3).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (6).toString()).value = 0;
+    else document.getElementById("cantidadHidden" + (6).toString()).value = 1;           
     
     console.log(document.getElementById("cantidadHidden" + (4).toString()).value)
     console.log(document.getElementById("cantidadHidden" + (5).toString()).value)
@@ -93,15 +93,6 @@ function seleccionado() {
     var opcionSeleccionadabox3 = selectbox3.options[selectbox3.selectedIndex].text;
     document.getElementById("opcionSeleccionadabox3").textContent = opcionSeleccionadabox3;
 }
-function soloNumeros(event) {
-    var charCode = event.which ? event.which : event.keyCode;
-    if (charCode < 48 || charCode > 57) {
-        event.preventDefault();
-        return false;
-    }
-    return true;
-}
-
 function soloNumeros(event) {
     var charCode = event.which ? event.which : event.keyCode;
     if (charCode < 48 || charCode > 57) {
@@ -222,7 +213,6 @@ function comprar() {
         alert("Falta llenar algun campo")
     }
 }
-
 
 function camposLlenos() {
     if (document.getElementById("celular").value.trim().length !== 9) return false;
