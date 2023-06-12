@@ -392,31 +392,28 @@ class comprarPage(View):
                     if (request.POST.get('tipoentrada'+str(i+1)) == None):
                         continue
                     ticketsCantidad = ticketsCantidad + 1
-                    ultimoTicket = ultimoTicket + 1
-                    #print(i)
-                    k=i
-        
+                    ultimoTicket = ultimoTicket + 1                  
                     for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
-                        auxiliarDisminuyeEntradas = Tipos.objects.get(tipo=k+1)
+                        auxiliarDisminuyeEntradas = Tipos.objects.get(tipo=int(request.POST.get('tipoentrada'+str(i+1))))
                         auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-1
                         auxiliarDisminuyeEntradas.save()
                         
                         Tipos.objects.get(tipo=k+1).descripcion
                         #print(j)
-                        # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(tipo = i + 1).precio)
+                        # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(tipo = auxiliarDisminuyeEntradas).precio)
                         ticket = Tickets()
                         ticket.ticket = generaNumeroTicket()
                         ticket.codigoseguridad = generacodigoseguridad()
                         ticket.pin = request.POST.get('pin')
                         ticket.fechaHoraCambio = timezone.now()
                         ticket.celular = request.POST.get('celular')
-                        ticket.tipo = Tipos.objects.get(tipo=k+1).descripcion
+                        ticket.tipo = Tipos.objects.get(tipo=auxiliarDisminuyeEntradas).descripcion
                         ticket.numeroBox = "0"
-                        if int(request.POST.get('tipoentrada'+str(i+1))) == 4:
+                        if int(request.POST.get('tipoentrada'+str(auxiliarDisminuyeEntradas))) == 4:
                             ticket.numeroBox = box1
-                        if int(request.POST.get('tipoentrada'+str(i+1))) == 5:
+                        if int(request.POST.get('tipoentrada'+str(auxiliarDisminuyeEntradas))) == 5:
                             ticket.numeroBox = box2
-                        if int(request.POST.get('tipoentrada'+str(i+1))) == 6:
+                        if int(request.POST.get('tipoentrada'+str(auxiliarDisminuyeEntradas))) == 6:
                             ticket.numeroBox = box3
                         ticket.cip = request.POST.get('cip')
                         ticket.nombre = request.POST.get('nombre')
@@ -424,11 +421,11 @@ class comprarPage(View):
                         ticket.dni = request.POST.get('dni')
                         ticket.pregunta1 = request.POST.get('pregunta1')
                         ticket.pregunta2 = request.POST.get('pregunta2')
-                        # "id": Tipos.objects.get(tipo = i + 1).descripcion,
+                        # "id": Tipos.objects.get(tipo = auxiliarDisminuyeEntradas).descripcion,
                         ticket.save()
                         auxiliar = {}
                         auxiliar["tipo_ticket"] = Tipos.objects.get(
-                            id=int(request.POST.get('tipoentrada'+str(i+1)))).descripcion
+                            id=int(request.POST.get('tipoentrada'+str(auxiliarDisminuyeEntradas)))).descripcion
                         auxiliar["numero_ticket"] = ticket.ticket
                         entradasArgumento.append(auxiliar)
 
