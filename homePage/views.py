@@ -413,9 +413,18 @@ class comprarPage(View):
                         ticket.numeroBox = "0"
                         if tipoactualInt == 4:
                             ticket.numeroBox = box1
+                            z = boxesRestante1.objects.get(box = box1)
+                            z.ocupado = True
+                            z.save()
                         if tipoactualInt == 5:
                             ticket.numeroBox = box2
+                            z = boxesRestante2.objects.get(box = box2)
+                            z.ocupado = True
+                            z.save()
                         if tipoactualInt == 6:
+                            z = boxesRestante3.objects.get(box = box3)
+                            z.ocupado = True
+                            z.save()
                             ticket.numeroBox = box3
                         ticket.cip = request.POST.get('cip')
                         ticket.nombre = request.POST.get('nombre')
