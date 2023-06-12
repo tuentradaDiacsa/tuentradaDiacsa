@@ -526,12 +526,12 @@ def administrarPage(request):
 
     # ValidarPage
     if request.method == 'POST' and request.POST.get('comando') == 'verificarBotonValidarTemplate':
-        ticket = request.POST.get('ticket')
-        cip = request.POST.get('cip')
-        print(ticket, cip)
+        numero = request.POST.get('ticket')
+        apellido = request.POST.get('cip')
+        
         try:
-            ticket = Tickets.objects.get(ticket=ticket, cip=cip)
-            if ticket.confirmado:
+            ticket = Tickets.objects.get(ticket=numero, nombre__icontains=apellido)
+            if ticket.confirmado2 is not None:
                 responseData = {'estado': 'Ticket valido'}
             else:
                 responseData = {'estado': 'Ticket en validacion'}
