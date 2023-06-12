@@ -7,10 +7,10 @@ window.addEventListener('pageshow', function (event) {
     form.reset();
 });
 ScrollReveal().reveal('.banner, .seleccionarFechaBanner, .fechaBotonBanner', {
-    delay: 200, // Retraso en milisegundos antes de que aparezca cada elemento
+    delay:     200, // Retraso en milisegundos antes de que aparezca cada elemento
     distance: '50px', // Distancia de desplazamiento desde la posición original
-    duration: 800, // Duración de la animación en milisegundos
-    easing: 'ease-out', // Curva de animación
+    duration:  800, // Duración de la animación en milisegundos
+    easing:   'ease-out', // Curva de animación
 });
 width = window.innerWidth;
 document.getElementById("fechaBotonBanner").addEventListener("click", function () {
@@ -30,8 +30,6 @@ document.getElementById("fechaBotonBanner").addEventListener("click", function (
 
     }
 });
-
-
 function disminuir(id) {
     value = parseInt(document.getElementById("cantidadVisible" + id.toString()).innerText)
     if (value <= 0 || parseInt(document.getElementById("entradasRestantes" + id.toString()).innerText) <= 0) return;
@@ -73,12 +71,27 @@ function calcularTotal() {
 }
 function seleccionado() {
     console.log("seleccionado")
-    for (var i = 0; i < 3; i++) {
-        console.log(document.getElementById("boxes" + (i + 1).toString()).value)
-        if (document.getElementById("boxes" + (i + 1).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (i + 4).toString()).value = 0;
-        else document.getElementById("cantidadHidden" + (i + 4).toString()).value = 1;
-    }
+    
+    if (document.getElementById("boxes" + (1).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (5).toString()).value = 0;
+    else document.getElementById("cantidadHidden" + (5).toString()).value = 1;
+    if (document.getElementById("boxes" + (2).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (6).toString()).value = 0;
+    else document.getElementById("cantidadHidden" + (6).toString()).value = 1;
+    if (document.getElementById("boxes" + (3).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (4).toString()).value = 0;
+    else document.getElementById("cantidadHidden" + (4).toString()).value = 1;           
+    
+    console.log(document.getElementById("cantidadHidden" + (4).toString()).value)
+    console.log(document.getElementById("cantidadHidden" + (5).toString()).value)
+    console.log(document.getElementById("cantidadHidden" + (6).toString()).value)
     calcularTotal()
+    var selectbox1 = document.getElementById("boxes1");
+    var opcionSeleccionadabox1 = selectbox1.options[selectbox1.selectedIndex].text;
+    document.getElementById("opcionSeleccionadabox1").textContent = opcionSeleccionadabox1;
+    var selectbox2 = document.getElementById("boxes2");
+    var opcionSeleccionadabox2 = selectbox2.options[selectbox2.selectedIndex].text;
+    document.getElementById("opcionSeleccionadabox2").textContent = opcionSeleccionadabox2;
+    var selectbox3 = document.getElementById("boxes3");
+    var opcionSeleccionadabox3 = selectbox3.options[selectbox3.selectedIndex].text;
+    document.getElementById("opcionSeleccionadabox3").textContent = opcionSeleccionadabox3;
 }
 function soloNumeros(event) {
     var charCode = event.which ? event.which : event.keyCode;
@@ -103,11 +116,11 @@ function enviarSMS() {
     console.log(document.getElementById("celular").value.trim().length)
     if (document.getElementById("celular").value.trim().length !== 9) {
         alert("El número de celular debe tener 9 dígitos.");
-        return false; // Evita que el formulario se envíe
+        return false; 
     }
     $.ajax({
         type: 'POST',
-        url: '/comprar/',  // Reemplaza esto con la URL de tu vista de Django
+        url: '/comprar/',  
         data: {
             'boton': 'sms',
             'celular': $('#celular').val(),
@@ -142,7 +155,7 @@ function enviarCodigo() {
         data: {
             'boton': 'verificar',
             'celular': $('#celular').val(),
-            'codigo': $('#codigo').val(),
+            'codigo' : $('#codigo').val(),
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (response) {
@@ -198,6 +211,9 @@ function uppercase(event) {
     input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 function comprar() {
+    document.getElementById("celular2").value = document.getElementById("celular").value;
+    document.getElementById("codigo2").value = document.getElementById("codigo").value;
+
     if (camposLlenos()) {
         document.getElementById("boton").value = "comprar"
         document.getElementById("comprarForm").submit();
@@ -205,7 +221,6 @@ function comprar() {
     else {
         alert("Falta llenar algun campo")
     }
-
 }
 
 
@@ -225,7 +240,6 @@ function camposLlenos() {
     }
     if (!seleccionada) return false;
     if (document.getElementById("dni").value.trim().length < 6) return false;
-
     if (document.getElementById("nombre").value.trim().length < 4) return false;
     if (document.getElementById("respuesta1").value.trim().length < 4) return false;
     if (document.getElementById("respuesta2").value.trim().length < 4) return false;
