@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <div></div>
-                <div class="totalBotonDiv" id="comprarBoton" onclick="comprar()">COMPRAR</div>
+                <div class="totalBotonDiv" id="comprarBoton" onclick="comprar()" hidden>COMPRAR</div>
                 <input hidden id="boton" name="boton" value="">
             </div>
         </div>
@@ -141,74 +141,113 @@
                     oninput="uppercase(event)">
                 <button type="button" id="buttonValidar" onclick="enviarCodigo()">Validar</button>
             </div>
-            <div class="contenedorPin" id="contenedorPin">
-                <div>PIN</div>
-                <input type="text" placeholder="Ingrese PIN" maxlength="10" id="pin" name="pin"
-                    onkeypress="return soloNumeros(event)">
-                <button type="button">Validar</button>
-            </div>
-            <!-- <div class="contenedorMedioPago" id="contenedorMedioPago">
-                <div><input type="radio" name="opciones" value="Yape"></div>
-                <div><img src="{% static 'comprarPage/yapeicon.png' %}" alt="Icono 1" class="icono"></div>
-                <div><input type="radio" name="opciones" value="Plin"></div>
-                <div><img src="{% static 'comprarPage/plinicon.png' %}" alt="Icono 1" class="icono"></div>
-                <div><input type="radio" name="opciones" value="Transferencia"></div>
-                <div><img src="{% static 'comprarPage/bcpicon.png' %}" alt="Icono 1" class="icono"></div>
-            </div> -->
-            <div class="contenedorNombre" id="contenedorNombre">
-                <div class="labelInput">Nombre</div>
-                <input type="text" placeholder="Nombres y apellidos" maxlength="59" id="nombre" name="nombre">
-                <button type="button">Validar</button>
-            </div>
-            <div class="contenedorDNI" id="contenedorDNI">
-                <div class="labelInput">DNI</div>
-                <input type="text" placeholder="Numero de DNI" maxlength="8" id="dni" name="dni"
-                    onkeypress="return soloNumeros(event)">
-                <button type="button">Validar</button>
-            </div>
-            <div class="contenedorCorreo" id="contenedorCorreo">
-                <div class="labelInput">Correo</div>
-                <input type="text" placeholder="Correo electronico" maxlength="50" id="correo" name="correo">
-                <button type="button">Validar</button>
+            <div id="celularigualwhatsapp" class="celularigualwhatsapp">
+                <input type="checkbox" id="sameNumber" name="sameNumber" checked onchange="checkwhatsapp()">
+                <label for="sameNumber">Mi celular es el mismo que mi WhatsApp</label>
             </div>
 
-            <div class="contenedorPregunta" id="contenedorPregunta1">
-                <div class="labelInput">Pregunta</div>
-                <select name="mi_combobox" placeholder="Pregunta de seguridad">
-                    {% for pregunta in preguntas %}
-                    <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
-                    {% endfor %}
-                </select>
-                <button type="button">Validar</button>
+            <div class="contenedorWhatsapp" id="contenedorWhatsapp">
+                <div>Whatsapp</div>
+                <input type="text" placeholder="Numero de whatsapp" maxlength="9" onkeypress="return soloNumeros(event)"
+                    id="whatsapp" name="whatsapp">
+                <button type="button" id="buttonWhatsapp" onclick="enviarWhatsapp()">Codigo</button>
             </div>
-
-            <div class="contenedorRespuesta" id="contenedorRespuesta1">
-                <div class="labelInput"></div>
-                <input type="text" placeholder="Respuesta a la pregunta 1" maxlength="59" id="respuesta1"
-                    name="respuesta1" style="margin-top: -25px;">
-                <button type="button">Validar</button>
+            <div class="contenedorCodigoWhatsapp" id="contenedorCodigoWhatsapp">
+                <div>Codigo</div>
+                <input type="text" placeholder="Codigo whatsapp" maxlength="6" id="codigoWhatsapp" name="codigoWhatsapp"
+                    oninput="uppercase(event)">
+                <button type="button" id="buttonValidarWhatsapp" onclick="enviarCodigoWhatsapp()">Validar</button>
             </div>
+            <div id="despuesWhatsapp">
 
-            <div class="contenedorPregunta" id="contenedorPregunta2">
-                <div class="labelInput">Pregunta</div>
-                <select name="mi_combobox" placeholder="Pregunta de seguridad">
-                    {% for pregunta in preguntas %}
-                    <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
-                    {% endfor %}
-                </select>
-                <button type="button">Validar</button>
+                <div class="contenedorMedioPago" id="contenedorMedioPago">
+                    <div><input type="radio" name="opciones" value="DNI"></div>
+                    <div>DNI</div>
+                    <div><input type="radio" name="opciones" value="Pasaporte"></div>
+                    <div>Pasaporte</div>
+                    <div><input type="radio" name="opciones" value="Carnet extrajeria"></div>
+                    <div>C.E.</div>
+                </div>
+
+                <div class="contenedorDNI" id="contenedorDNI">
+                    <div class="labelInput">Documento</div>
+                    <input type="text" placeholder="Ingrese de documento" maxlength="20" id="dni" name="dni">
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorNombre" id="contenedorNombre">
+                    <div class="labelInput">Nombre</div>
+                    <input type="text" placeholder="Nombres y apellidos" maxlength="59" id="nombre" name="nombre">
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorPregunta" id="contenedorPregunta1">
+                    <div class="labelInput">Pregunta</div>
+                    <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                        {% for pregunta in preguntas %}
+                        <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorRespuesta" id="contenedorRespuesta1">
+                    <div class="labelInput"></div>
+                    <input type="text" placeholder="Respuesta a la pregunta 1" maxlength="59" id="respuesta1"
+                        name="respuesta1" style="margin-top: -25px;">
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorPregunta" id="contenedorPregunta2">
+                    <div class="labelInput">Pregunta</div>
+                    <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                        {% for pregunta in preguntas %}
+                        <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorRespuesta" id="contenedorRespuesta2">
+                    <div class="labelInput"></div>
+                    <input type="text" placeholder="Respuesta a la pregunta 2" maxlength="59" id="respuesta2"
+                        name="respuesta2" style="margin-top: -25px;">
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorPregunta" id="contenedorPregunta3">
+                    <div class="labelInput">Pregunta</div>
+                    <select name="mi_combobox" placeholder="Pregunta de seguridad">
+                        {% for pregunta in preguntas %}
+                        <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorRespuesta" id="contenedorRespuesta3">
+                    <div class="labelInput"></div>
+                    <input type="text" placeholder="Respuesta a la pregunta 3" maxlength="59" id="respuesta3"
+                        name="respuesta2" style="margin-top: -25px;">
+                    <button type="button">Validar</button>
+                </div>
+
+                <div class="contenedorPin" id="contenedorPin">
+                    <div>PIN</div>
+                    <input type="text" placeholder="Ingrese PIN" maxlength="10" id="pin" name="pin"
+                        onkeypress="return soloNumeros(event)">
+                    <button type="button">Validar</button>
+                </div>
+
+
+
             </div>
+            <div class="comprarBotonFinal" id="comprarBotonFinal" onclick="comprar()">COMPRAR</div>
 
-            <div class="contenedorRespuesta" id="contenedorRespuesta2">
-                <div class="labelInput"></div>
-                <input type="text" placeholder="Respuesta a la pregunta 2" maxlength="59" id="respuesta2"
-                    name="respuesta2" style="margin-top: -25px;">
-                <button type="button">Validar</button>
-            </div>
-
-
+            <div
+                style="margin-top: 40px; font-size: 18px; background-color: blueviolet; justify-content: center; width: 100%; border-radius: 10px; display: flex; justify-self: center; color: white;">
+                Recuerde bien su PIN de seguridad</div>
         </div>
-        <div class="comprarBotonFinal" id="comprarBotonFinal" onclick="comprar()">COMPRAR</div>
         <div class="blankspace2"></div>
         <div class="footer">
             <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>

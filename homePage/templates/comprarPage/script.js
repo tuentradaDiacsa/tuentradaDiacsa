@@ -31,31 +31,6 @@ document.getElementById("fechaBotonBanner").addEventListener("click", function (
     }
 });
 
-document.getElementById("comprarBoton").addEventListener("mouseover", function () {
-    if (camposLlenos()) {
-        document.getElementById("comprarBoton").style.cursor = "pointer";
-        document.getElementById("comprarBoton").style.opacity = "0.8";
-    }
-});
-
-document.getElementById("comprarBoton").addEventListener("mouseleave", function () {
-    // Acciones a realizar cuando el cursor sale del div (hover)
-    document.getElementById("comprarBoton").style.cursor = "auto";
-    document.getElementById("comprarBoton").style.opacity = "1";
-});
-
-document.getElementById("comprarBotonFinal").addEventListener("mouseover", function () {
-    if (camposLlenos()) {
-        document.getElementById("comprarBotonFinal").style.cursor = "pointer";
-        document.getElementById("comprarBotonFinal").style.opacity = "0.8";
-    }
-});
-
-document.getElementById("comprarBotonFinal").addEventListener("mouseleave", function () {
-    // Acciones a realizar cuando el cursor sale del div (hover)
-    document.getElementById("comprarBotonFinal").style.cursor = "auto";
-    document.getElementById("comprarBotonFinal").style.opacity = "1";
-});
 
 function disminuir(id) {
     value = parseInt(document.getElementById("cantidadVisible" + id.toString()).innerText)
@@ -175,12 +150,16 @@ function enviarCodigo() {
             if (response.data.toString() == "Codigo correcto") {
                 document.getElementById("contenedorPin").style.visibility = "visible";
                 document.getElementById("contenedorPin").style.display = "grid";
-                // document.getElementById("contenedorMedioPago").style.visibility = "visible";
-                // document.getElementById("contenedorMedioPago").style.display = "grid";
+                document.getElementById("contenedorMedioPago").style.visibility = "visible";
+                document.getElementById("contenedorMedioPago").style.display = "grid";
                 document.getElementById("contenedorDNI").style.visibility = "visible";
                 document.getElementById("contenedorDNI").style.display = "grid";
-                document.getElementById("contenedorCorreo").style.visibility = "visible";
-                document.getElementById("contenedorCorreo").style.display = "grid";
+                document.getElementById("contenedorWhatsapp").style.visibility = "hidden";
+                document.getElementById("contenedorWhatsapp").style.display = "none";
+                document.getElementById("contenedorCodigoWhatsapp").style.visibility = "hidden";
+                document.getElementById("contenedorCodigoWhatsapp").style.display = "none";
+                document.getElementById("celularigualwhatsapp").style.visibility = "visible";
+                document.getElementById("celularigualwhatsapp").style.display = "flex";
                 document.getElementById("contenedorNombre").style.visibility = "visible";
                 document.getElementById("contenedorNombre").style.display = "grid";
                 document.getElementById("contenedorPregunta1").style.visibility = "visible";
@@ -191,6 +170,10 @@ function enviarCodigo() {
                 document.getElementById("contenedorPregunta2").style.display = "grid";
                 document.getElementById("contenedorRespuesta2").style.visibility = "visible";
                 document.getElementById("contenedorRespuesta2").style.display = "grid";
+                document.getElementById("contenedorPregunta3").style.visibility = "visible";
+                document.getElementById("contenedorPregunta3").style.display = "grid";
+                document.getElementById("contenedorRespuesta3").style.visibility = "visible";
+                document.getElementById("contenedorRespuesta3").style.display = "grid";
                 document.getElementById("comprarBotonFinal").style.display = "flex";
                 document.getElementById("comprarBotonFinal").style.visibility = "visible";
                 document.getElementById("celular").setAttribute("disabled", "disabled");
@@ -219,11 +202,34 @@ function comprar() {
         document.getElementById("boton").value = "comprar"
         document.getElementById("comprarForm").submit();
     }
+    else {
+        alert("Falta llenar algun campo")
+    }
 
 }
+
+
 function camposLlenos() {
     if (document.getElementById("celular").value.trim().length !== 9) return false;
     if (document.getElementById("codigo").value.trim().length !== 6) return false;
+    if (document.getElementById("sameNumber").checked == false) {
+        if (document.getElementById("whatsapp").value.trim().length !== 9) return false;
+        if (document.getElementById("codigoWhatsapp").value.trim().length !== 6) return false;
+    }
+    var seleccionada = false;
+    for (var i = 0; i < document.getElementsByName('opciones').length; i++) {
+        if (document.getElementsByName('opciones')[i].checked) {
+            seleccionada = true;
+            break;
+        }
+    }
+    if (!seleccionada) return false;
+    if (document.getElementById("dni").value.trim().length < 6) return false;
+
+    if (document.getElementById("nombre").value.trim().length < 4) return false;
+    if (document.getElementById("respuesta1").value.trim().length < 4) return false;
+    if (document.getElementById("respuesta2").value.trim().length < 4) return false;
+    if (document.getElementById("respuesta3").value.trim().length < 4) return false;
     if (document.getElementById("pin").value.trim().length < 4) return false;
     // var opciones = document.getElementsByName("opciones");
     // var opcionSeleccionada = "";
@@ -233,12 +239,90 @@ function camposLlenos() {
     //         break;
     //     }
     // }
+
+    /*celular
+    validacion
+    numero whatsappp
+    codigo validacion
+    DNI pasaporte o ce
+    Nombre 
+    PIN
+    preguntas (3)
+
+    quitar boton de comprar de arriba
+
+    texto al agregar el pago 
+
+    tachar QR
+    ocultar DNI
+*/
     // console.log(opcionSeleccionada)
     // console.log(parseInt(document.getElementById("totalEstatico").innerText))
     // if (opcionSeleccionada !== "Yape" && opcionSeleccionada !== "Plin" && opcionSeleccionada !== "Transferencia") return false;
     if (parseInt(document.getElementById("totalEstatico").innerText) == 0) return false;
-
     return true;
+}
+
+function enviarWhatsapp() {
+
+}
+
+function enviarCodigoWhatsapp() {
+    console.log(document.getElementById("codigoWhatsapp").value.trim().length)
+    if (document.getElementById("codigo").value.trim().length !== 6) {
+        alert("El codigo de verificacion debe tener 6 caracteres.");
+        return false; // Evita que el formulario se envíe
+    }
+    $.ajax({
+        type: 'POST',
+        url: '/comprar/',  // Reemplaza esto con la URL de tu vista de Django
+        data: {
+            'boton': 'verificar',
+            'celular': $('#celular').val(),
+            'codigo': $('#codigo').val(),
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (response) {
+            console.log(response.data)
+
+            document.getElementById("despuesWhatsapp").style.visibility = "visible";
+            document.getElementById("despuesWhatsapp").style.display = "grid";
+            if (response.data.toString() == "Codigo correcto") {
+
+            }
+            else {
+                alert("El codigo ingresado no es correcto.");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Lógica para manejar el error
+
+            console.error('Error:', error);
+
+        }
+    });
+}
+
+
+function checkwhatsapp() {
+    console.log("dwadw")
+    //document.getElementById("sameNumber").checked = !document.getElementById("sameNumber").checked
+    if (document.getElementById("sameNumber").checked == false) {
+        document.getElementById("despuesWhatsapp").style.visibility = "hidden";
+        document.getElementById("despuesWhatsapp").style.display = "none";
+        document.getElementById("contenedorWhatsapp").style.visibility = "visible";
+        document.getElementById("contenedorWhatsapp").style.display = "grid";
+        document.getElementById("contenedorCodigoWhatsapp").style.visibility = "visible";
+        document.getElementById("contenedorCodigoWhatsapp").style.display = "grid";
+    }
+    else {
+        document.getElementById("despuesWhatsapp").style.visibility = "visible";
+        document.getElementById("despuesWhatsapp").style.display = "grid";
+        document.getElementById("contenedorWhatsapp").style.visibility = "hidden";
+        document.getElementById("contenedorWhatsapp").style.display = "none";
+        document.getElementById("contenedorCodigoWhatsapp").style.visibility = "hidden";
+        document.getElementById("contenedorCodigoWhatsapp").style.display = "none";
+    }
 }
 
 function miFuncion() {
@@ -252,7 +336,8 @@ function miFuncion() {
     }
 
 }
-setInterval(miFuncion, 500);
+setInterval(miFuncion, 100);
+
 tiempo = 60;
 function miFuncion2() {
     if (validado) {
