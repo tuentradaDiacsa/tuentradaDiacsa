@@ -51,7 +51,7 @@ function aumentar(id) {
 function calcularTotal() {
     var total = 0;
     for (var i = 1; i <= 6; i++) {
-        total = total + parseInt(document.getElementById("cantidadHidden" + i.toString()).value) * parseInt(document.getElementById("entradaPrecio" + i.toString()).innerText.substring(4))
+        total = total + parseInt(document.getElementById("cantidadHidden"+i.toString()).value) * parseInt(document.getElementById("entradaPrecio"+i.toString()).innerText.substring(4))
     }
     document.getElementById("totalEstatico").innerText = total.toString();
     if (total == 0) {
