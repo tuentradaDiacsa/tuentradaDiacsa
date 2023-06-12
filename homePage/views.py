@@ -389,6 +389,7 @@ class comprarPage(View):
                 # monto = 0
                 entradasArgumento = []
                 for i in range(Tipos.objects.count()):
+                    print(request.POST.get('tipoentrada'+str(i+1)))
                     if (request.POST.get('tipoentrada'+str(i+1)) == None):
                         continue
                     ticketsCantidad = ticketsCantidad + 1
@@ -410,11 +411,11 @@ class comprarPage(View):
                         ticket.celular = request.POST.get('celular')
                         ticket.tipo = Tipos.objects.get(tipo=tipoactualInt).descripcion
                         ticket.numeroBox = "0"
-                        if int(request.POST.get('tipoentrada'+str(tipoactualInt))) == 4:
+                        if tipoactualInt == 4:
                             ticket.numeroBox = box1
-                        if int(request.POST.get('tipoentrada'+str(tipoactualInt))) == 5:
+                        if tipoactualInt == 5:
                             ticket.numeroBox = box2
-                        if int(request.POST.get('tipoentrada'+str(tipoactualInt))) == 6:
+                        if tipoactualInt == 6:
                             ticket.numeroBox = box3
                         ticket.cip = request.POST.get('cip')
                         ticket.nombre = request.POST.get('nombre')
@@ -426,7 +427,7 @@ class comprarPage(View):
                         ticket.save()
                         auxiliar = {}
                         auxiliar["tipo_ticket"] = Tipos.objects.get(
-                            tipo=int(request.POST.get('tipoentrada'+str(tipoactualInt)))).descripcion
+                            tipo=tipoactualInt).descripcion
                         auxiliar["numero_ticket"] = ticket.ticket
                         entradasArgumento.append(auxiliar)
 
