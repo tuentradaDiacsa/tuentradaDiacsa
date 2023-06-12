@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tuentrada Pe</title>
     <!--Custom CSS-->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +18,8 @@
         rel="stylesheet">
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="{% static 'comprarPage/styles.css' %}">
+
+
 </head>
 
 <body>
@@ -51,35 +54,72 @@
                     <div class="entradaColumna3">
                         <p id="entradaPrecio{{entrada.id}}">S/. {{entrada.precio}}</p>
                     </div>
-                    <div class="entradaColumna4"><i class="fas fa-minus-circle"
+                    {% if forloop.counter < 4 %} <div class="entradaColumna4"><i class="fas fa-minus-circle"
                             onclick="disminuir('{{entrada.id}}')"></i>
-                    </div>
-                    <div class="entradaColumna5">
-                        <p id="cantidadVisible{{entrada.id}}">00</p>
-                        <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
-                    </div>
-                    <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.id}}')"></i>
-                    </div>
-                    <div class="entradaColumna7">
-                        <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
-                    </div>
                 </div>
-                {% endfor %}
-                <div class="totalEntradasDiv">
-                    <div class="totalMontoDiv">
-                        <div class="totalTexto">
-                            <p>Total S/.</p>
-                        </div>
-                        <div class="dummy"> </div>
-                        <div class="totalEstatico">
-                            <p id="totalEstatico">0</p>
-                        </div>
-                    </div>
-                    <div></div>
-                    <div class="totalBotonDiv" id="comprarBoton" onclick="comprar()">COMPRAR</div>
-                    <input hidden id="boton" name="boton" value="">
+                <div class="entradaColumna5">
+                    <p id="cantidadVisible{{entrada.id}}">00</p>
+                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
+                </div>
+                <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.id}}')"></i>
+                </div>
+                {% elif forloop.counter == 4%}
+                <div></div>
+                <div><select id="boxes1" name="boxes1" class="form-select" onchange="seleccionado()">
+                        <option value="ninguno"> --- </option>
+                        {% for boxs in boxes1 %}
+                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
+                        {% endfor %}
+                    </select>
+                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
+                </div>
+                <div></div>
+                {% elif forloop.counter == 5%}
+                <div></div>
+                <div><select id="boxes2" name="boxes2" class="form-select" onchange="seleccionado()">
+                        <option value="ninguno"> --- </option>
+                        {% for boxs in boxes2 %}
+                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
+                        {% endfor %}
+                    </select>
+                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
+                </div>
+                <div></div>
+                {% elif forloop.counter == 6%}
+                <div></div>
+                <div><select id="boxes3" name="boxes3" class="form-select" onchange="seleccionado()">
+                        <option value="ninguno"> --- </option>
+                        {% for boxs in boxes3 %}
+                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
+                        {% endfor %}
+                    </select>
+                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.id}}" value="0">
+                </div>
+                <div></div>
+                {% endif %}
+                <div class="entradaColumna7">
+                    <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
+
+
+
                 </div>
             </div>
+            {% endfor %}
+            <div class="totalEntradasDiv">
+                <div class="totalMontoDiv">
+                    <div class="totalTexto">
+                        <p>Total S/.</p>
+                    </div>
+                    <div class="dummy"> </div>
+                    <div class="totalEstatico">
+                        <p id="totalEstatico">0</p>
+                    </div>
+                </div>
+                <div></div>
+                <div class="totalBotonDiv" id="comprarBoton" onclick="comprar()">COMPRAR</div>
+                <input hidden id="boton" name="boton" value="">
+            </div>
+        </div>
         </div>
         <div class="blankspace"></div>
 

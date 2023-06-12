@@ -89,8 +89,22 @@ function calcularTotal() {
         document.getElementById("comprarBotonFinal").style.display = "none";
         document.getElementById("comprarBotonFinal").style.visibility = "hidden";
     }
+    else {
+        document.getElementById("todoObligatorio").style.visibility = "visible";
+        document.getElementById("todoObligatorio").style.display = "grid";
+        document.getElementById("datosCompradorTexto").style.visibility = "visible";
+        document.getElementById("datosCompradorTexto").style.display = "flex";
+    }
 }
-
+function seleccionado() {
+    console.log("seleccionado")
+    for (var i = 0; i < 3; i++) {
+        console.log(document.getElementById("boxes" + (i + 1).toString()).value)
+        if (document.getElementById("boxes" + (i + 1).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (i + 4).toString()).value = 0;
+        else document.getElementById("cantidadHidden" + (i + 4).toString()).value = 1;
+    }
+    calcularTotal()
+}
 function soloNumeros(event) {
     var charCode = event.which ? event.which : event.keyCode;
     if (charCode < 48 || charCode > 57) {
