@@ -243,6 +243,11 @@ body {
     justify-content: center;
 }
 
+.copy-icon:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
 .containerCuenta2,
 .containerCuenta1 {
     margin-top: 10px;
@@ -252,7 +257,7 @@ body {
     height: 35px;
     border-radius: 10px;
     font-size: 15px;
-    width: 400px;
+    width: 290px;
 }
 
 .containerCuenta1 {
