@@ -1,33 +1,34 @@
-from django.shortcuts  import render, redirect
-from homePage.models   import Preguntas, Tipos, Tickets, Pagos
+from django.shortcuts import render, redirect
+from homePage.models import Preguntas, Tipos, Tickets, Pagos, boxesRestante1, boxesRestante2, boxesRestante3
 from .codigoValidacion import generaCodigoValidacion
 from .codigoValidacion import almacenaCelularValidador, buscarCodigoEnBaseDatos
-from .generaTickets    import generaNumeroTicket
-from .generaCIP        import generaCIP
-from django.http       import JsonResponse
+from .generaTickets import generaNumeroTicket
+from .generaCIP import generaCIP
+from django.http import JsonResponse
 
-from .models     import Pagos
+from .models import Pagos
 from django.http import FileResponse
 
 from django.http import HttpResponse
 import io
 import qrcode
 from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen        import canvas
+from reportlab.pdfgen import canvas
 import pdfkit
 from django.template.loader import render_to_string
 
-from django.utils          import timezone
+from django.utils import timezone
 from django.utils.timezone import activate
 import pytz
 
 import base64
 from django.conf import settings
-from io          import BytesIO
-from xhtml2pdf   import pisa
+from io import BytesIO
+from xhtml2pdf import pisa
 import os
 from django.contrib.sites.shortcuts import get_current_site
 from django.views import View
+
 
 def get_dynamic_base_url(request):
     current_site = get_current_site(request)
@@ -37,6 +38,7 @@ def get_dynamic_base_url(request):
     static_url = '/static/'  # Esto debería coincidir con tu configuración STATIC_URL
 
     return f'{scheme}://{current_site.domain}{static_url}'
+
 
 def generar_qr_code_url(ticket, cip):
     data = "Ticket: {}, CIP: {}".format(ticket, cip)
@@ -49,69 +51,71 @@ def generar_qr_code_url(ticket, cip):
     qr_buffer.seek(0)
     return qr_buffer
 
+
 def descargar_boleto(request, entrada_id):
     try:
         ticket_obj = Tickets.objects.get(ticket=entrada_id)
-        cip        = ticket_obj.cip
+        cip = ticket_obj.cip
         qr_buffer = generar_qr_code_url(entrada_id, cip)
         qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
-        qr_url = "data:image/png;base64," + qr_base64       
+        qr_url = "data:image/png;base64," + qr_base64
         context = {
-            'ID_Ticket':entrada_id,
-            'nombre_y_apellido':getattr(ticket_obj, 'nombre', 'No completado'),
-            'dni':getattr(ticket_obj, 'dni', 'No completado'),
-            'telefono':getattr(ticket_obj, 'celular', 'No completado'),
-            'whatsapp':getattr(ticket_obj, 'celular', 'No completado'),
+            'ID_Ticket': entrada_id,
+            'nombre_y_apellido': getattr(ticket_obj, 'nombre', 'No completado'),
+            'dni': getattr(ticket_obj, 'dni', 'No completado'),
+            'telefono': getattr(ticket_obj, 'celular', 'No completado'),
+            'whatsapp': getattr(ticket_obj, 'celular', 'No completado'),
             'Lugar': "Hangar de Iquitos",
-            'Ubicacion':"Calle Muy Bonita 234 Iquitos Peru",
-            'fecha':"21-06-2023",
-            'hora':"7:00 pm",
-            'Zona':getattr(ticket_obj, 'tipo', 'No completado'),
+            'Ubicacion': "Calle Muy Bonita 234 Iquitos Peru",
+            'fecha': "21-06-2023",
+            'hora': "7:00 pm",
+            'Zona': getattr(ticket_obj, 'tipo', 'No completado'),
             'qr_image': qr_url,
         }
-        
+
     except Tickets.DoesNotExist:
         return HttpResponse("No se crearon los tickets correctamente o hubo problemas en la búsqueda")
-    
-
 
     html_content = render_to_string('entradas/plantillaentrada1.html', context)
 
     # Generar el PDF en un buffer de memoria
-    #pdf_data = generar_pdf_desde_html(html_content)
+    # pdf_data = generar_pdf_desde_html(html_content)
 
     # Crear una respuesta de Django con el archivo PDF
-    #response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
-    #response.write(pdf_data)
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
+    # response.write(pdf_data)
 
-    return HttpResponse(html_content)#response
+    return HttpResponse(html_content)  # response
 
 
 def generar_pdf_desde_html(html_content):
     pdf_data = pdfkit.from_string(html_content, False)
     return pdf_data
 
+
 def obtener_entrada(entrada_id):
     datosentrada = {}
     datosentrada[id] = entrada_id
     return datosentrada
 
+
 def descargar_boleto2(request, entrada_id):
     datosEntrada = {
-        'ID_Ticket':2,
-        'nombre_y_apellido':"Andre Bolaños",
-        'dni':44036805,
-        'telefono':975976333,
-        'whatsapp':975976333,
+        'ID_Ticket': 2,
+        'nombre_y_apellido': "Andre Bolaños",
+        'dni': 44036805,
+        'telefono': 975976333,
+        'whatsapp': 975976333,
         'Lugar': "Hangar de Iquitos",
-        'Ubicacion':"Calle Muy Bonita 234 Iquitos Peru",
-        'fecha':"21-06-2023",
-        'hora':"7:00 pm",
-        'Zona':"Box 1",
+        'Ubicacion': "Calle Muy Bonita 234 Iquitos Peru",
+        'fecha': "21-06-2023",
+        'hora': "7:00 pm",
+        'Zona': "Box 1",
 
     }
-    return render(request, "entradas/plantillaentrada1.html",datosEntrada)
+    return render(request, "entradas/plantillaentrada1.html", datosEntrada)
+
 
 '''
 def descargar_boleto(request, entrada_id):
@@ -168,11 +172,11 @@ def descargar_boleto(request, entrada_id):
 '''
 
 
-TipoEntradas = ["Platinum", "Box", "Motor y Motivo", "General", "Alimaña", "Palco"]
-    
+TipoEntradas = ["Platinum", "Box", "Motor y Motivo",
+                "General", "Alimaña", "Palco"]
+
 
 def armaEntradas(entradasArreglo):
-
     '''
     ticket1 = {}
     ticket1["tipo_ticket"]="Platinum"
@@ -188,219 +192,261 @@ def armaEntradas(entradasArreglo):
     auxiliar = {}
     print(entradasArreglo)
     for indice, entrada in enumerate(entradasArreglo):
-        
+
         print(entrada)
         print(entrada[0])
         print("Paso cantidad")
         for i in range(int(entrada)):
             auxiliar = {}
-            auxiliar["tipo_ticket"]=TipoEntradas[indice]
-            auxiliar["numero_ticket"]=generaNumeroTicket(indice)
-            auxiliar["cip"]=generaCIP()
+            auxiliar["tipo_ticket"] = TipoEntradas[indice]
+            auxiliar["numero_ticket"] = generaNumeroTicket(indice)
+            auxiliar["cip"] = generaCIP()
             arregloAenviar.append()
 
-    return arregloAenviar#[ticket1,ticket2]
+    return arregloAenviar  # [ticket1,ticket2]
+
 
 def homePage(request):
     return render(request, "homePage/homePage.html")
 
-def calculamonto(request):
-    print("entradaID: ",request.POST.get("entradaID"+str(i+1)) , "cantidad: ",request.POST.get("entradasFilaID"+str(i+1)))
 
-#def descargar_boleto(request, entrada_id):
+def calculamonto(request):
+    print("entradaID: ", request.POST.get("entradaID"+str(i+1)),
+          "cantidad: ", request.POST.get("entradasFilaID"+str(i+1)))
+
+# def descargar_boleto(request, entrada_id):
     # Lógica para obtener el archivo PDF del boleto basado en entrada_id
-    #boleto = obtener_boleto_pdf(entrada_id)
-    #obtener_boleto_pdf(entrada_id)
+    # boleto = obtener_boleto_pdf(entrada_id)
+    # obtener_boleto_pdf(entrada_id)
     # Devuelve el archivo PDF como una respuesta de archivo
-    #return #FileResponse(boleto, as_attachment=True, filename='boleto.pdf')
+    # return #FileResponse(boleto, as_attachment=True, filename='boleto.pdf')
+
+
 class comprarPage(View):
-    def get(self,request):
+    def get(self, request):
         preguntas = Preguntas.objects.all()
         entradas = Tipos.objects.all()
+        boxes1 = boxesRestante1.objects.filter(ocupado=False)
+        boxes2 = boxesRestante2.objects.filter(ocupado=False)
+        boxes3 = boxesRestante3.objects.filter(ocupado=False)
         datos = {
             'preguntas': preguntas,
-            'entradas': entradas
+            'entradas': entradas,
+            'boxes1': boxes1,
+            'boxes2': boxes2,
+            'boxes3': boxes3
         }
-        identifica_compra = request.session.get('compra_redirect',False)
-        if(identifica_compra):
-            #print(request.session['compra_redirect'])
-            del(request.session['compra_redirect'])
+        identifica_compra = request.session.get('compra_redirect', False)
+        if (identifica_compra):
+            # print(request.session['compra_redirect'])
+            del (request.session['compra_redirect'])
             contexto = request.session['contexto']
-            del(request.session['contexto'])
+            del (request.session['contexto'])
             return render(request, "resumenPage/resumenPage.html", contexto)
-        identifica_tickets = request.session.get('tickets_redirect',False)
-        if(identifica_tickets):
-            del(request.session['tickets_redirect'])
+        identifica_tickets = request.session.get('tickets_redirect', False)
+        if (identifica_tickets):
+            del (request.session['tickets_redirect'])
             contexto = request.session['contexto']
-            del(request.session['contexto']) 
-            return render(request, "ticketsCompradosPage/ticketsCompradosPage.html",contexto) 
+            del (request.session['contexto'])
+            return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", contexto)
         return render(request, "comprarPage/comprarPage.html", datos)
 
-    def post(self,request):
+    def post(self, request):
         if request.method == 'POST':
             preguntas = Preguntas.objects.all()
             entradas = Tipos.objects.all()
+            boxes1 = boxesRestante1.objects.filter(ocupado=False)
+            boxes2 = boxesRestante2.objects.filter(ocupado=False)
+            boxes3 = boxesRestante3.objects.filter(ocupado=False)
             datos = {
                 'preguntas': preguntas,
-                'entradas': entradas
+                'entradas': entradas,
+                'boxes1': boxes1,
+                'boxes2': boxes2,
+                'boxes3': boxes3
             }
             print("POST COMPRAR ENTRADA")
             if request.POST.get('boton') == 'sms':
                 print("Boton SMS presionado")
                 celular = request.POST.get('celular')
-                codigoValidacion=generaCodigoValidacion(6)
-                if codigoValidacion=="":
-                    print ("Error!!! No se pudo generar codigo de validacion NO REPETIDO")
+                codigoValidacion = generaCodigoValidacion(6)
+                if codigoValidacion == "":
+                    print(
+                        "Error!!! No se pudo generar codigo de validacion NO REPETIDO")
                 else:
-                    print("Boton SMS presionado", "Celular:", celular, "Codigo:", codigoValidacion)
-                    almacenaCelularValidador(celular,codigoValidacion)
-                #return redirect(request.path)
+                    print("Boton SMS presionado", "Celular:",
+                          celular, "Codigo:", codigoValidacion)
+                    almacenaCelularValidador(celular, codigoValidacion)
+                # return redirect(request.path)
                 return render(request, "comprarPage/comprarPage.html", datos)
-        
+
             elif request.POST.get('boton') == 'verificar':
                 print("Boton verificar presionado")
                 celular = request.POST.get('celular')
                 codigoValidacionIngresado = request.POST.get('codigo')
                 responseData = {'data': 'Codigo incorrecto'}
-                if(buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado)):
-                    print ("Codigo Correcto!!!")
+                if (buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado)):
+                    print("Codigo Correcto!!!")
                     responseData = {'data': 'Codigo correcto'}
                 return JsonResponse(responseData)
 
             elif request.POST.get('boton') == 'comprar':
-                celular    = request.POST.get('celular')
-                codigo     = request.POST.get('codigo')
-                pin        = request.POST.get('pin')
-                nombre     = request.POST.get('nombre')
-                dni        = request.POST.get('dni')
-                correo     = request.POST.get('correo')
-                pregunta1  = request.POST.get('pregunta1')
+                celular = request.POST.get('celular')
+                codigo = request.POST.get('codigo')
+                pin = request.POST.get('pin')
+                nombre = request.POST.get('nombre')
+                dni = request.POST.get('dni')
+                correo = request.POST.get('correo')
+                pregunta1 = request.POST.get('pregunta1')
                 respuesta1 = request.POST.get('respuesta1')
-                pregunta2  = request.POST.get('pregunta2')
+                pregunta2 = request.POST.get('pregunta2')
                 respuesta2 = request.POST.get('respuesta2')
-                #print("antes de cip")
+                box1 = request.POST.get('boxes1')
+                box2 = request.POST.get('boxes2')
+                box3 = request.POST.get('boxes3')
+                # print("antes de cip")
                 cip = generaCIP(6)
-                #print(cip)
+                # print(cip)
                 entradasCantidad = []
-                for i in range (Tipos.objects.count()):
-                    #print(request.POST.get('cantidadHidden'+str(i+1)))
-                    entradasCantidad.append(request.POST.get('cantidadHidden'+str(i+1)))
-                #print(entradasCantidad)
-                responseData = {'celular'   : celular,
-                                'codigo'    : codigo,
-                                'pin'       : pin,
-                                'nombre'    : nombre,
-                                'dni'       : dni,
-                                'correo'    : correo,
+                for i in range(Tipos.objects.count()):
+                    # print(request.POST.get('cantidadHidden'+str(i+1)))
+                    entradasCantidad.append(
+                        request.POST.get('cantidadHidden'+str(i+1)))
+                # print(entradasCantidad)
+                responseData = {'celular': celular,
+                                'codigo': codigo,
+                                'pin': pin,
+                                'nombre': nombre,
+                                'dni': dni,
+                                'correo': correo,
                                 'respuesta1': respuesta1,
                                 'respuesta2': respuesta2,
-                                'cip': cip
+                                'cip': cip,
+                                'box1': box1,
+                                'box2': box2,
+                                'box3': box3,
                                 }
+                print(responseData)
                 entradasElegidas = {}
                 montoPagar = 0
-                j=0
+                j = 0
                 for i in range(Tipos.objects.count()):
                     if entradasCantidad[i] == str(0):
                         continue
                     j = j+1
                     key = f"entrada{j}"
-                    montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(id = i + 1).precio)
+                    montoPagar = montoPagar + \
+                        int(entradasCantidad[i]) * \
+                        int(Tipos.objects.get(id=i + 1).precio)
                     value = {
-                        "id": Tipos.objects.get(id = i + 1).descripcion,
+                        "id": Tipos.objects.get(id=i + 1).descripcion,
                         "cantidad": entradasCantidad[i],
-                        "tipo":str(i+1)
+                        "tipo": str(i+1)
                     }
                     entradasElegidas[key] = value
-                #print(entradasElegidas)
-                
-                request.session['compra_redirect']= "compra"
-                request.session['contexto']={'response': responseData, 'entradas': entradasElegidas, 'precioTotal': str(montoPagar)}
+                # print(entradasElegidas)
+
+                request.session['compra_redirect'] = "compra"
+                request.session['contexto'] = {
+                    'response': responseData, 'entradas': entradasElegidas, 'precioTotal': str(montoPagar)}
                 return redirect(request.path)
-                 
+
             elif request.POST.get('boton') == 'confirmarCompra':
                 print("Boton confirmar compra presionado")
+                # boxes comprados
+                box1 = request.POST.get('box1')
+                box2 = request.POST.get('box2')
+                box3 = request.POST.get('box3')
                 # PAGO
-                nuevaCompra           = Pagos()
+                nuevaCompra = Pagos()
                 nuevaCompra.fechaHora = timezone.now()
-                nuevaCompra.celular   = request.POST.get('celular')
-                nuevaCompra.cip       = request.POST.get('cip')
-                nuevaCompra.pin       = request.POST.get('pin')
-                nuevaCompra.monto     = request.POST.get('montoaPagar')
-                #confirmado
-                #sms tickets pagados
-                nuevaCompra.nombre    = request.POST.get('nombre')
-                nuevaCompra.correo    = request.POST.get('correo')
-                nuevaCompra.dni       = request.POST.get('dni')
+                nuevaCompra.celular = request.POST.get('celular')
+                nuevaCompra.cip = request.POST.get('cip')
+                nuevaCompra.pin = request.POST.get('pin')
+                nuevaCompra.monto = request.POST.get('montoaPagar')
+                # confirmado
+                # sms tickets pagados
+                nuevaCompra.nombre = request.POST.get('nombre')
+                nuevaCompra.correo = request.POST.get('correo')
+                nuevaCompra.dni = request.POST.get('dni')
                 nuevaCompra.pregunta1 = request.POST.get('pregunta1')
                 nuevaCompra.pregunta2 = request.POST.get('pregunta2')
                 nuevaCompra.save()
-                
+
                 # TICKET
                 entradasArreglo = {}
                 ticketsCantidad = 0
                 ultimoTicket = Tickets.objects.count()
-                #monto = 0
+                # monto = 0
                 entradasArgumento = []
                 for i in range(Tipos.objects.count()):
-                    if(request.POST.get('cantidadentrada'+str(i)) == None):
+                    if (request.POST.get('tipoentrada'+str(i+1)) == None):
                         continue
                     ticketsCantidad = ticketsCantidad + 1
-                    ultimoTicket    = ultimoTicket + 1
-                    
+                    ultimoTicket = ultimoTicket + 1
+
                     #################
-                    #campo = "cantidadEntradasTipo"+str(i)
-                    #cantidad = int(request.POST.get("cantidadentrada"+str(i)))
-                    #print("Cantidad entrada tipo "+str())
-                    #print(cantidad)
-                    #entradasArreglo[campo] = cantidad
-                    #monto += (entradas[i].precio)*cantidad
+                    # campo = "cantidadEntradasTipo"+str(i)
+                    # cantidad = int(request.POST.get("cantidadentrada"+str(i)))
+                    # print("Cantidad entrada tipo "+str())
+                    # print(cantidad)
+                    # entradasArreglo[campo] = cantidad
+                    # monto += (entradas[i].precio)*cantidad
                     #################
 
-                    for j in range(int(request.POST.get("cantidadentrada"+str(i)))):
-                        
-                        #montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(id = i + 1).precio)
+                    for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
+
+                        # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(id = i + 1).precio)
                         ticket = Tickets()
-                        ticket.ticket    = generaNumeroTicket()
+                        ticket.ticket = generaNumeroTicket()
                         ticket.codigoseguridad = "12345678"
-                        ticket.pin       = request.POST.get('pin')
+                        ticket.pin = request.POST.get('pin')
                         ticket.fechaHoraCambio = timezone.now()
-                        ticket.celular   = request.POST.get('celular')
-                        #ticket.tipo =
-                        ticket.cip       = request.POST.get('cip')
-                        ticket.nombre    = request.POST.get('nombre')
-                        ticket.correo    = request.POST.get('correo')
-                        ticket.dni       = request.POST.get('dni')
+                        ticket.celular = request.POST.get('celular')
+                        ticket.tipo = str(i+1)
+                        ticket.numeroBox = "0"
+                        if int(request.POST.get('tipoentrada'+str(i+1))) == 4:
+                            ticket.numeroBox = box1
+                        if int(request.POST.get('tipoentrada'+str(i+1))) == 5:
+                            ticket.numeroBox = box2
+                        if int(request.POST.get('tipoentrada'+str(i+1))) == 6:
+                            ticket.numeroBox = box3
+                        ticket.cip = request.POST.get('cip')
+                        ticket.nombre = request.POST.get('nombre')
+                        ticket.correo = request.POST.get('correo')
+                        ticket.dni = request.POST.get('dni')
                         ticket.pregunta1 = request.POST.get('pregunta1')
                         ticket.pregunta2 = request.POST.get('pregunta2')
-                        #"id": Tipos.objects.get(id = i + 1).descripcion,
+                        # "id": Tipos.objects.get(id = i + 1).descripcion,
                         ticket.save()
                         auxiliar = {}
-                        auxiliar["tipo_ticket"]   = Tipos.objects.get(id = i + 1).descripcion
+                        auxiliar["tipo_ticket"] = Tipos.objects.get(
+                            id=int(request.POST.get('tipoentrada'+str(i+1)))).descripcion
                         auxiliar["numero_ticket"] = ticket.ticket
                         entradasArgumento.append(auxiliar)
 
-                #return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", {'response': responseData, 'entradas': entradasElegidas, 'precioTotal': str(montoPagar)})
-                #entradasArgumento = armaEntradas(entradasArreglo)
+                # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", {'response': responseData, 'entradas': entradasElegidas, 'precioTotal': str(montoPagar)})
+                # entradasArgumento = armaEntradas(entradasArreglo)
                 datosConfirmar = {
                     'entradas': entradasArgumento,
                 }
 
-                #entradas = {}
-                #for i in range (4):
+                # entradas = {}
+                # for i in range (4):
                 #    key = f"entrada{str(i)}"
                 #    value = {
                 #        "id": Tipos.objects.get(id = i + 1).descripcion, #nombre de la entrada
-                        #mas cosas
-                        #mas
-                        #
-                        #
+                # mas cosas
+                # mas
+                #
+                #
                 #    }
                 #    entradas[key] = value
-                #return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", {"entradas" : entradas})
+                # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", {"entradas" : entradas})
                 request.session['tickets_redirect'] = "tickets"
-                request.session['contexto']         = datosConfirmar
+                request.session['contexto'] = datosConfirmar
                 return redirect(request.path)
-                return render(request, "ticketsCompradosPage/ticketsCompradosPage.html",datosConfirmar)  
+                return render(request, "ticketsCompradosPage/ticketsCompradosPage.html", datosConfirmar)
                 # entradas = Tipos.objects.all()
                 # monto = 0
 
@@ -440,36 +486,37 @@ class comprarPage(View):
                 # pagoAguardar = Pagos()
                 # #pagoAguardar.fechaHora =         #Actual
                 # pagoAguardar.celular = celular
-                # #pagoAguardar.recibo = 
-                # pagoAguardar.pin = pin       
+                # #pagoAguardar.recibo =
+                # pagoAguardar.pin = pin
                 # pagoAguardar.monto = monto
-                # #pagoAguardar.confirmado = 
-                # #pagoAguardar.sms = 
+                # #pagoAguardar.confirmado =
+                # #pagoAguardar.sms =
                 # pagoAguardar.nombre = nombre
                 # pagoAguardar.correo = correo
                 # pagoAguardar.dni = dni
                 # pagoAguardar.pregunta1 = pregunta1
                 # pagoAguardar.pregunta2 = pregunta2
-                
+
                 # entradasArgumento = armaEntradas(entradasArreglo)
                 # print(entradasArgumento)
                 # datosConfirmar = {
                 #     'entradas': entradasArgumento,
                 # }
-                # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html",datosConfirmar) 
+                # return render(request, "ticketsCompradosPage/ticketsCompradosPage.html",datosConfirmar)
         return render(request, "comprarPage/comprarPage.html", datos)
+
 
 def administrarPage(request):
     if request.POST.get('submit') == "validar":
-        return render(request, "validarPage/validarPage.html" )
+        return render(request, "validarPage/validarPage.html")
     elif request.POST.get('submit') == "actualizar":
         None
     elif request.POST.get('submit') == "vender":
         None
     elif request.POST.get('submit') == "comprar":
         None
-         
-    ### ValidarPage
+
+    # ValidarPage
     if request.method == 'POST' and request.POST.get('comando') == 'verificarBotonValidarTemplate':
         ticket = request.POST.get('ticket')
         cip = request.POST.get('cip')
@@ -484,4 +531,3 @@ def administrarPage(request):
             responseData = {'estado': 'Ticket no valido'}
         return JsonResponse(responseData)
     return render(request, "administrarPage.html")
-
