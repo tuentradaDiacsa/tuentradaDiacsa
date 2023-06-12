@@ -67,6 +67,8 @@ function calcularTotal() {
         document.getElementById("todoObligatorio").style.display = "grid";
         document.getElementById("datosCompradorTexto").style.visibility = "visible";
         document.getElementById("datosCompradorTexto").style.display = "flex";
+        document.getElementById("comprarBotonFinal").style.display = "flex";
+        document.getElementById("comprarBotonFinal").style.visibility = "visible";
     }
 }
 function seleccionado() {
