@@ -13,7 +13,7 @@ ScrollReveal().reveal('.banner, .seleccionarFechaBanner, .fechaBotonBanner', {
     easing: 'ease-out', // Curva de animación
 });
 width = window.innerWidth;
-document.getElementById("fechaBotonBanner").addEventListener("click", function () {
+/*document.getElementById("fechaBotonBanner").addEventListener("click", function () {
     // window.print()
     document.getElementById("fechaSinCheck").hidden = true;
     document.getElementById("fechaConCheck").hidden = false;
@@ -29,7 +29,7 @@ document.getElementById("fechaBotonBanner").addEventListener("click", function (
         document.getElementById("todoEntradas").style.display = "none";
 
     }
-});
+});*/
 function disminuir(id) {
     value = parseInt(document.getElementById("cantidadVisible" + id.toString()).innerText)
     if (value <= 0 || parseInt(document.getElementById("entradasRestantes" + id.toString()).innerText) <= 0) return;
