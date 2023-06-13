@@ -109,8 +109,8 @@ body {
 .todoEntradas {
     margin-top: 10px;
     justify-content: center;
-    display: none;
-    visibility: hidden;
+    display: flex;
+    visibility: visible;
     align-items: center;
     justify-content: center;
     background-color: white;
