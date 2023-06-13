@@ -36,7 +36,7 @@ import re
 
 def reemplazar_letras(cadena):
     # Utilizar expresiones regulares para buscar palabras y reemplazar letras
-    resultado = re.sub(r'\b(\w)(\w+)(\w)\b', lambda match: match.group(1) + 'X' * len(match.group(2)) + match.group(3), cadena)
+    resultado = re.sub(r'\b(\w)(\w+)(\w)\b', lambda match: match.group(1) + 'x' * len(match.group(2)) + match.group(3), cadena)
     return resultado
 
 def reemplazar_ultimos_caracteres(cadena):
