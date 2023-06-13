@@ -515,6 +515,9 @@ totalBotonDiv:hover {
 
 
 @media (pointer: coarse) {
+    .todoEntradas {
+        display: flex;
+    }
     .seleccionarFechaBanner {
         height: 50px;
         align-items: center;
