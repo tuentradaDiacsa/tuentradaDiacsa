@@ -1,37 +1,49 @@
 import random
+from django.utils import timezone
+from django.utils.timezone import activate
 import string
 from .models import smsValidacionCelular
 
+
 def generaCodigoValidacion(longitud):
-    existe   = True
-    intentos = 0 
-    while (existe == True and intentos<10):
-        intentos   = intentos + 1
-        caracteres = string.ascii_uppercase + string.digits  # Letras mayúsculas y dígitos
-        codigo     = ''.join(random.choice(caracteres) for _ in range(longitud))
-        #print("Codigo generado = "+codigo)
-        #codigo     = "963741"
-        #print("Comparacion forzada con uno igual")
+    existe = True
+    intentos = 0
+    while (existe == True and intentos < 10):
+        intentos = intentos + 1
+        caracteres = string.ascii_uppercase + \
+            string.digits  # Letras mayúsculas y dígitos
+        codigo = ''.join(random.choice(caracteres) for _ in range(longitud))
+        # print("Codigo generado = "+codigo)
+        # codigo     = "963741"
+        # print("Comparacion forzada con uno igual")
         if smsValidacionCelular.objects.filter(codigoValidacion=codigo).exists():
             existe = True
-            #print("Paso por True en generaCodigoValidacion. Intento:"+str(intentos))
+            # print("Paso por True en generaCodigoValidacion. Intento:"+str(intentos))
         else:
             existe = False
     if existe == True:
-        codigo=""
+        codigo = ""
     return codigo
 
-def almacenaCelularValidador(celular,codigoValidacion):
+
+def almacenaCelularValidador(celular, codigoValidacion):
     registro = smsValidacionCelular()
-    
-    registro.celular          = celular
+    registro.celular = celular
     registro.codigoValidacion = codigoValidacion
+    registro.fechaSolicitud = timezone.now()
+    # registro.estado = "0" Default 0
     registro.save()
     return
 
+
 def buscarCodigoEnBaseDatos(celularIngresado, codigoValidacionIngresado):
-    ultimo_registro = smsValidacionCelular.objects.filter(celular=celularIngresado).latest('correlativo')
+    ultimo_registro = smsValidacionCelular.objects.filter(
+        celular=celularIngresado).latest('correlativo')
+
     if ultimo_registro.codigoValidacion == codigoValidacionIngresado and ultimo_registro.estado == 0:
+        ultimo_registro.estado = 21
+        ultimo_registro.save()
         return True
+
     else:
         return False
