@@ -154,6 +154,23 @@ function soloNumeros(event) {
     return true;
 }
 
+function solodocumentos(event) {
+    console.log(document.getElementsByName("opciones")[0].checked)
+    console.log(document.getElementsByName("opciones")[1].checked)
+    console.log(document.getElementsByName("opciones")[2].checked)
+    if (document.getElementsByName("opciones")[0].checked) {
+        var charCode = event.which ? event.which : event.keyCode;
+        if (charCode < 48 || charCode > 57) {
+            event.preventDefault();
+            return false;
+        }
+        return true;
+    }
+    else {
+        return true
+    }
+}
+
 var SMSenviado = false;
 function enviarSMS() {
     console.log(document.getElementById("celular").value.trim().length)

@@ -447,6 +447,9 @@ totalBotonDiv:hover {
     align-items: center;
     justify-content: center;
     position: relative;
+    justify-items: center;
+    text-align: center;
+    font-size: 20px;
 }
 
 .contenedorNombre input,
@@ -736,6 +739,9 @@ totalBotonDiv:hover {
         display: flex;
         align-items: center;
         justify-content: center;
+        justify-items: center;
+        text-align: center;
+        font-size: 15px;
     }
 
     .contenedorPregunta select {

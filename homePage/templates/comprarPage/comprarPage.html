@@ -162,9 +162,11 @@
             <div id="despuesWhatsapp">
 
                 <div class="contenedorMedioPago" id="contenedorMedioPago">
-                    <div><input type="radio" name="opciones" value="DNI" checked></div>
+                    <div><input type="radio" name="opciones" value="DNI" checked>
+                    </div>
                     <div>DNI</div>
-                    <div><input type="radio" name="opciones" value="Pasaporte"></div>
+                    <div><input type="radio" name="opciones" value="Pasaporte">
+                    </div>
                     <div>Pasaporte</div>
                     <div><input type="radio" name="opciones" value="Carnet extrajeria"></div>
                     <div>C.E.</div>
@@ -172,7 +174,8 @@
 
                 <div class="contenedorDNI" id="contenedorDNI">
                     <div class="labelInput">Documento</div>
-                    <input type="text" placeholder="Ingrese de documento" maxlength="20" id="dni" name="dni">
+                    <input type="text" placeholder="Ingrese de documento" maxlength="8" id="dni" name="dni"
+                        onkeypress="return solodocumentos(event)">
                     <button type="button">Validar</button>
                 </div>
 
