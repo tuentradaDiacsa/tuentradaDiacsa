@@ -6,12 +6,6 @@ window.addEventListener('pageshow', function (event) {
     var form = document.getElementById('comprarForm');
     form.reset();
 });
-ScrollReveal().reveal('.banner, .seleccionarFechaBanner, .fechaBotonBanner', {
-    delay: 200, // Retraso en milisegundos antes de que aparezca cada elemento
-    distance: '50px', // Distancia de desplazamiento desde la posición original
-    duration: 800, // Duración de la animación en milisegundos
-    easing: 'ease-out', // Curva de animación
-});
 width = window.innerWidth;
 /*document.getElementById("fechaBotonBanner").addEventListener("click", function () {
     // window.print()
@@ -447,6 +441,7 @@ setInterval(miFuncion, 100);
 
 tiempo = 60;
 function miFuncion2() {
+    console.log("OK")
     if (validado) {
         document.getElementById("buttonSMS").style.backgroundColor = "#858484";
         document.getElementById("buttonSMS").disabled = true;
