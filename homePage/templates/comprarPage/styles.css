@@ -514,10 +514,7 @@ totalBotonDiv:hover {
 }
 
 
-@media (pointer: coarse) {
-    .todoEntradas {
-        display: grid;
-    }
+@media (max-width: 900px) {
     .seleccionarFechaBanner {
         height: 50px;
         align-items: center;
@@ -818,6 +815,10 @@ totalBotonDiv:hover {
         visibility: hidden;
     }
 
+    .todoEntradas {
+        display: grid;
+    }
+
 }
 
 @media (pointer: fine) {
@@ -912,4 +913,5 @@ totalBotonDiv:hover {
         color: pink;
         font-weight: bold;
     }
+
 }

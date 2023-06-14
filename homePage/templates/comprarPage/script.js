@@ -31,22 +31,75 @@ width = window.innerWidth;
     }
 });*/
 function disminuir(id) {
-    value = parseInt(document.getElementById("cantidadVisible" + id.toString()).innerText)
-    if (value <= 0 || parseInt(document.getElementById("entradasRestantes" + id.toString()).innerText) <= 0) return;
-    document.getElementById("cantidadVisible" + id.toString()).innerText = (value - 1).toString().padStart(2, '0');
-    document.getElementById("cantidadHidden" + id.toString()).value = value - 1;
-    calcularTotal();
+    $.ajax({
+        type: 'POST',
+        url: '/comprar/',
+        data: {
+            'comando': 'leerCantidadEntradas',
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (response) {
+            for (var i = 0; i < 5; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - document.getElementById("cantidadHidden" + (i + 1).toString()).value
+                entradasElegidas = parseInt(document.getElementById("cantidadHidden" + (i + 1).toString()).value)
+                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
+                    document.getElementById("cantidadHidden" + (i + 1).toString()).value = response.entradasRestantes[i]
+                    document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString()
+                    document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0"
+                }
+            }
+            if (parseInt(document.getElementById("cantidadHidden" + id).value) - 1 < 0) { calcularTotal(); return }
+            entradasElegidas = parseInt(document.getElementById("cantidadHidden" + id).value) - 1
+            document.getElementById("cantidadHidden" + id).value = entradasElegidas
+            document.getElementById("cantidadVisible" + id).innerText = entradasElegidas.toString()
+            for (var i = 0; i < 5; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - document.getElementById("cantidadHidden" + (i + 1).toString()).value
+            }
+            calcularTotal()
+
+        },
+        error: function (xhr, status, error) {
+            // Lógica para manejar el error
+            console.error('Error:', error);
+        }
+    });
 }
 function aumentar(id) {
-    value = parseInt(document.getElementById("cantidadVisible" + id.toString()).innerText)
-    if (value >= 20 || value >= parseInt(document.getElementById("entradasRestantes" + id.toString()).innerText)) return;
-    document.getElementById("cantidadVisible" + id.toString()).innerText = (value + 1).toString().padStart(2, '0');
-    document.getElementById("cantidadHidden" + id.toString()).value = value + 1;
-    calcularTotal();
-    document.getElementById("todoObligatorio").style.visibility = "visible";
-    document.getElementById("todoObligatorio").style.display = "grid";
-    document.getElementById("datosCompradorTexto").style.visibility = "visible";
-    document.getElementById("datosCompradorTexto").style.display = "flex";
+    $.ajax({
+        type: 'POST',
+        url: '/comprar/',
+        data: {
+            'comando': 'leerCantidadEntradas',
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (response) {
+            for (var i = 0; i < 5; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i]
+                entradasElegidas = parseInt(document.getElementById("cantidadHidden" + (i + 1).toString()).value)
+                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
+                    document.getElementById("cantidadHidden" + (i + 1).toString()).value = response.entradasRestantes[i]
+                    document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString()
+                    document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0"
+                    if (id == (i + 1).toString()) {
+                        calcularTotal()
+                        return
+                    }
+                }
+            }
+            entradasElegidas = parseInt(document.getElementById("cantidadHidden" + id).value) + 1
+            document.getElementById("cantidadHidden" + id).value = entradasElegidas
+            document.getElementById("cantidadVisible" + id).innerText = entradasElegidas.toString()
+            for (var i = 0; i < 5; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - document.getElementById("cantidadHidden" + (i + 1).toString()).value
+            }
+            calcularTotal()
+
+        },
+        error: function (xhr, status, error) {
+            // Lógica para manejar el error
+            console.error('Error:', error);
+        }
+    });
 }
 function calcularTotal() {
     var total = 0;
@@ -61,6 +114,7 @@ function calcularTotal() {
         document.getElementById("datosCompradorTexto").style.display = "none";
     }
     else {
+
         document.getElementById("todoObligatorio").style.visibility = "visible";
         document.getElementById("todoObligatorio").style.display = "grid";
         document.getElementById("datosCompradorTexto").style.visibility = "visible";
@@ -207,12 +261,12 @@ function comprar() {
     document.getElementById("celular2").value = document.getElementById("celular").value;
     document.getElementById("codigo2").value = document.getElementById("codigo").value;
 
-    if (camposLlenos()) {
+    if (camposLlenos() == "OK") {
         document.getElementById("boton").value = "comprar"
         document.getElementById("comprarForm").submit();
     }
     else {
-        alert("Falta llenar algun campo")
+        alert("Falta llenar el campo: " + camposLlenos())
     }
 }
 var previa1 = 0
@@ -241,12 +295,12 @@ function guardaranteriores() {
 }
 
 function camposLlenos() {
-    if (document.getElementById("celular").value.trim().length !== 9) return false;
-    if (document.getElementById("codigo").value.trim().length !== 6) return false;
-    if (document.getElementById("sameNumber").checked == false) {
+    if (document.getElementById("celular").value.trim().length !== 9) return "CELULAR";
+    if (document.getElementById("codigo").value.trim().length !== 6) return "CODIGO";
+    /*if (document.getElementById("sameNumber").checked == false) {
         if (document.getElementById("whatsapp").value.trim().length !== 9) return false;
         if (document.getElementById("codigoWhatsapp").value.trim().length !== 6) return false;
-    }
+    }*/
     var seleccionada = false;
     for (var i = 0; i < document.getElementsByName('opciones').length; i++) {
         if (document.getElementsByName('opciones')[i].checked) {
@@ -254,13 +308,13 @@ function camposLlenos() {
             break;
         }
     }
-    if (!seleccionada) return false;
-    if (document.getElementById("dni").value.trim().length < 6) return false;
-    if (document.getElementById("nombre").value.trim().length < 4) return false;
-    if (document.getElementById("respuesta1").value.trim().length < 4) return false;
-    if (document.getElementById("respuesta2").value.trim().length < 4) return false;
-    if (document.getElementById("respuesta3").value.trim().length < 4) return false;
-    if (document.getElementById("pin").value.trim().length < 4) return false;
+    if (!seleccionada) return "TIPO DE DOCUMENTO";
+    if (document.getElementById("dni").value.trim().length < 6) return "DOCUMENTO";
+    if (document.getElementById("nombre").value.trim().length < 4) return "NOMBRE";
+    if (document.getElementById("respuesta1").value.trim().length < 4) return "RESPUESTA 1";
+    if (document.getElementById("respuesta2").value.trim().length < 4) return "RESPUESTA 2";
+    if (document.getElementById("respuesta3").value.trim().length < 4) return "RESPUESTA 3";
+    if (document.getElementById("pin").value.trim().length < 6) return "PIN";
     // var opciones = document.getElementsByName("opciones");
     // var opcionSeleccionada = "";
     // for (var i = 0; i < 3; i++) {
@@ -289,8 +343,8 @@ function camposLlenos() {
     // console.log(opcionSeleccionada)
     // console.log(parseInt(document.getElementById("totalEstatico").innerText))
     // if (opcionSeleccionada !== "Yape" && opcionSeleccionada !== "Plin" && opcionSeleccionada !== "Transferencia") return false;
-    if (parseInt(document.getElementById("totalEstatico").innerText) == 0) return false;
-    return true;
+    if (parseInt(document.getElementById("totalEstatico").innerText) == 0) return "ENTRADAS";
+    return "OK";
 }
 
 function enviarWhatsapp() {
@@ -356,7 +410,7 @@ function checkwhatsapp() {
 }
 
 function miFuncion() {
-    if (camposLlenos()) {
+    if (camposLlenos() == "OK") {
         document.getElementById("comprarBoton").style.backgroundColor = "#FF0043";
         document.getElementById("comprarBotonFinal").style.backgroundColor = "#FF0043";
     }

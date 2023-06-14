@@ -58,7 +58,7 @@
                             onclick="disminuir('{{entrada.tipo}}')"></i>
                 </div>
                 <div class="entradaColumna5">
-                    <p id="cantidadVisible{{entrada.tipo}}">00</p>
+                    <p id="cantidadVisible{{entrada.tipo}}">0</p>
                     <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.tipo}}" value="0">
                 </div>
                 <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.tipo}}')"></i>
@@ -162,7 +162,7 @@
             <div id="despuesWhatsapp">
 
                 <div class="contenedorMedioPago" id="contenedorMedioPago">
-                    <div><input type="radio" name="opciones" value="DNI"></div>
+                    <div><input type="radio" name="opciones" value="DNI" checked></div>
                     <div>DNI</div>
                     <div><input type="radio" name="opciones" value="Pasaporte"></div>
                     <div>Pasaporte</div>
