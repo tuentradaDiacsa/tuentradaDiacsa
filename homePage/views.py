@@ -242,7 +242,25 @@ class comprarPage(View):
                     almacenaCelularValidador(celular, codigoValidacion)
                 # return redirect(request.path)
                 return render(request, "comprarPage/comprarPage.html", datos)
-
+##### Agregado martes 13
+            elif request.POST.get('comando') == 'leerCantidadEntradas':
+                entradas  = Tipos.objects.all().order_by('tipo')
+                boxes1    = boxesRestante1.objects.filter(ocupado=False)
+                boxes2    = boxesRestante2.objects.filter(ocupado=False)
+                boxes3    = boxesRestante3.objects.filter(ocupado=False)
+                entradasRestantes = []
+                entradasDescripcion = []
+                for entrada in entradas:
+                    entradasRestantes.append(entrada.cantidad)
+                    entradasDescripcion.append(entrada.descripcion)
+                    
+                responseData = {
+                    'entradasDescripcion' : entradasDescripcion,
+                    'entradasRestantes' : entradasRestantes,
+                }
+                print(responseData)
+                return JsonResponse(responseData)
+####
             elif request.POST.get('boton') == 'verificar':
                 print("Boton verificar presionado")
                 celular = request.POST.get('celular')
