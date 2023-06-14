@@ -34,67 +34,83 @@ from .generaCodigoSeguridad import generacodigoseguridad
 
 import re
 
+
 def reemplazar_letras(cadena):
     # Utilizar expresiones regulares para buscar palabras y reemplazar letras
-    resultado = re.sub(r'\b(\w)(\w+)(\w)\b', lambda match: match.group(1) + 'x' * len(match.group(2)) + match.group(3), cadena)
+    resultado = re.sub(r'\b(\w)(\w+)(\w)\b', lambda match: match.group(1) +
+                       'x' * len(match.group(2)) + match.group(3), cadena)
     return resultado
+
 
 def reemplazar_ultimos_caracteres(cadena):
     longitud = len(cadena)
-    if(longitud==1):
+    if (longitud == 1):
         return "X"
-    if(longitud==2):
+    if (longitud == 2):
         return cadena[0]+"X"
-    if(longitud==3):
+    if (longitud == 3):
         return cadena[0]+"X"+cadena[2]
-    if(longitud==4):
+    if (longitud == 4):
         return cadena[0]+"XX"+cadena[3]
-    if(longitud==5):
+    if (longitud == 5):
         return cadena[0]+"XXX"+cadena[4]
-    if(longitud==6):
+    if (longitud == 6):
         return cadena[0]+"XXXX"+cadena[5]
-    if(longitud>=7):
+    if (longitud >= 7):
         return cadena[:-6]+"XXXX"+cadena[-2:]
     return cadena
-    
-    #if len(cadena) >= 9:
+
+    # if len(cadena) >= 9:
     #    nueva_cadena = cadena[:-6] + "X" * 4 + cadena[-2:]
-    #elif len(cadena) >= 8:
+    # elif len(cadena) >= 8:
     #    nueva_cadena = cadena[:-6] + "X" * (len(cadena) - 4) + cadena[-1:]
-    #else:
+    # else:
     #    nueva_cadena = cadena
-    #return nueva_cadena
+    # return nueva_cadena
+
 
 def generar_qr_code_url(datoencriptado):
-    data = datoencriptado#"Ticket: {}, CIP: {}".format(ticket, cip)
-    qr   = qrcode.QRCode(version=1, box_size=10, border=4)
+    data = datoencriptado  # "Ticket: {}, CIP: {}".format(ticket, cip)
+    qr = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
-    qr_image  = qr.make_image(fill="black", back_color="white")
+    qr_image = qr.make_image(fill="black", back_color="white")
     qr_buffer = io.BytesIO()
     qr_image.save(qr_buffer, format="PNG")
     qr_buffer.seek(0)
     return qr_buffer
 
+
 def descargar_boleto(request, entrada_id):
     try:
         ticket_obj = Tickets.objects.get(ticket=entrada_id)
-        #codigoseguridad  = ticket_obj.codigoseguridad
-        #codigoseguridad_encriptador = encriptador(entrada_id, codigoseguridad)
-        #qr_buffer = generar_qr_code_url(codigoseguridad_encriptador)
-        #qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
-        #qr_url = "data:image/png;base64," + qr_base64
-        if(getattr(ticket_obj, 'numeroBox', '0') !='0'): numeroBox = " - Box "+getattr(ticket_obj, 'numeroBox', '0')
-        else: numeroBox = ""
+        # codigoseguridad  = ticket_obj.codigoseguridad
+        # codigoseguridad_encriptador = encriptador(entrada_id, codigoseguridad)
+        # qr_buffer = generar_qr_code_url(codigoseguridad_encriptador)
+        # qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
+        # qr_url = "data:image/png;base64," + qr_base64
+        if (getattr(ticket_obj, 'numeroBox', '0') != '0'):
+            numeroBox = " - Box "+getattr(ticket_obj, 'numeroBox', '0')
+        else:
+            numeroBox = ""
 
-        if(getattr(ticket_obj, 'nombre', 'No completado')!="No completado"): campoNombreApellido = reemplazar_letras(getattr(ticket_obj, 'nombre', 'No completado'))
-        else: campoNombreApellido = "No completado"
+        if (getattr(ticket_obj, 'nombre', 'No completado') != "No completado"):
+            campoNombreApellido = reemplazar_letras(
+                getattr(ticket_obj, 'nombre', 'No completado'))
+        else:
+            campoNombreApellido = "No completado"
 
-        if(getattr(ticket_obj, 'dni', 'No completado')!="No completado"): campodni = reemplazar_ultimos_caracteres(getattr(ticket_obj, 'dni', 'No completado'))
-        else: campodni = "No completado"
-        
-        if(getattr(ticket_obj, 'celular', 'No completado')!="No completado"): campocelular = reemplazar_ultimos_caracteres(getattr(ticket_obj, 'celular', 'No completado'))
-        else: campocelular = "No completado"
+        if (getattr(ticket_obj, 'dni', 'No completado') != "No completado"):
+            campodni = reemplazar_ultimos_caracteres(
+                getattr(ticket_obj, 'dni', 'No completado'))
+        else:
+            campodni = "No completado"
+
+        if (getattr(ticket_obj, 'celular', 'No completado') != "No completado"):
+            campocelular = reemplazar_ultimos_caracteres(
+                getattr(ticket_obj, 'celular', 'No completado'))
+        else:
+            campocelular = "No completado"
 
         context = {
             'ID_Ticket': entrada_id,
@@ -107,7 +123,7 @@ def descargar_boleto(request, entrada_id):
             'fecha': "Domingo 25 de Junio 2023",
             'hora': "3:00 pm",
             'Zona': getattr(ticket_obj, 'tipo', 'No completado')+numeroBox,
-            #'qr_image': qr_url,
+            # 'qr_image': qr_url,
         }
 
     except Tickets.DoesNotExist:
@@ -124,6 +140,7 @@ def descargar_boleto(request, entrada_id):
     # response.write(pdf_data)
 
     return HttpResponse(html_content)  # response
+
 
 '''
 def descargar_boleto(request, entrada_id):
@@ -183,20 +200,21 @@ def descargar_boleto(request, entrada_id):
 def homePage(request):
     return render(request, "homePage/homePage.html")
 
+
 class comprarPage(View):
     def get(self, request):
         preguntas = Preguntas.objects.all()
-        entradas  = Tipos.objects.all().order_by('tipo')
+        entradas = Tipos.objects.all().order_by('tipo')
 
-        boxes1    = boxesRestante1.objects.filter(ocupado=False)
-        boxes2    = boxesRestante2.objects.filter(ocupado=False)
-        boxes3    = boxesRestante3.objects.filter(ocupado=False)
+        boxes1 = boxesRestante1.objects.filter(ocupado=False)
+        boxes2 = boxesRestante2.objects.filter(ocupado=False)
+        boxes3 = boxesRestante3.objects.filter(ocupado=False)
         datos = {
             'preguntas': preguntas,
-            'entradas' : entradas,
-            'boxes1'   : boxes1,
-            'boxes2'   : boxes2,
-            'boxes3'   : boxes3
+            'entradas': entradas,
+            'boxes1': boxes1,
+            'boxes2': boxes2,
+            'boxes3': boxes3
         }
         identifica_compra = request.session.get('compra_redirect', False)
         if (identifica_compra):
@@ -216,81 +234,82 @@ class comprarPage(View):
     def post(self, request):
         if request.method == 'POST':
             preguntas = Preguntas.objects.all()
-            entradas  = Tipos.objects.all().order_by('tipo')
-            boxes1    = boxesRestante1.objects.filter(ocupado=False)
-            boxes2    = boxesRestante2.objects.filter(ocupado=False)
-            boxes3    = boxesRestante3.objects.filter(ocupado=False)
+            entradas = Tipos.objects.all().order_by('tipo')
+            boxes1 = boxesRestante1.objects.filter(ocupado=False)
+            boxes2 = boxesRestante2.objects.filter(ocupado=False)
+            boxes3 = boxesRestante3.objects.filter(ocupado=False)
             datos = {
                 'preguntas': preguntas,
-                'entradas' : entradas,
-                'boxes1'   : boxes1,
-                'boxes2'   : boxes2,
-                'boxes3'   : boxes3
+                'entradas': entradas,
+                'boxes1': boxes1,
+                'boxes2': boxes2,
+                'boxes3': boxes3
             }
-            print("POST COMPRAR ENTRADA")
+            # print("POST COMPRAR ENTRADA")
             if request.POST.get('boton') == 'sms':
-                print("Boton SMS presionado")
+                # print("Boton SMS presionado")
                 celular = request.POST.get('celular')
                 datos['celular'] = celular
                 codigoValidacion = generaCodigoValidacion(6)
                 if codigoValidacion == "":
-                    print(
-                        "Error!!! No se pudo generar codigo de validacion NO REPETIDO")
+                    None
+                    # print(
+                    #    "Error!!! No se pudo generar codigo de validacion NO REPETIDO")
                 else:
                     print("Boton SMS presionado", "Celular:",
                           celular, "Codigo:", codigoValidacion)
                     almacenaCelularValidador(celular, codigoValidacion)
                 # return redirect(request.path)
                 return render(request, "comprarPage/comprarPage.html", datos)
-##### Agregado martes 13
+# Agregado martes 13
             elif request.POST.get('comando') == 'leerCantidadEntradas':
-                entradas  = Tipos.objects.all().order_by('tipo')
-                boxes1    = boxesRestante1.objects.filter(ocupado=False)
-                boxes2    = boxesRestante2.objects.filter(ocupado=False)
-                boxes3    = boxesRestante3.objects.filter(ocupado=False)
+                entradas = Tipos.objects.all().order_by('tipo')
+                boxes1 = boxesRestante1.objects.filter(ocupado=False)
+                boxes2 = boxesRestante2.objects.filter(ocupado=False)
+                boxes3 = boxesRestante3.objects.filter(ocupado=False)
                 entradasRestantes = []
                 entradasDescripcion = []
                 for entrada in entradas:
                     entradasRestantes.append(entrada.cantidad)
                     entradasDescripcion.append(entrada.descripcion)
-                    
+
                 responseData = {
-                    'entradasDescripcion' : entradasDescripcion,
-                    'entradasRestantes' : entradasRestantes,
+                    'entradasDescripcion': entradasDescripcion,
+                    'entradasRestantes': entradasRestantes,
                 }
-                print(responseData)
+                # print(responseData)
                 return JsonResponse(responseData)
 ####
             elif request.POST.get('boton') == 'verificar':
-                print("Boton verificar presionado")
+               # print("Boton verificar presionado")
                 celular = request.POST.get('celular')
                 datos['celular'] = celular
                 codigoValidacionIngresado = request.POST.get('codigo')
                 datos['codigo'] = codigoValidacionIngresado
                 responseData = {'data': 'Codigo incorrecto'}
                 if (buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado)):
-                    print("Codigo Correcto!!!")
+                   # print("Codigo Correcto!!!")
                     responseData = {'data': 'Codigo correcto'}
                 return JsonResponse(responseData)
 
             elif request.POST.get('boton') == 'comprar':
-                celular    = request.POST.get('celular2')
-                codigo     = request.POST.get('codigo2')
-                pin        = request.POST.get('pin')
-                nombre     = request.POST.get('nombre')
-                dni        = request.POST.get('dni')
-                correo     = request.POST.get('correo')
-                pregunta1  = request.POST.get('pregunta1')
+                celular = request.POST.get('celular2')
+                codigo = request.POST.get('codigo2')
+                pin = request.POST.get('pin')
+                nombre = request.POST.get('nombre')
+                dni = request.POST.get('dni')
+                correo = request.POST.get('correo')
+                pregunta1 = request.POST.get('pregunta1')
                 respuesta1 = request.POST.get('respuesta1')
-                pregunta2  = request.POST.get('pregunta2')
+                pregunta2 = request.POST.get('pregunta2')
                 respuesta2 = request.POST.get('respuesta2')
-                pregunta3  = request.POST.get('pregunta3')
+                pregunta3 = request.POST.get('pregunta3')
                 respuesta3 = request.POST.get('respuesta3')
-                box1       = request.POST.get('boxes1')
-                box2       = request.POST.get('boxes2')
-                box3       = request.POST.get('boxes3')
+                box1 = request.POST.get('boxes1')
+                box2 = request.POST.get('boxes2')
+                box3 = request.POST.get('boxes3')
                 # print("antes de cip")
-                cip        = generaCIP(6)
+                cip = generaCIP(6)
                 # print(cip)
                 entradasCantidad = []
                 for i in range(Tipos.objects.count()):
@@ -298,21 +317,21 @@ class comprarPage(View):
                     entradasCantidad.append(
                         request.POST.get('cantidadHidden'+str(i+1)))
                 # print(entradasCantidad)
-                responseData = {'celular'   : celular,
-                                'codigo'    : codigo,
-                                'pin'       : pin,
-                                'nombre'    : nombre,
-                                'dni'       : dni,
-                                'correo'    : correo,
+                responseData = {'celular': celular,
+                                'codigo': codigo,
+                                'pin': pin,
+                                'nombre': nombre,
+                                'dni': dni,
+                                'correo': correo,
                                 'respuesta1': respuesta1,
                                 'respuesta2': respuesta2,
                                 'respuesta3': respuesta3,
-                                'cip'       : cip,
-                                'box1'      : box1,
-                                'box2'      : box2,
-                                'box3'      : box3,
+                                'cip': cip,
+                                'box1': box1,
+                                'box2': box2,
+                                'box3': box3,
                                 }
-                print(responseData)
+               # print(responseData)
                 entradasElegidas = {}
                 montoPagar = 0
                 j = 0
@@ -338,7 +357,7 @@ class comprarPage(View):
                 return redirect(request.path)
 
             elif request.POST.get('boton') == 'confirmarCompra':
-                #print("Boton confirmar compra presionado")
+                # print("Boton confirmar compra presionado")
                 # boxes comprados
                 box1 = request.POST.get('box1')
                 box2 = request.POST.get('box2')
@@ -346,66 +365,72 @@ class comprarPage(View):
                 # PAGO
                 nuevaCompra = Pagos()
                 nuevaCompra.fechaHora = timezone.now()
-                nuevaCompra.celular   = request.POST.get('celular')
-                nuevaCompra.cip       = request.POST.get('cip')
-                nuevaCompra.pin       = request.POST.get('pin')
-                nuevaCompra.monto     = request.POST.get('montoaPagar')
+                nuevaCompra.celular = request.POST.get('celular')
+                nuevaCompra.cip = request.POST.get('cip')
+                nuevaCompra.pin = request.POST.get('pin')
+                nuevaCompra.monto = request.POST.get('montoaPagar')
                 # confirmado
                 # sms tickets pagados
-                nuevaCompra.nombre    = request.POST.get('nombre')
-                nuevaCompra.correo    = request.POST.get('correo')
-                nuevaCompra.dni       = request.POST.get('dni')
+                nuevaCompra.nombre = request.POST.get('nombre')
+                nuevaCompra.correo = request.POST.get('correo')
+                nuevaCompra.dni = request.POST.get('dni')
                 nuevaCompra.pregunta1 = request.POST.get('pregunta1')
                 nuevaCompra.pregunta2 = request.POST.get('pregunta2')
                 nuevaCompra.save()
-                #print("Termino de almacenar pago")
+                # print("Termino de almacenar pago")
                 # TICKET
                 ticketsCantidad = 0
                 ultimoTicket = Tickets.objects.count()
                 # monto = 0
                 entradasArgumento = []
                 for i in range(Tipos.objects.count()):
-                    print(request.POST.get('tipoentrada'+str(i+1)))
+                    # print(request.POST.get('tipoentrada'+str(i+1)))
                     if (request.POST.get('tipoentrada'+str(i+1)) == None):
                         continue
                     ticketsCantidad = ticketsCantidad + 1
-                    ultimoTicket = ultimoTicket + 1                  
+                    ultimoTicket = ultimoTicket + 1
                     for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
-                        tipoactualInt=int(request.POST.get('tipoentrada'+str(i+1)))
-                        auxiliarDisminuyeEntradas = Tipos.objects.get(tipo=tipoactualInt)
+                        tipoactualInt = int(
+                            request.POST.get('tipoentrada'+str(i+1)))
+                        auxiliarDisminuyeEntradas = Tipos.objects.get(
+                            tipo=tipoactualInt)
                         auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-1
                         auxiliarDisminuyeEntradas.save()
-                        
-                        #Tipos.objects.get(tipo=k+1).descripcion
-                        #print(j)
+
+                        # Tipos.objects.get(tipo=k+1).descripcion
+                        # print(j)
                         # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(tipo = tipoactualInt).precio)
                         ticket = Tickets()
-                        ticket.ticket          = generaNumeroTicket()
+                        ticket.ticket = generaNumeroTicket()
                         ticket.codigoseguridad = generacodigoseguridad()
-                        ticket.pin             = request.POST.get('pin')
+                        ticket.pin = request.POST.get('pin')
                         ticket.fechaHoraCambio = timezone.now()
-                        ticket.celular         = request.POST.get('celular')
-                        ticket.tipo            = Tipos.objects.get(tipo=tipoactualInt).descripcion
-                        ticket.numeroBox       = "0"
+                        ticket.celular = request.POST.get('celular')
+                        ticket.tipo = Tipos.objects.get(
+                            tipo=tipoactualInt).descripcion
+                        ticket.numeroBox = "0"
                         if tipoactualInt == 4:
                             ticket.numeroBox = box1
-                            auxiliarDisminuyeBox1 = boxesRestante1.objects.get(box=box1)
+                            auxiliarDisminuyeBox1 = boxesRestante1.objects.get(
+                                box=box1)
                             auxiliarDisminuyeBox1.ocupado = True
                             auxiliarDisminuyeBox1.save()
                         if tipoactualInt == 5:
                             ticket.numeroBox = box2
-                            auxiliarDisminuyeBox2 = boxesRestante2.objects.get(box=box2)
+                            auxiliarDisminuyeBox2 = boxesRestante2.objects.get(
+                                box=box2)
                             auxiliarDisminuyeBox2.ocupado = True
                             auxiliarDisminuyeBox2.save()
                         if tipoactualInt == 6:
                             ticket.numeroBox = box3
-                            auxiliarDisminuyeBox3 = boxesRestante3.objects.get(box=box3)
+                            auxiliarDisminuyeBox3 = boxesRestante3.objects.get(
+                                box=box3)
                             auxiliarDisminuyeBox3.ocupado = True
                             auxiliarDisminuyeBox3.save()
-                        ticket.cip       = request.POST.get('cip')
-                        ticket.nombre    = request.POST.get('nombre')
-                        ticket.correo    = request.POST.get('correo')
-                        ticket.dni       = request.POST.get('dni')
+                        ticket.cip = request.POST.get('cip')
+                        ticket.nombre = request.POST.get('nombre')
+                        ticket.correo = request.POST.get('correo')
+                        ticket.dni = request.POST.get('dni')
                         ticket.pregunta1 = request.POST.get('pregunta1')
                         ticket.pregunta2 = request.POST.get('pregunta2')
                         # "id": Tipos.objects.get(tipo = tipoactualInt).descripcion,
@@ -422,7 +447,7 @@ class comprarPage(View):
 
                 request.session['tickets_redirect'] = "tickets"
                 request.session['contexto'] = datosConfirmar
-                print("Llega hasta redirect")
+                # print("Llega hasta redirect")
                 return redirect(request.path)
 
         return render(request, "comprarPage/comprarPage.html", datos)
@@ -442,9 +467,10 @@ def administrarPage(request):
     if request.method == 'POST' and request.POST.get('comando') == 'verificarBotonValidarTemplate':
         numero = request.POST.get('ticket')
         apellido = request.POST.get('cip')
-        
+
         try:
-            ticket = Tickets.objects.get(ticket=numero, nombre__icontains=apellido)
+            ticket = Tickets.objects.get(
+                ticket=numero, nombre__icontains=apellido)
             if ticket.confirmado2 is not None:
                 responseData = {'estado': 'Ticket valido'}
             else:
@@ -453,6 +479,7 @@ def administrarPage(request):
             responseData = {'estado': 'Ticket no valido'}
         return JsonResponse(responseData)
     return render(request, "administrarPage.html")
+
 
 def escanerPage(request):
     return render(request, "escanerPage/escanerPage.html")
