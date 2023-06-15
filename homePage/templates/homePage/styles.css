@@ -1,54 +1,276 @@
-*{
-    margin: 0 0;
-    padding: 0 0;
-    box-sizing: border-box;
-    user-select: none;
-}
-  
-.btn{
-    display: block;
-    width: 140px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    background-color: red;
-    border-radius: 10px;
-    padding: 15px 30px;
-    margin: 15px 15px;
-    color: #000;
-    text-decoration: none;
-
+:root {
+    --red: #FF0043;
+    --white: #ffffff;
+    --verde: #07A781;
+    --morado: #7643F6;
+    --negro: #000000;
+    --gris: #858484;
+    --yelow: #d9e806;
+    --azul: #01A0E2;
+    --rosado: #EC1074;
 }
 
-.btn:hover{
-    background-color: transparent;
-    border: 2px solid red;
-    color: red;
-}
 
-.bg-img{
-    background: url('FondoGrupo5.jpg') no-repeat center fixed;
+.header {
+    background: linear-gradient(to right, var(--red), var(--negro));
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    height: 45px;
     width: 100%;
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-  }
-
-.content{
-    position: absolute;
-    z-index: 999;
-    text-align: center;
-    background: transparent;
-    box-shadow: -1px 4px 28px 0px rgba(0,0,0,0.75);
-}
-
-.field{
-    position: relative;
-    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
     display: flex;
-  }
+    z-index: 9999;
+}
 
-.texto_cabecera{
-    color: white;
-    font-size: 24px;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+}
+
+.footer {
+    background: linear-gradient(to right, var(--red), var(--negro));
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    height: 45px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    grid-template-columns: 1fr;
+    display: grid;
+    justify-content: right;
+}
+
+.containerBotones {
+    font-family: "Poppins", sans-serif;
+    display: grid;
+    margin-top: 60px;
+    height: 250px;
+    width: 100%;
+}
+
+.containerBotones a {
+    margin-top: 30px;
+    margin-left: 20%;
+    display: flex;
+    border-style: 2px;
+    background-color: white;
+    border-style: solid;
+    border-color: var(--red);
+    color: var(--white);
+    background-color: var(--red);
+    border-radius: 12px;
+    width: 60%;
+    height: 50px;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.6em;
+    font-weight: 600;
+}
+
+
+.containerBanner {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 100%;
+    grid-template-rows: 25% 10% 25% 40%;
+    height: 300px;
+    background: linear-gradient(to right, var(--red), var(--negro));
+}
+
+.containerBanner1 {
+    margin-left: 5%;
+    margin-top: 15px;
+    height: 60px;
+    width: 90%;
+}
+
+.containerBanner1 img {
+    height: 70%;
+}
+
+.containerBanner2 {
+    display: flex;
+    width: 90%;
+    height: 100%;
+    margin-left: 5%;
+    align-items: center;
+
+}
+
+.containerBanner2 p:nth-child(1) {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.45em;
+    width: 40%;
+    color: var(--white);
+}
+
+.containerBanner2 p:nth-child(2) {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.45em;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    color: var(--white);
+}
+
+.containerBanner3 {
+    display: flex;
+    margin-left: 5%;
+    width: 90%;
+    height: 100%;
+}
+
+.containerReferencias {
+    display: grid;
+    width: 40%;
+    font-size: 0.35em;
+}
+
+.containerReferencias a {
+    text-decoration: none;
+    color: var(--white);
+}
+
+.containerImagen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+}
+
+.containerImagen img {
+    height: 80%
+}
+
+.containerBanner4 {
+    display: grid;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 5%;
+    width: 90%;
+    border-style: solid;
+    border-width: 2px;
+    border-color: var(--white);
+    border-radius: 12px;
+}
+
+.containerBanner4 p {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.6em;
+    height: 20px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.containerContacto {
+    display: flex;
+    height: auto;
+    width: 100%;
+    height: auto;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.containerContacto img {
+    height: 50px;
+}
+
+.containerRedes {
+    margin-top: 5px;
+    width: 80%;
+    margin-left: 10%;
+    height: 100px;
+    margin-bottom: 60px;
+}
+
+.containerRedes p {
+    display: flex;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    margin: 0;
+    color: var(--negro);
+    font-size: 0.6em;
+}
+
+.containerRedesLogos {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 80px;
+}
+
+.containerRed {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(to right, var(--red), var(--negro));
+    border-radius: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.containerRed img {
+    width: 80%;
+    height: 80%;
+}
+
+@media(min-width:600px) {
+    body {
+        margin-top: 60px;
+        margin-left: 20%;
+        margin-right: 20%;
+        border-radius: 15px;
+        border-color: var(--red);
+        border-width: 2px;
+        border-style: solid;
+        margin-bottom: 60px;
+    }
+}
+
+@media(min-width:900px) {
+    body {
+        margin-top: 60px;
+        margin-left: 25%;
+        margin-right: 25%;
+        border-radius: 15px;
+        border-color: var(--red);
+        border-width: 2px;
+        border-style: solid;
+        margin-bottom: 60px;
+    }
+}
+
+@media(min-width:1200px) {
+    body {
+        margin-top: 60px;
+        margin-left: 30%;
+        margin-right: 30%;
+        border-radius: 15px;
+        border-color: var(--red);
+        border-width: 2px;
+        border-style: solid;
+        margin-bottom: 60px;
+    }
+}
+
+@media(min-width:1500px) {
+    body {
+        margin-top: 60px;
+        margin-left: 35%;
+        margin-right: 35%;
+        border-radius: 15px;
+        border-color: var(--red);
+        border-width: 2px;
+        border-style: solid;
+        margin-bottom: 60px;
+        font-size: 30px;
+    }
 }
