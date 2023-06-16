@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -8,261 +8,295 @@
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Expires" content="-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tuentrada Pe</title>
-    <!--Custom CSS-->
-
+    <title>Transferencia de entradas</title>
+    <link rel="icon" type="image/png" href="{% static 'imagenes/favicon.png' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{% static 'comprarPage/styles.css' %}">
-
-
 </head>
 
-<body>
-    <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
+<body onload="inicializacion()">
+    <form id="comprarForm" autocomplete="off" action="{% url 'comprarPage' %}" method="post">
         {% csrf_token %}
         <div class="header">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"
-                    onclick="javascript:location.reload(true)"></img></div>
+            <img src="{% static 'comprarPage/headerlogo.png' %}"
+                style="height: 30px; margin-left: 5%; align-self: center;"
+                onclick=" javascript:location.reload(true)" />
         </div>
-        <div class="banner"><img src="{% static 'comprarPage/banner.png' %}" width="100%"></img></div>
-        <div class="seleccionarFechaBanner">
-            <p>SELECCIONAR FECHA</p>
+        <div class="containerBanner">
+            <img src="{%static 'comprarPage/banner.png'%}" />
         </div>
-        <div class="blankspace"></div>
-        <div class="Absolute-Center">
-            <div class="fechaBotonBanner" id="fechaBotonBanner">
-                <p>Domingo 25 de Junio</p>
-                <div hidden id="fechaSinCheck"><i class="far fa-circle" id="circleIcon"></i></div>
-                <div id="fechaConCheck"><i class="far fa-check-circle" id="circleCheckIcon"></i></div>
+        <div class="containerObligatorio" id="containerObligatorio">
+            <div class="containeriTitle">Por su seguridad ingrese estos datos</div>
+            <div class="containeriText">Numero de contacto</div>
+            <div class="containerInput1">
+                <p>+51</p>
+                <input type="text" placeholder="Numero de contacto" maxlength="9" onkeypress="return soloNumeros(event)"
+                    id="celular" name="celular">
+                <button type="button" id="buttonSMS" onclick="enviarSMS()">Validar</button>
+                <button type="button" id="buttonSMSenEspera">Validar</button>
+            </div>
+            <div class="containerInput1" id="containerCodigo">
+                <p></p>
+                <input type="text" placeholder="Codigo de validacion" maxlength="6" oninput="uppercase(event)"
+                    value="{{ codigo }}" id="codigo" name="codigo">
+                <button type="button" id="buttonValidar" onclick="enviarCodigo()">Verificar</button>
+            </div>
+            <div class="containerInput1" id="containerCodigoWhatsapp">
+                <p>+51</p>
+                <input type="text" placeholder="Numero de whatsapp" maxlength="9"
+                    onkeypress="return soloNumeros(event)">
+                <button type="button">Validar</button>
+            </div>
+            <div class="containeriText2">Tu numero de whastapp puede ser el mismo de contacto</div>
+
+            <div class="containeriText">Documento personal</div>
+            <div class="containerInput2">
+                <input type="radio" id="DNI" name="Documento" value="DNI" checked
+                    onchange="documentoSeleccionado(this)">
+                <label for="DNI">DNI</label>
+                <input type="radio" id="CE" name="Documento" value="CE" onchange="documentoSeleccionado(this)">
+                <label for="CE">Carnet Extranjeria</label>
+                <input type="radio" id="Pass" name="Documento" value="Pass" onchange="documentoSeleccionado(this)">
+                <label for="Pass">Pasaporte</label>
+            </div>
+            <div class="containerInput3">
+                <input type="text" placeholder="Ingresa tu documento" maxlength="8" id="dni" name="dni"
+                    onkeypress="return soloNumeros(event)">
+            </div>
+            <div class="containeriText">Nombres y apellidos completos</div>
+            <div class="containerInput3">
+                <input type="text" placeholder="Nombres y apellidos" oninput="uppercase(event)" maxlength="50"
+                    id="nombre" name="nombre">
+            </div>
+            <div class="containeriText">Pin secreto de seguridad</div>
+            <div class="containerInput3">
+                <input type="text" placeholder="Codigo de 6 a 10 digitos" maxlength="10" minlength="6" id="pin"
+                    name="pin" onkeypress="return soloNumeros(event)">
+            </div>
+            <div class="containeriText3">
+                <p>NUNCA COMPARTIR EL PIN SECRETO DE SEGURIDAD</p>
+            </div>
+            <div class="containerInput4">
+                <input type="checkbox" id="Privacidad">
+                <label for="Privacidad">Declaro que he leido y acepto los <a href="">terminos, condiciones y politica de
+                        privacidad</a> de Entradas.pe</label>
+            </div>
+
+            <div class="containerInput4">
+                <input type="checkbox" id="Spam">
+                <label for="Spam">Autorizo que Entradas.pe me envie informacion sobre eventos, promociones y
+                    encuentras.</label>
+            </div>
+
+            <div class="containerInput5">
+                <button type="button" id="buttonOpcionales" onclick="datosOpcionales()">Agregar datos opcionales de
+                    seguridad</button>
+                <button type="button" id="buttonContinuar" onclick="continuar()">Continuar</button>
+                <button type="button" id="buttonContinuar_1">Datos guardados</button>
             </div>
         </div>
-        <div class="blankspace"></div>
-        <div hidden class="todoEntradas" id="todoEntradas">
-            <div class="imagenIzquierda">
-                <img src="{% static 'comprarPage/zonas.png' %}" alt="Imagen" id="imagenZonas">
+
+        <div class="containerOpcional" id="containerOpcional">
+            <div class="containeriTitle">Datos opcionales de seguridad</div>
+            <div class="containeriText">Correo electronico</div>
+            <div class="containerInput3">
+                <input type="text" placeholder="Ingrese su correo electronico" id="correo" name="correo">
             </div>
-            <div class="entradaPorFilas">
-                {% for entrada in entradas %}
-                <div class="entradaFila{{entrada.id}}">
-                    <div class="entradaColumna1"><i class="fas fa-circle"></i></div>
-                    <div class="entradaColumna2">{{entrada.descripcion}}</div>
-                    <div class="entradaColumna3">
-                        <p id="entradaPrecio{{entrada.tipo}}">S/. {{entrada.precio}}</p>
+            <!-- <div class="containerInput6">
+                <input type="text" placeholder="Ingrese su correo">
+                <button type="button">Validar</button>
+            </div> -->
+            <div class="containeriText">Preguntas de seguridad</div>
+            <div class="containerInput7">
+                <select id="pregunta1Sel" name="mi_combobox" placeholder="Pregunta de seguridad"
+                    onchange="preguntaseleccionada()">
+                    {% for pregunta in preguntas %}
+                    <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="containerInput3">
+                <input type="text" placeholder="Respuesta a la pregunta 1" maxlength="59" id="respuesta1"
+                    name="respuesta1">
+            </div>
+            <div class="containerInput7">
+                <select id="pregunta2Sel" name="mi_combobox" placeholder="Pregunta de seguridad"
+                    onchange="preguntaseleccionada()">
+                    {% for pregunta in preguntas %}
+                    <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="containerInput3">
+                <input type="text" placeholder="Respuesta a la pregunta 2" maxlength="59" id="respuesta2"
+                    name="respuesta2">
+            </div>
+            <div class="containerInput7">
+                <select id="pregunta3Sel" name="mi_combobox" placeholder="Pregunta de seguridad"
+                    onchange="preguntaseleccionada()">
+                    {% for pregunta in preguntas %}
+                    <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="containerInput3">
+                <input type="text" placeholder="Respuesta a la pregunta 3" maxlength="59" id="respuesta3"
+                    name="respuesta3">
+            </div>
+            <div class="containerInput8">
+                <button type="button" id="buttonContinuarOpcional" onclick="verificarDatosOpcional()">Continuar</button>
+                <button type="button" id="buttonContinuarOpcional_1">Datos opcionales guardados</button>
+            </div>
+        </div>
+
+        <div class="containerFecha">
+            Domingo 25 Junio
+        </div>
+
+        <div class="containerSeleccion">
+            <img src="{%static 'comprarPage/escenario.png' %}">
+            <div class="containerEntradas">
+                <div class="containerEntrada1">
+                    <i class="fas fa-circle"></i>
+                    <p id="entradaPrecio1">EL FIESTÓN DEL GRUPO 5 <br>S/. 100.00</p>
+                    <div class="containerRestantes1">
+                        <p id="entradasRestantes1">{{entradas.0.cantidad}}</p>
+                        <div class="containerMasMenos1">
+                            <i class="fas fa-minus-circle" onclick="disminuir('1')"></i>
+                            <p id="cantidadVisible1">0</p>
+                            <i class="fas fa-plus-circle" onclick="aumentar('1')"></i>
+                        </div>
                     </div>
-                    {% if forloop.counter < 4 %} <div class="entradaColumna4"><i class="fas fa-minus-circle"
-                            onclick="disminuir('{{entrada.tipo}}')"></i>
                 </div>
-                <div class="entradaColumna5">
-                    <p id="cantidadVisible{{entrada.tipo}}">0</p>
-                    <input hidden name="cantidadHidden{{entrada.id}}" id="cantidadHidden{{entrada.tipo}}" value="0">
-                </div>
-                <div class="entradaColumna6"><i class="fas fa-plus-circle" onclick="aumentar('{{entrada.tipo}}')"></i>
-                </div>
-                {% elif forloop.counter == 4%}
-                <div></div>
-                <div class="custom-select"><select id="boxes1" name="boxes1" onchange="seleccionado()">
-                        <option value="ninguno"> --- </option>
-                        {% for boxs in boxes1 %}
-                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
-                        {% endfor %}
-                    </select>
-                    <input hidden name="cantidadHidden4" id="cantidadHidden4" value="0">
-                </div>
-                <div id="opcionSeleccionadabox1" style="font-size: 17px;"></div>
-                <div></div>
-                {% elif forloop.counter == 5%}
-                <div></div>
-                <div class="custom-select"> <select id="boxes2" name="boxes2" onchange="seleccionado()">
-                        <option value="ninguno"> --- </option>
-                        {% for boxs in boxes2 %}
-                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
-                        {% endfor %}
-                    </select>
-                    <input hidden name="cantidadHidden5" id="cantidadHidden5" value="0">
-                </div>
-                <div id="opcionSeleccionadabox2" style="font-size: 17px;"></div>
-                <div></div>
-                {% elif forloop.counter == 6%}
-                <div></div>
-                <div class="custom-select"><select id="boxes3" name="boxes3" onchange="seleccionado()">
-                        <option value="ninguno"> --- </option>
-                        {% for boxs in boxes3 %}
-                        <option value="{{ boxs.box }}">BOX {{ boxs.box }}</option>
-                        {% endfor %}
-                    </select>
-                    <input hidden name="cantidadHidden6" id="cantidadHidden6" value="0">
-                </div>
-                <div id="opcionSeleccionadabox3" style="font-size: 17px;"></div>
-                <div></div>
-                {% endif %}
-                <div class="entradaColumna7">
-                    <p id="entradasRestantes{{entrada.id}}">{{entrada.cantidad}}</p>
-                </div>
-            </div>
-            {% endfor %}
-            <div class="totalEntradasDiv">
-                <div class="totalMontoDiv">
-                    <div class="totalTexto">
-                        <p>Total S/.</p>
-                    </div>
-                    <div class="dummy"> </div>
-                    <div class="totalEstatico">
-                        <p id="totalEstatico">0</p>
+                <div class="containerEntrada2">
+                    <i class="fas fa-circle"></i>
+                    <p id="entradaPrecio2">MOTOR Y MOTIVO <br>S/. 150.00</p>
+                    <div class="containerRestantes1">
+                        <p id="entradasRestantes2">{{entradas.1.cantidad}}</p>
+                        <div class="containerMasMenos1">
+                            <i class="fas fa-minus-circle" onclick="disminuir('2')"></i>
+                            <p id="cantidadVisible2">0</p>
+                            <i class="fas fa-plus-circle" onclick="aumentar('2')"></i>
+                        </div>
                     </div>
                 </div>
-                <div></div>
-                <div class="totalBotonDiv" id="comprarBoton" onclick="comprar()" hidden>COMPRAR</div>
-                <input hidden id="boton" name="boton" value="">
-            </div>
-        </div>
-        </div>
-        <div class="blankspace"></div>
-
-        <div class="datosCompradorTexto" id="datosCompradorTexto">
-            <p>Datos del comprador</p>
-        </div>
-        <input hidden type="text" id="celular2" name="celular2" value="{{ celular }}">
-        <input hidden type="text" id="codigo2" name="codigo2" value="{{ codigo }}">
-        <div class="blankspace"></div>
-        <div class="todoObligatorio" id="todoObligatorio">
-            <div class="contenedorCelular" id="contenedorCelular">
-                <div>Celular</div>
-                <input type="text" placeholder="Numero de celular" maxlength="9" onkeypress="return soloNumeros(event)"
-                    id="celular" name="celular" value="{{ celular }}">
-                <button type="button" id="buttonSMS" onclick="enviarSMS()">SMS</button>
-            </div>
-            <div class="contenedorCodigo" id="contenedorCodigo">
-                <div>Codigo</div>
-                <input type="text" placeholder="Codigo validacion" maxlength="6" id="codigo" name="codigo"
-                    oninput="uppercase(event)" value="{{ codigo }}">
-                <button type="button" id="buttonValidar" onclick="enviarCodigo()">Validar</button>
-            </div>
-            <div id="celularigualwhatsapp" class="celularigualwhatsapp">
-                <input type="checkbox" id="sameNumber" name="sameNumber" checked>
-                <label for="sameNumber">Mi celular es el mismo que mi WhatsApp</label>
-            </div>
-
-            <div class="contenedorWhatsapp" id="contenedorWhatsapp">
-                <div>Whatsapp</div>
-                <input type="text" placeholder="Numero de whatsapp" maxlength="9" onkeypress="return soloNumeros(event)"
-                    id="whatsapp" name="whatsapp">
-                <button type="button" id="buttonWhatsapp" onclick="enviarWhatsapp()">Codigo</button>
-            </div>
-            <div class="contenedorCodigoWhatsapp" id="contenedorCodigoWhatsapp">
-                <div>Codigo</div>
-                <input type="text" placeholder="Codigo whatsapp" maxlength="6" id="codigoWhatsapp" name="codigoWhatsapp"
-                    oninput="uppercase(event)">
-                <button type="button" id="buttonValidarWhatsapp" onclick="enviarCodigoWhatsapp()">Validar</button>
-            </div>
-            <div id="despuesWhatsapp">
-
-                <div class="contenedorMedioPago" id="contenedorMedioPago">
-                    <div><input type="radio" name="opciones" value="DNI" checked>
+                <div class="containerEntrada3">
+                    <i class="fas fa-circle"></i>
+                    <p id="entradaPrecio3">AMOR DE MIS AMORES <br>S/. 200.00</p>
+                    <div class="containerRestantes1">
+                        <p id="entradasRestantes3">{{entradas.2.cantidad}}</p>
+                        <div class="containerMasMenos1">
+                            <i class="fas fa-minus-circle" onclick="disminuir('3')"></i>
+                            <p id="cantidadVisible3">0</p>
+                            <i class="fas fa-plus-circle" onclick="aumentar('3')"></i>
+                        </div>
                     </div>
-                    <div>DNI</div>
-                    <div><input type="radio" name="opciones" value="Pasaporte">
+                </div>
+                <div class="containerEntrada4" id="containerEntrada4">
+                    <div class="containerInformacion">
+                        <i class="fas fa-circle"></i>
+                        <p id="entradaPrecio4">LADO IZQUIERDO <br>S/. 4000.00</p>
+                        <div class="containerRestantes2">
+                            <p id="entradasRestantes4">{{entradas.3.cantidad}}</p>
+                            <i id="downIcon4" class="fas fa-chevron-circle-down" onclick="showBox('4', 'down')"></i>
+                            <i id="upIcon4" class="fas fa-chevron-circle-up" onclick="showBox('4', 'up')"></i>
+                        </div>
+
                     </div>
-                    <div>Pasaporte</div>
-                    <div><input type="radio" name="opciones" value="Carnet extrajeria"></div>
-                    <div>C.E.</div>
-                </div>
-
-                <div class="contenedorDNI" id="contenedorDNI">
-                    <div class="labelInput">Documento</div>
-                    <input type="text" placeholder="Ingrese de documento" maxlength="8" id="dni" name="dni"
-                        onkeypress="return solodocumentos(event)">
-                    <button type="button">Validar</button>
-                </div>
-
-                <div class="contenedorNombre" id="contenedorNombre">
-                    <div class="labelInput">Nombre</div>
-                    <input type="text" placeholder="Nombres y apellidos" maxlength="59" id="nombre" name="nombre">
-                    <button type="button">Validar</button>
-                </div>
-
-                <div class="contenedorPregunta" id="contenedorPregunta1">
-                    <div class="labelInput">Pregunta</div>
-                    <select name="mi_combobox" placeholder="Pregunta de seguridad" onchange="preguntaseleccionada()">
-                        {% for pregunta in preguntas %}
-                        <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                    <div class=" containerExtras">(10 PERSONAS + ETIQUETA DORADA + 2 COCAS + 1 AGUA)
+                    </div>
+                    <div class="containerBoxes" id="containerBoxes4">
+                        {% for box in boxes1 %}
+                        {%if box.ocupado%}
+                        <div class="boxOcupado" onclick="seleccionBox('{{box.box}}')" id="box{{box.box}}"
+                            name="boxseleccionado">BOX {{box.box}}</div>
+                        {%else%}
+                        <div class="boxDesocupado" onclick="seleccionBox('{{box.box}}')" id="box{{box.box}}"
+                            name="boxseleccionado">BOX {{box.box}}</div>
+                        {%endif%}
                         {% endfor %}
-                    </select>
-                    <button type="button">Validar</button>
+                    </div>
                 </div>
 
-                <div class="contenedorRespuesta" id="contenedorRespuesta1">
-                    <div class="labelInput"></div>
-                    <input type="text" placeholder="Respuesta a la pregunta 1" maxlength="59" id="respuesta1"
-                        name="respuesta1" style="margin-top: -25px;">
-                    <button type="button">Validar</button>
-                </div>
-
-                <div class="contenedorPregunta" id="contenedorPregunta2">
-                    <div class="labelInput">Pregunta</div>
-                    <select name="mi_combobox" placeholder="Pregunta de seguridad" onchange="preguntaseleccionada()">
-                        {% for pregunta in preguntas %}
-                        <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                <div class="containerEntrada5" id="containerEntrada5">
+                    <div class="containerInformacion">
+                        <i class="fas fa-circle"></i>
+                        <p id="entradaPrecio5">LADO DERECHO<br>S/. 4000.00</p>
+                        <div class="containerRestantes2">
+                            <p id="entradasRestantes5">{{entradas.4.cantidad}}</p>
+                            <i id="downIcon5" class="fas fa-chevron-circle-down" onclick="showBox('5', 'down')"></i>
+                            <i id="upIcon5" class="fas fa-chevron-circle-up" onclick="showBox('5', 'up')"></i>
+                        </div>
+                    </div>
+                    <div class=" containerExtras1">(10 PERSONAS + ETIQUETA DORADA + 2 COCAS + 1 AGUA)
+                    </div>
+                    <div class="containerBoxes" id="containerBoxes5">
+                        {% for box in boxes2 %}
+                        {%if box.ocupado%}
+                        <div class="boxOcupado" onclick="seleccionBox('{{box.box}}')" id="box{{box.box}}"
+                            name="boxseleccionado">BOX {{box.box}}</div>
+                        {%else%}
+                        <div class="boxDesocupado" onclick="seleccionBox('{{box.box}}')" id="box{{box.box}}"
+                            name="boxseleccionado">BOX {{box.box}}</div>
+                        {%endif%}
                         {% endfor %}
-                    </select>
-                    <button type="button">Validar</button>
+                    </div>
                 </div>
 
-                <div class="contenedorRespuesta" id="contenedorRespuesta2">
-                    <div class="labelInput"></div>
-                    <input type="text" placeholder="Respuesta a la pregunta 2" maxlength="59" id="respuesta2"
-                        name="respuesta2" style="margin-top: -25px;">
-                    <button type="button">Validar</button>
-                </div>
-
-                <div class="contenedorPregunta" id="contenedorPregunta3">
-                    <div class="labelInput">Pregunta</div>
-                    <select name="mi_combobox" placeholder="Pregunta de seguridad" onchange="preguntaseleccionada()"
-                        onclick="guardaranteriores()">
-                        {% for pregunta in preguntas %}
-                        <option value="{{ opcion.value }}">{{ pregunta.pregunta }}</option>
+                <div class="containerEntrada6" id="containerEntrada6">
+                    <div class="containerInformacion">
+                        <i class="fas fa-circle"></i>
+                        <p id="entradaPrecio6">ALIMAÑA BOX <br>S/. 5000.00</p>
+                        <div class="containerRestantes2">
+                            <p id="entradasRestantes6">{{entradas.5.cantidad}}</p>
+                            <i id="downIcon6" class="fas fa-chevron-circle-down" onclick="showBox('6', 'down')"></i>
+                            <i id="upIcon6" class="fas fa-chevron-circle-up" onclick="showBox('6', 'up')"></i>
+                        </div>
+                    </div>
+                    <div class=" containerExtras2">(10 PERSONAS + ETIQUETA DORADA + 2 COCAS + 1 AGUA)
+                    </div>
+                    <div class="containerBoxes" id="containerBoxes6">
+                        {% for box in boxes3 %}
+                        {%if box.ocupado%}
+                        <div class="boxOcupado" onclick="seleccionBox('{{box.box}}')" id="box{{box.box}}"
+                            name="boxseleccionado">BOX {{box.box}}</div>
+                        {%else%}
+                        <div class="boxDesocupado" onclick="seleccionBox('{{box.box}}')" id="box{{box.box}}"
+                            name="boxseleccionado">BOX {{box.box}}</div>
+                        {%endif%}
                         {% endfor %}
-                    </select>
-                    <button type="button">Validar</button>
+                    </div>
                 </div>
+                <div class="containerTotal">
+                    <div>
+                        <p>Total S/.&nbsp;&nbsp;</p>
+                        <p id="totalEstatico"> 0</p>
+                    </div>
 
-                <div class="contenedorRespuesta" id="contenedorRespuesta3">
-                    <div class="labelInput"></div>
-                    <input type="text" placeholder="Respuesta a la pregunta 3" maxlength="59" id="respuesta3"
-                        name="respuesta3" style="margin-top: -25px;">
-                    <button type="button">Validar</button>
-                </div>
-
-                <div class="contenedorPin" id="contenedorPin">
-                    <div>PIN</div>
-                    <input type="text" placeholder="Ingrese PIN" maxlength="10" id="pin" name="pin"
-                        onkeypress="return soloNumeros(event)">
-                    <button type="button">Validar</button>
+                    <button type="button" id="buttonComprar" onclick="comprar()">COMPRAR</button>
                 </div>
             </div>
-            <div class="comprarBotonFinal" id="comprarBotonFinal" onclick="comprar()">COMPRAR</div>
-
-            <div
-                style="margin-top: 40px; font-size: 18px; background-color: blueviolet; justify-content: center; width: 100%; border-radius: 10px; display: flex; justify-self: center; color: white;">
-                Recuerde bien su PIN de seguridad</div>
         </div>
-        <div class="blankspace2"></div>
         <div class="footer">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
-            </div>
+            <img src="{% static 'comprarPage/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
         </div>
-        <!-- Scripts -->
-        <script>
-            var comprarPageUrl = "{% url 'comprarPage' %}";
-        </script>
-        <script defer src="https://code.jquery.com/jquery-3.5.1.js"
-            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-        <script defer src="{% static 'comprarPage/script.js' %}"></script>
+        <input style="visibility: hidden; display: none;" value="" name="boton" id="boton">
+        <input style="visibility: hidden; display: none;" value="0" name="boxes1" id="boxes1">
+        <input style="visibility: hidden; display: none;" value="0" name="boxes2" id="boxes2">
+        <input style="visibility: hidden; display: none;" value="0" name="boxes3" id="boxes3">
     </form>
-
+    <script>
+        var comprarPageUrl = "{% url 'comprarPage' %}";
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script defer src="{% static 'comprarPage/script.js' %}"></script>
 </body>
 
 </html>

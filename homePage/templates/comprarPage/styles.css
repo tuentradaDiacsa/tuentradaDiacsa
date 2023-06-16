@@ -1,9 +1,19 @@
-html {
-    scroll-behavior: smooth;
+:root {
+    --red: #FF0043;
+    --white: #ffffff;
+    --verde: #07A781;
+    --morado: #7643F6;
+    --negro: #000000;
+    --gris: #858484;
+    --yelow: #d9e806;
+    --azul: #01A0E2;
+    --rosado: #EC1074;
+    --naraja: #F9970E;
 }
 
+
 .header {
-    background-color: #FF0043;
+    background: linear-gradient(to right, var(--red), var(--negro));
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     height: 45px;
     width: 100%;
@@ -14,13 +24,8 @@ html {
     z-index: 9999;
 }
 
-.imagenHeader {
-    margin-left: 10%;
-    width: 50%;
-}
-
 .footer {
-    background-color: #FF0043;
+    background: linear-gradient(to right, var(--red), var(--negro));
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     height: 45px;
     width: 100%;
@@ -32,892 +37,913 @@ html {
     justify-content: right;
 }
 
-
 body {
-    margin: 0;
     padding: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: white;
-    font-size: 20px;
-    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
     justify-content: center;
 }
 
-.banner {
-    width: 100%;
+.containerBanner {
     margin-top: 45px;
-    display: flex;
-    justify-content: center;
-}
-
-.seleccionarFechaBanner {
-    margin: 0;
-    padding: 0;
-    height: 60px;
     width: 100%;
-    background-color: #7643F6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    color: white;
+    height: 280px;
+}
+
+.containerBanner img {
+
+    height: 100%;
+    width: 100%;
+}
+
+.containerObligatorio,
+.containerOpcional {
     font-family: 'Poppins', sans-serif;
-    font-size: 40px;
-
+    margin-top: 20px;
+    display: grid;
+    margin-right: 20%;
+    margin-left: 20%;
+    width: 60%;
+    border-style: solid;
+    border-width: 2px;
+    border-color: var(--red);
+    border-radius: 20px;
+    text-align: center;
+    padding-bottom: 60px;
+    padding-top: 2%;
+    margin-bottom: 60px;
 }
 
-.blankspace {
-    margin-top: 30px;
+.containerOpcional {
+    display: none;
 }
 
-.blankspace2 {
-    margin-top: 200px;
-}
-
-
-.fechaBotonBanner {
+.containeriTitle {
     display: flex;
-    justify-content: center;
     justify-self: center;
-    align-items: center;
-    position: relative;
-    background-color: #FF0043;
-    margin-top: 20px;
-    height: 60px;
-    width: 300px;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-}
-
-.fechaBotonBanner:hover {
-    opacity: 0.8;
-    /* Cambio de opacidad al pasar el mouse */
-}
-
-
-
-.fechaBotonBanner p {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    /* Ajusta el espacio entre la letra y los iconos */
-}
-
-.todoEntradas {
-    margin-top: 10px;
-    justify-content: center;
-    display: flex;
-    visibility: visible;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-}
-
-.container {
-    display: grid;
-    grid-template-columns: 150px 30px 50px 30px 150px 150px;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . ."
-        ". . . . . .";
-}
-
-.imagenIzquierda {
-    float: left;
-    margin-right: 10px;
-    /* Opcional: ajusta el margen derecho según tus necesidades */
-}
-
-.entradaPorFilas {
-    overflow: hidden;
-    /* Para limpiar el float y evitar colapsos de altura */
-}
-
-.entradaFila1,
-.entradaFila2,
-.entradaFila3,
-.entradaFila4,
-.entradaFila5,
-.entradaFila6,
-.entradaFila7 {
-    margin: 0;
-    margin-top: 10px;
-    padding: 0;
-    height: 60px;
-    width: 700px;
-    background-color: white;
-    display: grid;
-    grid-template-columns: 50px 300px 100px 40px 60px 40px 70px;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16 px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    /* Agrega la sombra aquí */
-}
-
-.entradaFila1 {
-    color: yellow;
-    background-color: #ededed;
-}
-
-.entradaFila2 {
-    color: #01A0E2;
-    background-color: #ededed;
-}
-
-.entradaFila3 {
-    color: lawngreen;
-    background-color: #ededed;
-}
-
-.entradaFila4 {
-    color: #EC1074;
-    background-color: #ededed;
-}
-
-.entradaFila5 {
-    color: #C203F1;
-    background-color: #ededed;
-}
-
-.entradaFila6 {
-    color: #F9970E;
-    background-color: #ededed;
-}
-
-.entradaFila7 {
-    color: yellow;
-    background-color: #ededed;
-}
-
-.entradaColumna1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    font-size: 25px;
-    margin-left: -15px;
-    font-family: 'Poppins', sans-serif;
-
-}
-
-.entradaColumna2 {
-    color: black;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    font-weight: 600;
-    margin: 0;
-    padding: 0;
-}
-
-
-.entradaColumna4,
-.entradaColumna6 {
-    color: #858484;
-    font-size: 25px;
-    margin-left: 25px;
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-.entradaColumna4:hover,
-.entradaColumna6:hover {
-    color: #C203F1;
-    cursor: pointer;
-}
-
-
-.entradaColumna5 {
-    color: black;
-    font-size: 20px;
-    margin-left: 25px;
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-.entradaColumna3 {
-    font-size: 20px;
-    color: black;
-    margin-left: 25px;
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-
-.entradaColumna7 {
-    color: #FF0043;
-    margin-left: 25px;
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-.totalEntradasDiv {
-    display: grid;
-    grid-template-columns: 400px 50px 200px;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.totalMontoDiv {
-    margin: 0;
-    margin-top: 10px;
-    padding: 0;
-    height: 60px;
-    width: 400px;
-    background-color: white;
-    display: grid;
-    grid-template-columns: 200px 50px 100px;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16 px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-}
-
-.totalBotonDiv,
-.comprarBotonFinal {
-    margin-top: 10px;
-    display: none;
-    justify-content: hidden;
-    align-items: center;
-    position: relative;
-    background-color: #FF0043;
-    height: 60px;
-    width: 200px;
-    border-radius: 10px;
-    color: white;
-
-}
-
-.comprarBotonFinal {
-    display: none;
-    visibility: hidden;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    margin-top: 20px;
-    left: 40%;
-    height: 60px;
-    width: 20%;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-}
-
-totalBotonDiv:hover {
-    opacity: 0.8;
-    cursor: pointer;
-}
-
-.Absolute-Center {
-    display: flex;
-    align-items: center;
     justify-content: center;
     text-align: center;
-
+    font-size: 0.8em;
+    width: 60%;
 }
 
-.datosCompradorTexto {
-    margin: 0;
-    padding: 0;
-    height: 60px;
+.containeriText {
+    margin-top: 20px;
+    display: flex;
+    justify-self: center;
+    text-align: start;
+    font-size: 0.6em;
+    width: 60%;
+}
+
+.containerInput1 {
+    margin-top: 10px;
+    display: flex;
+    justify-self: center;
+    width: 60%;
+    height: 30px;
+    align-items: center;
+}
+
+.containerInput1 p {
+    font-size: 0.6em;
+    width: 8%;
+}
+
+.containerInput1 input {
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    height: 100%;
+    font-size: 0.6em;
+    width: 60%;
+}
+
+.containerInput1 button {
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    height: 120%;
+    margin-left: 2%;
+    width: 28%;
+    background-color: var(--white);
+    border-color: var(--red);
+    color: var(--red);
+}
+
+.containerInput1 button:hover {
+    cursor: pointer;
+    background-color: var(--red);
+    color: var(--white);
+}
+
+.containerInput1 button:active {
+    opacity: 0.5;
+}
+
+.containeriText2 {
+    margin-top: 5px;
+    margin-left: 10%;
+    display: flex;
+    justify-self: center;
+    font-size: 0.35em;
+    width: 60%;
+    display: none;
+}
+
+.containerInput2 {
+    margin-top: 15px;
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    font-size: 0.5em;
+    width: 50%;
+}
+
+.containerInput2 label {
+    display: flex;
+    text-align: start;
+    width: auto;
+    margin-right: 5%;
+}
+
+.containerInput3 {
+    margin-top: 10px;
+    display: flex;
+    justify-self: center;
+    width: 60%;
+    height: 30px;
+    margin-bottom: 20px;
+}
+
+.containerInput3 input {
+    height: 100%;
     width: 100%;
-    background-color: #7643F6;
-    display: none;
-    visibility: hidden;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-size: 40px;
-}
-
-.todoObligatorio {
-    margin-top: 10px;
-    justify-content: center;
-    display: none;
-    visibility: hidden;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-}
-
-
-.contenedorCelular,
-.contenedorCodigo,
-.contenedorPin,
-.contenedorNombre,
-.contenedorDNI,
-.contenedorCorreo,
-.contenedorPregunta,
-.contenedorRespuesta,
-.contenedorWhatsapp,
-.contenedorCodigoWhatsapp {
-    margin: 0;
-    margin-top: 10px;
-    padding: 0;
-    height: 60px;
-    width: 600px;
-    display: grid;
-    grid-template-columns: 125px 250px 100px;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-family: 'Poppins', sans-serif;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16 px;
-    border-radius: 10px;
-}
-
-.celularigualwhatsapp {
-    visibility: hidden;
-    display: none;
-    justify-content: center;
-    display: flex;
-    margin-top: 20px;
-    align-items: center;
-}
-
-.contenedorCodigo,
-.contenedorWhatsapp,
-.contenedorCodigoWhatsapp {
-    display: none;
-    visibility: hidden;
-}
-
-.contenedorPin,
-.contenedorNombre,
-.contenedorDNI,
-.contenedorCorreo,
-.contenedorPregunta,
-.contenedorRespuesta {
-    display: none;
-    visibility: hidden;
-}
-
-.contenedorPin input,
-.contenedorCelular input,
-.contenedorCodigo input,
-.contenedorNombre input,
-.contenedorDNI input,
-.contenedorCorreo input,
-.contenedorPregunta select,
-.contenedorRespuesta input,
-.contenedorWhatsapp input,
-.contenedorCodigoWhatsapp input {
-    padding: 10px;
-    width: 200px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    justify-items: center;
+    font-family: "Poppins", sans-serif;
     text-align: center;
-    font-size: 20px;
+    font-size: 0.6em;
 }
 
-.contenedorNombre input,
-.contenedorRespuesta input {
-    width: 300px;
+.containeriText3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    color: var(--red);
+    font-size: 0.4em;
+    width: 80%;
+    margin-top: -20px;
+
 }
 
-.contenedorPregunta select {
-    width: 320px;
+.containerInput4 {
+    margin-top: 5px;
+    width: 60%;
+    display: flex;
+    justify-self: center;
+    font-size: 0.45em;
+    align-items: start;
+    text-align: start;
 }
 
-.contenedorCelular button,
-.contenedorCodigo button,
-.contenedorWhatsapp button,
-.contenedorCodigoWhatsapp button {
-    width: 100px;
-    padding: 10px;
-    margin-left: 10px;
-    background-color: #7643F6;
-    color: white;
-    border: none;
-    border-radius: 4px;
+.containerInput5 {
+    margin-top: 20px;
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    width: 60%;
+    height: 60px;
+}
+
+.containerInput5 button:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    color: var(--red);
+    border-color: var(--red);
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.65em;
+    width: 60%;
+}
+
+.containerInput5 button:nth-child(1):hover {
+    background-color: var(--red);
+    color: var(--white);
     cursor: pointer;
+}
+
+.containerInput5 button:nth-child(1):active {
+
+    opacity: 0.5;
+}
+
+.containerInput5 button:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    color: var(--red);
+    border-color: var(--red);
+    border-radius: 8px;
+    margin-left: 10%;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.7em;
+    width: 30%;
+}
+
+.containerInput5 button:nth-child(2):hover {
+    background-color: var(--red);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.containerInput5 button:nth-child(2):active {
+
+    opacity: 0.5;
+}
+
+.containerInput6 {
+    margin-top: 15px;
+    display: flex;
+    justify-self: center;
+    width: 60%;
+    height: 30px;
+}
+
+.containerInput6 input {
+    width: 70%;
+    height: 100%;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    font-size: 0.6em;
+}
+
+.containerInput6 button {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.5em;
+    margin-left: 2%;
+    width: 28%;
+    height: 120%;
+    background-color: var(--white);
+    border-color: var(--red);
+    color: var(--red);
+}
+
+.containerInput6 button:hover {
+    cursor: pointer;
+    background-color: var(--red);
+    color: var(--white);
+}
+
+.containerInput6 button:active {
+    opacity: 0.5;
+}
+
+.containerInput7 {
+    margin-top: 10px;
+    margin-bottom: -5px;
+    display: flex;
+    justify-self: center;
+    width: 60%;
+    height: 30px;
+}
+
+.containerInput7 select {
+    width: 100%;
+    height: 100%;
+    font-size: 0.7em;
+    text-align: center;
+}
+
+.containerInput8 {
+    margin-top: 30px;
+    margin-bottom: -5px;
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    width: 60%;
+    height: 45px;
+}
+
+.containerInput8 button {
+    background-color: var(--white);
+    color: var(--red);
+    border-color: var(--red);
+    border-radius: 12px;
+    height: 120%;
+    width: 50%;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.7em;
+}
+
+.containerInput8 button:hover {
+    background-color: var(--red);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.containerInput8 button:active {
+    opacity: 0.5;
+}
+
+.containerFecha {
+    display: grid;
+    justify-self: center;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 50px;
+    width: 20%;
+    margin-bottom: 60px;
+    font-size: 0.7em;
+    border-radius: 12px;
+    background-color: var(--red);
+    margin-left: 40%;
+    margin-right: 40%;
+    color: var(--white);
+}
+
+.containerSeleccion {
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    margin-left: 15%;
+    width: 70%;
+    margin-bottom: 60px;
+}
+
+.containerSeleccion img {
+    width: 40%;
+    height: 700px;
+}
+
+.containerEntradas {
+    display: grid;
+    margin-left: 2%;
+    width: 58%;
+}
+
+.containerEntrada1,
+.containerEntrada2,
+.containerEntrada3 {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 70px;
+    border-radius: 10px;
+    border-color: var(--red);
+    border-style: solid;
+    background-color: var(--white);
+
+}
+
+.containerEntrada1 i,
+.containerEntrada2 i,
+.containerEntrada3 i {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+
+    width: 10%;
+    color: var(--yelow);
 }
 
-.contenedorCelular button:hover,
-.contenedorCodigo button:hover {
-    opacity: 0.8;
+.containerEntrada2 i {
+    color: var(--azul)
 }
 
-.contenedorPin button,
-.contenedorNombre button,
-.contenedorDNI button,
-.contenedorCorreo button,
-.contenedorPregunta button,
-.contenedorRespuesta button {
-
-    visibility: hidden;
+.containerEntrada3 i {
+    color: var(--verde)
 }
 
-.contenedorMedioPago {
+.containerEntrada1 p,
+.containerEntrada2 p,
+.containerEntrada3 p {
+    margin-left: 2%;
+    width: 56%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 0.8em;
+}
+
+.containerRestantes1,
+.containerRestantes2,
+.containerRestantes3 {
+    display: grid;
+    width: 32%;
+    height: 100%;
+}
+
+.containerRestantes1 p,
+.containerRestantes2 p,
+.containerRestantes3 p {
+    color: var(--red);
+    font-weight: 600;
+    width: 100%;
     margin: 0;
-    margin-top: 10px;
+    height: auto;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.6em;
+}
+
+.containerMasMenos1,
+.containerMasMenos2,
+.containerMasMenos3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.containerMasMenos1 i {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    color: var(--gris);
+    width: 25%;
+}
+
+.containerMasMenos1 i:hover {
+    color: var(--red);
+    cursor: pointer;
+}
+
+.containerMasMenos1 i:active {
+    opacity: 0.5;
+}
+
+.containerMasMenos1 p {
+    color: var(--negro);
+    font-weight: 700;
+    height: auto;
+    font-size: 0.8em;
+    width: 50%;
+}
+
+.containerEntrada4,
+.containerEntrada5,
+.containerEntrada6 {
+
+    display: grid;
+    justify-content: center;
+    width: 100%;
+    grid-template-columns: 100%;
+    height: 95px;
+    border-radius: 10px;
+    border-color: var(--red);
+    border-style: solid;
+    background-color: var(--white);
     padding: 0;
-    height: 60px;
-    width: 600px;
-    display: none;
-    visibility: hidden;
-    grid-template-columns: 25px 80px 25px 120px 25px 25px;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.containerInformacion {
+    display: flex;
+    width: 100%;
+    height: 70px;
+}
+
+.containerInformacion i:nth-child(1) {
+    display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
+    width: 10%;
+    color: var(--morado)
+}
+
+.containerEntrada5 div i:nth-child(1) {
+    color: var(--naraja);
+}
+
+.containerEntrada6 div i:nth-child(1) {
+    color: var(--rosado);
+}
+
+.containerInformacion p {
+    margin-left: 2%;
+    width: 56%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 0.8em;
+}
+
+.containerInformacion i:nth-child(3),
+.containerInformacion i:nth-child(4) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32%;
+    color: var(--gris)
+}
+
+.containerInformacion i:nth-child(4) {
+    display: none;
+}
+
+.containerInformacion i:nth-child(3):hover,
+.containerInformacion i:nth-child(4):hover {
+    color: var(--red);
+    cursor: pointer;
+}
+
+.containerInformacion i:nth-child(3):active,
+.containerInformacion i:nth-child(4):active {
+    opacity: 0.5;
+}
+
+.containerExtras,
+.containerExtras1,
+.containerExtras2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    width: 100%;
+    font-size: 0.55em;
+    background-color: var(--morado);
+    color: var(--white);
+}
+
+.containerExtras1 {
+    background-color: var(--naraja);
+}
+
+.containerExtras2 {
+    background-color: var(--rosado);
+}
+
+.containerBoxes {
+    display: none;
+    height: 70px;
+    white-space: nowrap;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+
+}
+
+.boxDesocupado {
+    font-size: 0.5em;
+    display: flex;
+    text-align: center;
+    padding: 14px;
+    width: 100%;
+    margin-left: 1%;
+    margin-right: 1%;
     border-radius: 10px;
+    background-color: var(--gris);
+    color: var(--white);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: center;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-.icono {
-    width: 30px;
-    height: auto;
+.boxDesocupado:hover {
+    background-color: var(--red);
+    cursor: pointer;
+}
+
+.boxDesocupado:active {
+    opacity: 0.5;
+}
+
+.boxOcupado {
+    font-size: 0.5em;
+    display: flex;
+    text-align: center;
+    padding: 14px;
+    width: 100%;
+    margin-left: 1%;
+    margin-right: 1%;
+    border-radius: 10px;
+    background-color: var(--negro);
+    color: var(--white);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: center;
+    text-decoration: line-through;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.boxElegido {
+    font-size: 0.5em;
+    display: flex;
+    text-align: center;
+    padding: 14px;
+    width: 100%;
+    margin-left: 1%;
+    margin-right: 1%;
+    border-radius: 10px;
+    background-color: var(--red);
+    color: var(--white);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: center;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.boxElegido:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.boxElegido:active {
+    opacity: 0.5;
 }
 
 
-@media (max-width: 900px) {
-    .seleccionarFechaBanner {
-        height: 50px;
-        align-items: center;
+.containerTotal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    width: 100%;
+    height: 50px;
+}
+
+.containerTotal div {
+    display: flex;
+    border-radius: 12px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-color: var(--red);
+    border-style: solid;
+    border-width: 2px;
+    font-size: 0.8em;
+    height: 100%;
+    width: 40%;
+}
+
+.containerTotal button {
+    display: none;
+    margin-left: 20%;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--white);
+    background-color: var(--red);
+    border-color: var(--red);
+    border-radius: 10px;
+    height: 100%;
+    width: 40%;
+}
+
+.containerTotal button:hover {
+    background-color: var(--white);
+    color: var(--red);
+    cursor: pointer;
+}
+
+.containerTotal button:active {
+    opacity: 0.5;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--red);
+}
+
+#containerCodigo {
+    display: none;
+    margin-bottom: 15px;
+}
+
+#buttonSMSenEspera {
+    display: none;
+    color: var(--white);
+    background-color: var(--red);
+    justify-content: center;
+    align-items: center;
+}
+
+#buttonSMSenEspera:hover {
+    background-color: var(--red);
+    cursor: auto;
+}
+
+#buttonSMSenEspera:active {
+    opacity: 1;
+}
+
+#containerCodigoWhatsapp {
+    display: none;
+}
+
+#buttonOpcionales_1 {
+    display: none;
+}
+
+#buttonContinuar_1 {
+    display: none;
+    justify-self: center;
+    width: 60%;
+    background-color: var(--red);
+    border-radius: 12px;
+    border-color: var(--red);
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-family: "Poppins", sans-serif;
+    font-size: 0.7em;
+
+}
+
+#buttonContinuarOpcional_1 {
+    display: none;
+    align-items: center;
+    height: 80px;
+    justify-content: center;
+    background-color: var(--red);
+    color: var(--white);
+}
+
+#buttonContinuarOpcional_1:hover {
+    background-color: var(--red);
+    cursor: auto;
+}
+
+#buttonContinuarOpcional_1:active {
+    opacity: 1;
+}
+
+.containerRestantes2 {
+    display: grid;
+    justify-content: center;
+}
+
+.containerRestantes2 p:nth-child(1) {
+    justify-self: center;
+}
+
+.containerRestantes2 i:nth-child(2),
+.containerRestantes2 i:nth-child(3) {
+    justify-self: center;
+    color: var(--gris);
+    display: flex;
+}
+
+.containerRestantes2 i:nth-child(3) {
+    display: none;
+}
+
+.containerRestantes2 i:nth-child(2):hover,
+.containerRestantes2 i:nth-child(3):hover {
+    color: var(--red);
+    cursor: pointer;
+}
+
+.containerRestantes2 i:nth-child(2):active,
+.containerRestantes2 i:nth-child(3):active {
+    opacity: 0.5;
+}
+
+@media (max-width:1300px) {
+    .containerSeleccion {
+        margin-left: 7%;
+        width: 86%;
+    }
+
+    .containerSeleccion img {
+        width: 35%;
+        height: 500px;
+    }
+
+    .containerEntradas {
+        width: 63%;
+    }
+
+    body {
         font-size: 25px;
     }
 
-    .contenedorMedioPago {
-        width: 100%;
-    }
+}
 
-    .fechaBotonBanner {
-        margin-top: 0px;
-    }
+@media (max-width:950px) {
 
-    #imagenZonas {
-        width: 100%;
-    }
-
-    .entradaPorFilas {
-        width: 100%;
-    }
-
-    .entradaFila1,
-    .entradaFila2,
-    .entradaFila3,
-    .entradaFila4,
-    .entradaFila5,
-    .entradaFila6,
-    .entradaFila7 {
-        height: 70px;
-        margin-left: 2%;
-        width: 96%;
-        grid-template-columns: 5% 40% 16% 7% 10% 7% 15%;
-    }
-
-    .entradaColumna1 {
-        margin-left: 10px;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        font-size: 10px;
-    }
-
-    .entradaColumna2 {
-        font-weight: bold;
-        font-size: 13px;
-        margin-left: 10px;
-        margin-right: 10px;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-    }
-
-
-    .entradaColumna4,
-    .entradaColumna6,
-    .entradaColumna4:hover,
-    .entradaColumna6:hover {
-        color: gray;
-        font-size: 18px;
-        display: flex;
-        justify-content: center;
-        justify-items: center;
-    }
-
-    .entradaColumna5 {
-        color: black;
-        font-size: 20px;
-        margin-left: 15px;
-        display: flex;
-        justify-content: center;
-        justify-items: center;
-        margin: 0;
-        padding: 0;
-    }
-
-    .entradaColumna3 {
-        color: black;
-        display: flex;
-        justify-content: start;
-        justify-items: center;
-        font-size: 13px;
-    }
-
-
-    .entradaColumna7 {
-        color: #FF0043;
-        display: flex;
-        margin-right: 10px;
-        justify-content: end;
-        align-items: center;
-        font-size: 12px;
-    }
-
-    .entradaColumna4:active,
-    .entradaColumna6:active {
-        color: #7643F6;
-        cursor: pointer;
-    }
-
-    .totalEntradasDiv {
-        justify-self: center;
-        justify-content: start;
-        align-items: center;
-        display: flex;
-        width: 96%;
-        margin-top: 15px;
-        margin-left: 2%;
-    }
-
-    .totalMontoDiv {
-        margin: 0;
-        width: 50%;
-        justify-self: center;
-        justify-items: center;
-        display: flex;
-        align-items: center;
-    }
-
-    .totalBotonDiv {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        justify-self: end;
+    .containerFecha {
         width: 40%;
-        margin: 0;
-        margin-right: 0;
-        margin-left: auto;
-        background-color: #858484;
+        margin-left: 30%;
+        margin-right: 30%;
     }
 
-    .datosCompradorTexto {
-        height: 50px;
-        align-items: center;
-        font-size: 25px;
-    }
-
-    .todoObligatorio {
-        margin-left: 2%;
-        width: 96%;
-        justify-content: center;
-        align-items: center;
-        display: flex;
-    }
-
-    .contenedorCodigo {
-        visibility: hidden;
-    }
-
-    .contenedorPin,
-    .contenedorNombre,
-    .contenedorDNI,
-    .contenedorCorreo,
-    .contenedorPregunta,
-    .contenedorRespuesta {
-        display: none;
-        visibility: hidden;
-    }
-
-
-    .contenedorCelular,
-    .contenedorCodigo,
-    .contenedorWhatsapp,
-    .contenedorCodigoWhatsapp {
-        margin: 0;
-        margin-left: 2%;
-        padding: 0;
-        height: 60px;
-        width: 96%;
-        grid-template-columns: 30% 40% 30%;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Poppins', sans-serif;
-        font-size: 16px;
-        border-radius: 10px;
-    }
-
-    .celularigualwhatsapp {
-        font-size: 16px;
-    }
-
-    .contenedorPin,
-    .contenedorNombre,
-    .contenedorDNI,
-    .contenedorCorreo,
-    .contenedorPregunta,
-    .contenedorRespuesta {
-        margin: 0;
-        margin-left: 2%;
-        padding: 0;
-        height: 60px;
-        width: 96%;
-        grid-template-columns: 35% 64% 1%;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Poppins', sans-serif;
-        font-size: 16px;
-        border-radius: 10px;
-    }
-
-    .labelInput {
-        width: 95%;
-        display: flex;
-        align-items: center;
-        justify-content: start;
-    }
-
-    .contenedorCelular input,
-    .contenedorCodigo input,
-    .contenedorPin input,
-    .contenedorNombre input,
-    .contenedorDNI input,
-    .contenedorCorreo input,
-    .contenedorPregunta select,
-    .contenedorRespuesta input,
-    .contenedorWhatsapp input,
-    .contenedorCodigoWhatsapp input {
-        width: 85%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        justify-items: center;
-        text-align: center;
-        font-size: 15px;
-    }
-
-    .contenedorPregunta select {
-        width: 95%;
-    }
-
-    .contenedorCelular button,
-    .contenedorCodigo button,
-    .contenedorPin button,
-    .contenedorNombre button,
-    .contenedorDNI button,
-    .contenedorCorreo button,
-    .contenedorPregunta button,
-    .contenedorRespuesta button,
-    .contenedorWhatsapp button,
-    .contenedorCodigoWhatsapp button {
+    .containerObligatorio,
+    .containerOpcional {
+        margin-left: 10%;
         width: 80%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        justify-self: end;
     }
 
-    .contenedorPin button,
-    .contenedorNombre button,
-    .contenedorDNI button,
-    .contenedorCorreo button,
-    .contenedorPregunta button,
-    .contenedorRespuesta button {
-
-        visibility: hidden;
-        width: 95%;
+    .containerObligatorio div,
+    .containerOpcional div {
+        width: 80%;
     }
 
-    .comprarBotonFinal {
-        margin-top: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        background-color: #858484;
-        height: 60px;
-        width: 200px;
-        border-radius: 10px;
-        color: white;
 
-        display: none;
-        visibility: hidden;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        margin-top: 20px;
-        left: 25%;
-        height: 60px;
-        width: 50%;
-        border-radius: 10px;
-        color: white;
-        cursor: pointer;
-    }
-
-    .custom-select {
-        margin-left: -20px;
-    }
-
-    #opcionSeleccionadabox1 {
-        display: none;
-        visibility: hidden;
-    }
-
-    #opcionSeleccionadabox2 {
-        display: none;
-        visibility: hidden;
-    }
-
-    #opcionSeleccionadabox3 {
-        display: none;
-        visibility: hidden;
-    }
-
-    .todoEntradas {
+    .containerSeleccion {
         display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: auto auto;
+        margin-left: 10%;
+        width: 80%;
+        justify-content: center;
+    }
+
+    .containerSeleccion img {
+        display: flex;
+        justify-content: center;
+        justify-self: center;
+        width: 80%;
+        margin-bottom: 20px;
+
+    }
+
+    .containerEntradas {
+        width: 100%;
+    }
+
+    body {
+        font-size: 25px;
     }
 
 }
 
-@media (pointer: fine) {
-    .custom-select {
-        margin-left: -25px;
-        position: relative;
-        display: inline-block;
-        width: 30px;
-        /* Ajusta el ancho según necesites */
-        height: 30px;
-        /* Ajusta la altura según necesites */
-        border-radius: 50%;
-        overflow: hidden;
-        background-color: pink;
-        /* Color de fondo rosado */
+@media (max-width:600px) {
+    body {
+        font-size: 20px;
     }
 
-    .custom-select select {
-        appearance: none;
-        background-color: transparent;
-        color: black;
-        padding: 8px;
-        border: none;
-        cursor: pointer;
+    .containerObligatorio,
+    .containerOpcional {
+        margin-left: 2%;
+        width: 96%;
+    }
+
+    .containerObligatorio div,
+    .containerOpcional div {
+        width: 96%;
+    }
+
+    .containerSeleccion {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: auto auto;
+        margin-left: 2%;
+        width: 96%;
+        justify-content: center;
+    }
+
+    .containerSeleccion img {
+        display: flex;
+        justify-content: center;
+        justify-self: center;
+        width: 80%;
+        margin-bottom: 20px;
+
+    }
+
+    .containerEntradas {
+        margin-left: 0;
         width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        opacity: 0;
-        z-index: 1;
     }
-
-    .custom-select::after {
-        content: '\25BC';
-        /* Código unicode de la flecha hacia abajo */
-        position: absolute;
-        color: black;
-        top: 50%;
-        right: 4px;
-        transform: translateY(-50%);
-        pointer-events: none;
-    }
-
-    .select-arrow {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(45deg);
-        width: 10px;
-        height: 10px;
-        background-color: black;
-        /* Color de la flecha */
-        z-index: 2;
-    }
-
-    .custom-select select:focus {
-        outline: none;
-    }
-
-    .custom-select select option {
-        color: black;
-        /* Color del texto negro para las opciones */
-    }
-
-    #opcionSeleccionadabox1 {
-        position: absolute;
-        top: +40%;
-        right: +16%;
-        font-size: 17px;
-        margin: 0 0px;
-        color: pink;
-        font-weight: bold;
-    }
-
-    #opcionSeleccionadabox2 {
-        position: absolute;
-        top: +40%;
-        right: +16%;
-        font-size: 17px;
-        margin: 0 0px;
-        color: pink;
-        font-weight: bold;
-    }
-
-    #opcionSeleccionadabox3 {
-        position: absolute;
-        top: +40%;
-        right: +16%;
-        font-size: 17px;
-        margin: 0 0px;
-        color: pink;
-        font-weight: bold;
-    }
-
 }

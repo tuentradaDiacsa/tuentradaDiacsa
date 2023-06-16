@@ -1,144 +1,21 @@
-window.onbeforeunload = function () {
-    document.getElementById("comprarForm").reset();
-};
-
-window.addEventListener('pageshow', function (event) {
-    var form = document.getElementById('comprarForm');
-    form.reset();
-});
-width = window.innerWidth;
-/*document.getElementById("fechaBotonBanner").addEventListener("click", function () {
-    // window.print()
-    document.getElementById("fechaSinCheck").hidden = true;
-    document.getElementById("fechaConCheck").hidden = false;
-    if (!document.getElementById("fechaConCheck").hidden) {
-        document.getElementById("todoEntradas").style.visibility = "visible";
-        console.log(width)
-        if (width <= 1500) document.getElementById("todoEntradas").style.display = "grid";
-        else document.getElementById("todoEntradas").style.display = "flex";
-        document.getElementById("todoEntradas").scrollIntoView({ behavior: "smooth" });
+function showBox(item, action) {
+    console.log("OK")
+    if (action == "down") {
+        console.log(parseInt(document.getElementById("containerEntrada" + item).style.height))
+        document.getElementById("downIcon" + item).style.display = "none"
+        document.getElementById("upIcon" + item).style.display = "flex"
+        document.getElementById("containerEntrada" + item).style.height = "165px"
+        document.getElementById("containerBoxes" + item).style.display = "flex"
     }
-    else {
-        document.getElementById("todoEntradas").style.visibility = "hidden";
-        document.getElementById("todoEntradas").style.display = "none";
-
+    else if (action == "up") {
+        document.getElementById("downIcon" + item).style.display = "flex"
+        document.getElementById("upIcon" + item).style.display = "none"
+        document.getElementById("containerEntrada" + item).style.height = "95px"
+        document.getElementById("containerBoxes" + item).style.display = "none"
     }
-});*/
-function disminuir(id) {
-    $.ajax({
-        type: 'POST',
-        url: '/comprar/',
-        data: {
-            'comando': 'leerCantidadEntradas',
-            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function (response) {
-            for (var i = 0; i < 5; i++) {
-                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - document.getElementById("cantidadHidden" + (i + 1).toString()).value
-                entradasElegidas = parseInt(document.getElementById("cantidadHidden" + (i + 1).toString()).value)
-                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
-                    document.getElementById("cantidadHidden" + (i + 1).toString()).value = response.entradasRestantes[i]
-                    document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString()
-                    document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0"
-                }
-            }
-            if (parseInt(document.getElementById("cantidadHidden" + id).value) - 1 < 0) { calcularTotal(); return }
-            entradasElegidas = parseInt(document.getElementById("cantidadHidden" + id).value) - 1
-            document.getElementById("cantidadHidden" + id).value = entradasElegidas
-            document.getElementById("cantidadVisible" + id).innerText = entradasElegidas.toString()
-            for (var i = 0; i < 5; i++) {
-                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - document.getElementById("cantidadHidden" + (i + 1).toString()).value
-            }
-            calcularTotal()
 
-        },
-        error: function (xhr, status, error) {
-            // Lógica para manejar el error
-            console.error('Error:', error);
-        }
-    });
 }
-function aumentar(id) {
-    $.ajax({
-        type: 'POST',
-        url: '/comprar/',
-        data: {
-            'comando': 'leerCantidadEntradas',
-            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function (response) {
-            for (var i = 0; i < 5; i++) {
-                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i]
-                entradasElegidas = parseInt(document.getElementById("cantidadHidden" + (i + 1).toString()).value)
-                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
-                    document.getElementById("cantidadHidden" + (i + 1).toString()).value = response.entradasRestantes[i]
-                    document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString()
-                    document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0"
-                    if (id == (i + 1).toString()) {
-                        calcularTotal()
-                        return
-                    }
-                }
-            }
-            entradasElegidas = parseInt(document.getElementById("cantidadHidden" + id).value) + 1
-            document.getElementById("cantidadHidden" + id).value = entradasElegidas
-            document.getElementById("cantidadVisible" + id).innerText = entradasElegidas.toString()
-            for (var i = 0; i < 5; i++) {
-                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - document.getElementById("cantidadHidden" + (i + 1).toString()).value
-            }
-            calcularTotal()
 
-        },
-        error: function (xhr, status, error) {
-            // Lógica para manejar el error
-            console.error('Error:', error);
-        }
-    });
-}
-function calcularTotal() {
-    var total = 0;
-    for (var i = 1; i <= 6; i++) {
-        total = total + parseInt(document.getElementById("cantidadHidden" + i.toString()).value) * parseInt(document.getElementById("entradaPrecio" + i.toString()).innerText.substring(4))
-    }
-    document.getElementById("totalEstatico").innerText = total.toString();
-    if (total == 0) {
-        document.getElementById("todoObligatorio").style.visibility = "hidden";
-        document.getElementById("todoObligatorio").style.display = "none";
-        document.getElementById("datosCompradorTexto").style.visibility = "hidden";
-        document.getElementById("datosCompradorTexto").style.display = "none";
-    }
-    else {
-
-        document.getElementById("todoObligatorio").style.visibility = "visible";
-        document.getElementById("todoObligatorio").style.display = "grid";
-        document.getElementById("datosCompradorTexto").style.visibility = "visible";
-        document.getElementById("datosCompradorTexto").style.display = "flex";
-    }
-}
-function seleccionado() {
-    console.log("seleccionado")
-
-    if (document.getElementById("boxes" + (1).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (4).toString()).value = 0;
-    else document.getElementById("cantidadHidden" + (4).toString()).value = 1;
-    if (document.getElementById("boxes" + (2).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (5).toString()).value = 0;
-    else document.getElementById("cantidadHidden" + (5).toString()).value = 1;
-    if (document.getElementById("boxes" + (3).toString()).value.toString() == "ninguno") document.getElementById("cantidadHidden" + (6).toString()).value = 0;
-    else document.getElementById("cantidadHidden" + (6).toString()).value = 1;
-
-    console.log(document.getElementById("cantidadHidden" + (4).toString()).value)
-    console.log(document.getElementById("cantidadHidden" + (5).toString()).value)
-    console.log(document.getElementById("cantidadHidden" + (6).toString()).value)
-    calcularTotal()
-    var selectbox1 = document.getElementById("boxes1");
-    var opcionSeleccionadabox1 = selectbox1.options[selectbox1.selectedIndex].text;
-    document.getElementById("opcionSeleccionadabox1").textContent = opcionSeleccionadabox1;
-    var selectbox2 = document.getElementById("boxes2");
-    var opcionSeleccionadabox2 = selectbox2.options[selectbox2.selectedIndex].text;
-    document.getElementById("opcionSeleccionadabox2").textContent = opcionSeleccionadabox2;
-    var selectbox3 = document.getElementById("boxes3");
-    var opcionSeleccionadabox3 = selectbox3.options[selectbox3.selectedIndex].text;
-    document.getElementById("opcionSeleccionadabox3").textContent = opcionSeleccionadabox3;
-}
 function soloNumeros(event) {
     var charCode = event.which ? event.which : event.keyCode;
     if (charCode < 48 || charCode > 57) {
@@ -148,26 +25,8 @@ function soloNumeros(event) {
     return true;
 }
 
-function solodocumentos(event) {
-    console.log(document.getElementsByName("opciones")[0].checked)
-    console.log(document.getElementsByName("opciones")[1].checked)
-    console.log(document.getElementsByName("opciones")[2].checked)
-    if (document.getElementsByName("opciones")[0].checked) {
-        var charCode = event.which ? event.which : event.keyCode;
-        if (charCode < 48 || charCode > 57) {
-            event.preventDefault();
-            return false;
-        }
-        return true;
-    }
-    else {
-        return true
-    }
-}
-
-var SMSenviado = false;
 function enviarSMS() {
-    console.log(document.getElementById("celular").value.trim().length)
+    //console.log(document.getElementById("celular").value.trim().length)
     if (document.getElementById("celular").value.trim().length !== 9) {
         alert("El número de celular debe tener 9 dígitos.");
         return false;
@@ -181,14 +40,7 @@ function enviarSMS() {
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (response) {
-            document.getElementById("contenedorCodigo").style.visibility = "visible";
-            document.getElementById("contenedorCodigo").style.display = "grid";
-            console.log(response);
             SMSenviado = true;
-            tiempo = 60;
-            document.getElementById("buttonSMS").style.backgroundColor = "#858484";
-            document.getElementById("buttonSMS").innerText = tiempo.toString()
-            document.getElementById("buttonSMS").disabled = true;
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
@@ -197,8 +49,41 @@ function enviarSMS() {
     });
 }
 
+tiempo = 60;
+SMSenviado = false
+validado = false
+function ActBotSMSValidar() {
+    if (validado) {
+        document.getElementById("buttonSMSenEspera").innerText = "Validado"
+        document.getElementById("buttonSMS").style.display = "none";
+        document.getElementById("buttonSMSenEspera").style.display = "block";
+        document.getElementById("containerCodigo").style.display = "none"
+        document.getElementById("celular").readOnly = true
+    }
+    else if (SMSenviado) {
+        document.getElementById("buttonSMS").style.display = "none";
+        document.getElementById("buttonSMSenEspera").style.display = "block";
+        document.getElementById("containerCodigo").style.display = "flex"
+        document.getElementById("celular").readOnly = true
+        tiempo = tiempo - 1
+        document.getElementById("buttonSMSenEspera").innerText = tiempo.toString()
+        if (tiempo <= 0) {
+            SMSenviado = false;
+            tiempo = 60;
+        }
+    }
+    else {
+        document.getElementById("buttonSMS").style.display = "block";
+        document.getElementById("buttonSMSenEspera").style.display = "none";
+        document.getElementById("containerCodigo").style.display = "none"
+        document.getElementById("celular").readOnly = false
+    }
+}
+setInterval(ActBotSMSValidar, 999);
+
+
 function enviarCodigo() {
-    console.log(document.getElementById("codigo").value.trim().length)
+    //console.log(document.getElementById("codigo").value.trim().length)
     if (document.getElementById("codigo").value.trim().length !== 6) {
         alert("El codigo de verificacion debe tener 6 caracteres.");
         return false; // Evita que el formulario se envíe
@@ -213,42 +98,8 @@ function enviarCodigo() {
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (response) {
-            console.log(response.data)
+            //console.log(response.data)
             if (response.data.toString() == "Codigo correcto") {
-                document.getElementById("buttonSMS").style.visibility = "hidden"
-                document.getElementsByName("mi_combobox")[0].selectedIndex = 0
-                document.getElementsByName("mi_combobox")[1].selectedIndex = 1
-                document.getElementsByName("mi_combobox")[2].selectedIndex = 2
-                document.getElementById("contenedorPin").style.visibility = "visible";
-                document.getElementById("contenedorPin").style.display = "grid";
-                document.getElementById("contenedorMedioPago").style.visibility = "visible";
-                document.getElementById("contenedorMedioPago").style.display = "grid";
-                document.getElementById("contenedorDNI").style.visibility = "visible";
-                document.getElementById("contenedorDNI").style.display = "grid";
-                document.getElementById("contenedorWhatsapp").style.visibility = "hidden";
-                document.getElementById("contenedorWhatsapp").style.display = "none";
-                document.getElementById("contenedorCodigoWhatsapp").style.visibility = "hidden";
-                document.getElementById("contenedorCodigoWhatsapp").style.display = "none";
-                document.getElementById("celularigualwhatsapp").style.visibility = "visible";
-                document.getElementById("celularigualwhatsapp").style.display = "flex";
-                document.getElementById("contenedorNombre").style.visibility = "visible";
-                document.getElementById("contenedorNombre").style.display = "grid";
-                document.getElementById("contenedorPregunta1").style.visibility = "visible";
-                document.getElementById("contenedorPregunta1").style.display = "grid";
-                document.getElementById("contenedorRespuesta1").style.visibility = "visible";
-                document.getElementById("contenedorRespuesta1").style.display = "grid";
-                document.getElementById("contenedorPregunta2").style.visibility = "visible";
-                document.getElementById("contenedorPregunta2").style.display = "grid";
-                document.getElementById("contenedorRespuesta2").style.visibility = "visible";
-                document.getElementById("contenedorRespuesta2").style.display = "grid";
-                document.getElementById("contenedorPregunta3").style.visibility = "visible";
-                document.getElementById("contenedorPregunta3").style.display = "grid";
-                document.getElementById("contenedorRespuesta3").style.visibility = "visible";
-                document.getElementById("contenedorRespuesta3").style.display = "grid";
-                document.getElementById("comprarBotonFinal").style.display = "flex";
-                document.getElementById("comprarBotonFinal").style.visibility = "visible";
-                document.getElementById("celular").setAttribute("disabled", "disabled");
-                document.getElementById("codigo").setAttribute("disabled", "disabled");
                 validado = true
             }
             else {
@@ -263,31 +114,77 @@ function enviarCodigo() {
         }
     });
 }
-var validado = false
+
 function uppercase(event) {
     var input = event.target;
-    input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    input.value = input.value.toUpperCase().replace(/[^A-Z 0-9]/g, "");
 }
-function comprar() {
-    document.getElementById("celular2").value = document.getElementById("celular").value;
-    document.getElementById("codigo2").value = document.getElementById("codigo").value;
 
-    if (camposLlenos() == "OK") {
-        document.getElementById("boton").value = "comprar"
-        document.getElementById("comprarForm").submit();
-    }
-    else {
-        alert("Falta llenar el campo: " + camposLlenos())
+function documentoSeleccionado(radioButton) {
+    const valorSeleccionado = radioButton.value;
+    const input = document.getElementById("dni");
+    input.value = ""
+    input.removeAttribute("onkeypress");
+    input.removeAttribute("oninput");
+    if (valorSeleccionado === "DNI") {
+        input.setAttribute("onkeypress", "return soloNumeros(event)");
+        input.setAttribute("maxlength", "8");
+    } else if (valorSeleccionado === "CE" || valorSeleccionado === "Pass") {
+        input.setAttribute("oninput", "uppercase(event)");
+        input.setAttribute("maxlength", "20");
     }
 }
-var previa1 = 0
-var previa2 = 1
-var previa3 = 2
-var repetidas = false
+
+function verificarDatosCompletos() {
+    if (!validado) {
+        alert("No ha validado su celular")
+        return false
+    }
+    if (document.getElementById("dni").value.length < 8) {
+        alert("Falta ingresar su documento")
+        return false
+    }
+    if (document.getElementById("nombre").value.length < 3) {
+        alert("Falta ingresar su nombre completo")
+        return false
+    }
+    if (document.getElementById("pin").value.length < 3) {
+        alert("Falta ingresar su pin")
+        return false
+    }
+    if (!document.getElementById("Privacidad").checked) {
+        alert("Debe aceptar la politica de privacidad")
+        return false
+    }
+    document.getElementById("DNI").readOnly = true
+    document.getElementById("CE").readOnly = true
+    document.getElementById("Pass").readOnly = true
+    document.getElementById("dni").readOnly = true
+    document.getElementById("nombre").readOnly = true
+    document.getElementById("pin").readOnly = true
+    document.getElementById("Privacidad").readOnly = true
+    document.getElementById("Spam").readOnly = true
+    document.getElementById("buttonContinuar").readOnly = true
+    document.getElementById("buttonOpcionales").style.display = "none"
+    document.getElementById("buttonContinuar").style.display = "none"
+    document.getElementById("buttonContinuar_1").style.display = "flex"
+    return true
+}
+
+function continuar() {
+    verificarDatosCompletos()
+}
+
+function datosOpcionales() {
+    if (verificarDatosCompletos()) {
+        document.getElementById("containerOpcional").style.display = "grid"
+    }
+}
+
 function preguntaseleccionada() {
-    console.log(previa1)
-    console.log(previa2)
-    console.log(previa3)
+    //console.log(previa1)
+    //console.log(previa2)
+    //console.log(previa3)
     if (document.getElementsByName("mi_combobox")[0].selectedIndex == document.getElementsByName("mi_combobox")[1].selectedIndex ||
         document.getElementsByName("mi_combobox")[1].selectedIndex == document.getElementsByName("mi_combobox")[2].selectedIndex ||
         document.getElementsByName("mi_combobox")[2].selectedIndex == document.getElementsByName("mi_combobox")[0].selectedIndex) {
@@ -301,321 +198,415 @@ function preguntaseleccionada() {
     }
 }
 
-function guardaranteriores() {
-
-}
-
-function camposLlenos() {
-    if (document.getElementById("celular").value.trim().length !== 9) return "CELULAR";
-    if (document.getElementById("codigo").value.trim().length !== 6) return "CODIGO";
-    /*if (document.getElementById("sameNumber").checked == false) {
-        if (document.getElementById("whatsapp").value.trim().length !== 9) return false;
-        if (document.getElementById("codigoWhatsapp").value.trim().length !== 6) return false;
-    }*/
-    var seleccionada = false;
-    for (var i = 0; i < document.getElementsByName('opciones').length; i++) {
-        if (document.getElementsByName('opciones')[i].checked) {
-            seleccionada = true;
-            break;
-        }
-    }
-    if (!seleccionada) return "TIPO DE DOCUMENTO";
-    if (document.getElementById("dni").value.trim().length < 6) return "DOCUMENTO";
-    if (document.getElementById("nombre").value.trim().length < 4) return "NOMBRE";
-    if (document.getElementById("respuesta1").value.trim().length < 4) return "RESPUESTA 1";
-    if (document.getElementById("respuesta2").value.trim().length < 4) return "RESPUESTA 2";
-    if (document.getElementById("respuesta3").value.trim().length < 4) return "RESPUESTA 3";
-    if (document.getElementById("pin").value.trim().length < 6) return "PIN";
-    // var opciones = document.getElementsByName("opciones");
-    // var opcionSeleccionada = "";
-    // for (var i = 0; i < 3; i++) {
-    //     if (opciones[i].checked) {
-    //         opcionSeleccionada = opciones[i].value;
-    //         break;
-    //     }
-    // }
-
-    /*celular
-    validacion
-    numero whatsappp
-    codigo validacion
-    DNI pasaporte o ce
-    Nombre 
-    PIN
-    preguntas (3)
-
-    quitar boton de comprar de arriba
-
-    texto al agregar el pago 
-
-    tachar QR
-    ocultar DNI
-*/
-    // console.log(opcionSeleccionada)
-    // console.log(parseInt(document.getElementById("totalEstatico").innerText))
-    // if (opcionSeleccionada !== "Yape" && opcionSeleccionada !== "Plin" && opcionSeleccionada !== "Transferencia") return false;
-    if (parseInt(document.getElementById("totalEstatico").innerText) == 0) return "ENTRADAS";
-    return "OK";
-}
-
-function enviarWhatsapp() {
-
-}
-
-function enviarCodigoWhatsapp() {
-    console.log(document.getElementById("codigoWhatsapp").value.trim().length)
-    if (document.getElementById("codigo").value.trim().length !== 6) {
-        alert("El codigo de verificacion debe tener 6 caracteres.");
-        return false; // Evita que el formulario se envíe
-    }
-    $.ajax({
-        type: 'POST',
-        url: '/comprar/',  // Reemplaza esto con la URL de tu vista de Django
-        data: {
-            'boton': 'verificar',
-            'celular': $('#celular').val(),
-            'codigo': $('#codigo').val(),
-            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function (response) {
-            console.log(response.data)
-
-            document.getElementById("despuesWhatsapp").style.visibility = "visible";
-            document.getElementById("despuesWhatsapp").style.display = "grid";
-            if (response.data.toString() == "Codigo correcto") {
-
-            }
-            else {
-                alert("El codigo ingresado no es correcto.");
-            }
-        },
-        error: function (xhr, status, error) {
-            // Lógica para manejar el error
-
-            console.error('Error:', error);
-
-        }
-    });
-}
-
-
-function checkwhatsapp() {
-    console.log("dwadw")
-    //document.getElementById("sameNumber").checked = !document.getElementById("sameNumber").checked
-    if (document.getElementById("sameNumber").checked == false) {
-        document.getElementById("despuesWhatsapp").style.visibility = "hidden";
-        document.getElementById("despuesWhatsapp").style.display = "none";
-        document.getElementById("contenedorWhatsapp").style.visibility = "visible";
-        document.getElementById("contenedorWhatsapp").style.display = "grid";
-        document.getElementById("contenedorCodigoWhatsapp").style.visibility = "visible";
-        document.getElementById("contenedorCodigoWhatsapp").style.display = "grid";
-    }
-    else {
-        document.getElementById("despuesWhatsapp").style.visibility = "visible";
-        document.getElementById("despuesWhatsapp").style.display = "grid";
-        document.getElementById("contenedorWhatsapp").style.visibility = "hidden";
-        document.getElementById("contenedorWhatsapp").style.display = "none";
-        document.getElementById("contenedorCodigoWhatsapp").style.visibility = "hidden";
-        document.getElementById("contenedorCodigoWhatsapp").style.display = "none";
-    }
-}
-
-function miFuncion() {
-    if (camposLlenos() == "OK") {
-        document.getElementById("comprarBoton").style.backgroundColor = "#FF0043";
-        document.getElementById("comprarBotonFinal").style.backgroundColor = "#FF0043";
-    }
-    else {
-        document.getElementById("comprarBoton").style.backgroundColor = "#858484;";
-        document.getElementById("comprarBotonFinal").style.backgroundColor = "#858484;";
-    }
+var previa1 = 0
+var previa2 = 1
+var previa3 = 2
+var repetidas = true
+function ActivacionBotonComprar() {
     if (repetidas) {
         repetidas = false;
         document.getElementsByName("mi_combobox")[0].selectedIndex = previa1
         document.getElementsByName("mi_combobox")[1].selectedIndex = previa2
         document.getElementsByName("mi_combobox")[2].selectedIndex = previa3
     }
-
 }
-setInterval(miFuncion, 100);
+setInterval(ActivacionBotonComprar, 100);
 
-tiempo = 60;
-function miFuncion2() {
-    console.log("OK")
-    if (validado) {
-        document.getElementById("buttonSMS").style.backgroundColor = "#858484";
-        document.getElementById("buttonSMS").disabled = true;
-        document.getElementById("buttonSMS").innerText = "SMS"
-        document.getElementById("buttonValidar").style.backgroundColor = "#858484";
-        document.getElementById("buttonValidar").disabled = true;
-        document.getElementById("buttonValidar").innerText = "Validado"
+function verificarDatosOpcional() {
+    if (document.getElementById("correo").value.length < 12) {
+        alert("Ingrese un correo valido")
+        return
     }
-    else if (SMSenviado) {
-        tiempo = tiempo - 1
-        document.getElementById("buttonSMS").style.backgroundColor = "#858484";
-        document.getElementById("buttonSMS").innerText = tiempo.toString()
-        document.getElementById("buttonSMS").disabled = true;
-        if (tiempo <= 0) SMSenviado = false;
-    }
-    else {
-        document.getElementById("buttonSMS").style.backgroundColor = "#7643F6";
-        document.getElementById("buttonSMS").innerText = "SMS"
-        document.getElementById("buttonSMS").disabled = false;
+    if (document.getElementById("respuesta1").value.length < 3) {
+        alert("Ingresar respuesta 1 valida")
+        return
     }
 
-}
-setInterval(miFuncion2, 999);
+    if (document.getElementById("respuesta2").value.length < 3) {
+        alert("Ingresar respuesta 2 valida")
+        return
+    }
 
-/*
+    if (document.getElementById("respuesta3").value.length < 3) {
+        alert("Ingresar respuesta 3 valida")
+        return
+    }
 
-function disminuirFila(fila) {
-    var element = document.getElementById("entradasFila" + fila);
-    var numero = parseInt(element.innerText);
-    if (numero > 0) numero--;
-    element.innerText = numero.toString().padStart(2, '0');
-    document.getElementById("entradasFilaID" + fila).value = numero
-    montoTotal();
-}
-
-function aumentarFila(fila) {
-    var element = document.getElementById("entradasFila" + fila);
-    var numero = parseInt(element.innerText);
-    if (numero < 20 && numero < parseInt(document.getElementById("restantesFila" + fila).innerText)) numero++;
-    element.innerText = numero.toString().padStart(2, '0');
-    document.getElementById("entradasFilaID" + fila).value = numero
-    montoTotal();
+    document.getElementById("buttonContinuarOpcional").style.display = "none"
+    document.getElementById("buttonContinuarOpcional_1").style.display = "flex"
+    document.getElementById("correo").readOnly = true;
+    document.getElementsByName("mi_combobox")[0].readOnly = true;
+    document.getElementsByName("mi_combobox")[1].readOnly = true;
+    document.getElementsByName("mi_combobox")[2].readOnly = true;
+    document.getElementById("respuesta1").readOnly = true;
+    document.getElementById("respuesta2").readOnly = true;
+    document.getElementById("respuesta3").readOnly = true;
 }
 
-function montoTotal() {
+var cantEntradasTipoSelec = new Array(6)
+var precioEntradasTipo = new Array(6)
+
+function inicializacion() {
+
+    for (var i = 0; i < cantEntradasTipoSelec.length; i++) {
+        cantEntradasTipoSelec[i] = 0;
+        precioEntradasTipo[i] = parseInt(document.getElementById("entradaPrecio" + (i + 1).toString()).innerText.substring(document.getElementById("entradaPrecio" + (i + 1).toString()).innerText.length - 7));
+    }
+    console.log(precioEntradasTipo);
+    //console.log(precioEntradasTipo[5]);
+}
+function disminuir(id) {
+    $.ajax({
+        type: 'POST',
+        url: '/comprar/',
+        data: {
+            'comando': 'leerCantidadEntradas',
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (response) {
+            for (var i = 0; i < 6; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - cantEntradasTipoSelec[i];
+                entradasElegidas = cantEntradasTipoSelec[i];
+                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
+                    cantEntradasTipoSelec[i] = response.entradasRestantes[i]
+                    document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString();
+                    document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0";
+                }
+            }
+            if (cantEntradasTipoSelec[id - 1] - 1 < 0) { calcularTotal(); return }
+            entradasElegidas = cantEntradasTipoSelec[id - 1] - 1;
+            cantEntradasTipoSelec[id - 1] = entradasElegidas;
+            document.getElementById("cantidadVisible" + id).innerText = entradasElegidas.toString();
+            for (var i = 0; i < 3; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - cantEntradasTipoSelec[i];
+            }
+
+            for (var i = 0; i < response.boxes1Restantes.length; i++) {
+                if (response.boxes1Restantes[i] == document.getElementById("boxes1").value) continue;
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes1Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.add("boxOcupado")
+            }
+
+            for (var i = 0; i < response.boxes2Restantes.length; i++) {
+                if (response.boxes2Restantes[i] == document.getElementById("boxes2").value) continue;
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes2Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.add("boxOcupado")
+            }
+
+            for (var i = 0; i < response.boxes3Restantes.length; i++) {
+                if (response.boxes3Restantes[i] == document.getElementById("boxes3").value) continue;
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes3Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.add("boxOcupado")
+            }
+            calcularTotal();
+        },
+        error: function (xhr, status, error) {
+            // Lógica para manejar el error
+            console.error('Error:', error);
+        }
+    });
+}
+
+function aumentar(id) {
+    $.ajax({
+        type: 'POST',
+        url: '/comprar/',
+        data: {
+            'comando': 'leerCantidadEntradas',
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (response) {
+            for (var i = 0; i < 3; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i];
+                entradasElegidas = cantEntradasTipoSelec[i];
+                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
+                    cantEntradasTipoSelec[i] = response.entradasRestantes[i];
+                    document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString();
+                    document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0";
+                }
+            }
+            if (cantEntradasTipoSelec[id - 1] + 1 > 20) { calcularTotal(); return }
+            entradasElegidas = cantEntradasTipoSelec[id - 1] + 1;
+            cantEntradasTipoSelec[id - 1] = entradasElegidas;
+            document.getElementById("cantidadVisible" + id).innerText = entradasElegidas.toString();
+            for (var i = 0; i < 3; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - cantEntradasTipoSelec[i];
+            }
+
+            for (var i = 0; i < response.boxes1Restantes.length; i++) {
+                if (response.boxes1Restantes[i] == document.getElementById("boxes1").value) continue;
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes1Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.add("boxOcupado")
+            }
+
+            for (var i = 0; i < response.boxes2Restantes.length; i++) {
+                if (response.boxes2Restantes[i] == document.getElementById("boxes2").value) continue;
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes2Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.add("boxOcupado")
+            }
+
+            for (var i = 0; i < response.boxes3Restantes.length; i++) {
+                if (response.boxes3Restantes[i] == document.getElementById("boxes3").value) continue;
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes3Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.add("boxOcupado")
+            }
+            calcularTotal();
+        },
+        error: function (xhr, status, error) {
+            // Lógica para manejar el error
+            console.error('Error:', error);
+        }
+    });
+}
+
+function calcularTotal() {
     var total = 0;
-    total = parseInt(document.getElementById("entradasFila1").innerText) * parseInt(document.getElementById("montoFila1").innerText.substring(0)) +
-        parseInt(document.getElementById("entradasFila2").innerText) * parseInt(document.getElementById("montoFila2").innerText.substring(0)) +
-        parseInt(document.getElementById("entradasFila3").innerText) * parseInt(document.getElementById("montoFila3").innerText.substring(0)) +
-        parseInt(document.getElementById("entradasFila4").innerText) * parseInt(document.getElementById("montoFila4").innerText.substring(0));
-    var element = document.getElementById("montoTotal");
-    element.innerText = "S/. " + total.toString();
-    var element2 = document.getElementById("monto");
-    element2.value = total
-
-    /*if (total > 0) {
-        var contenedor = document.getElementById("regionObligatoria")
-        contenedor.hidden = false;
+    for (var i = 0; i < 6; i++) {
+        //console.log(cantEntradasTipoSelec[i])
+        //console.log(precioEntradasTipo[i])
+        total = total + cantEntradasTipoSelec[i] * precioEntradasTipo[i]
+    }
+    //console.log("Paso por calcular total")
+    document.getElementById("totalEstatico").innerText = total.toString();
+    if (total == 0) {
+        document.getElementById("buttonComprar").style.display = "none"
     }
     else {
-        var contenedor = document.getElementById("regionObligatoria")
-        contenedor.hidden = true;
+        document.getElementById("buttonComprar").style.display = "block"
     }
 }
 
-function soloNumeros(event) {
-    var charCode = event.which ? event.which : event.keyCode;
-    if (charCode < 48 || charCode > 57) {
-        event.preventDefault();
-        return false;
+function comprar() {
+    //document.getElementById("celular2").value = document.getElementById("celular").value;
+    //document.getElementById("codigo2").value  = document.getElementById("codigo").value;
+    if (!verificarDatosCompletos()) {
+        return
     }
-    return true;
-}
-
-function medioPagoElegido(checkbox) {
-    var element;
-    switch (checkbox) {
-        case "yapeCheckBox":
-            element = document.getElementById("plinCheckBox");
-            element.checked = false;
-            element = document.getElementById("bcpCheckBox");
-            element.checked = false;
-            break;
-
-        case "plinCheckBox":
-            var element = document.getElementById("yapeCheckBox");
-            element.checked = false;
-            element = document.getElementById("bcpCheckBox");
-            element.checked = false;
-            break;
-
-        case "bcpCheckBox":
-            var element = document.getElementById("plinCheckBox");
-            element.checked = false;
-            element = document.getElementById("yapeCheckBox");
-            element.checked = false;
-            break;
+    console.log("holad")
+    var formulario = document.getElementById("comprarForm");
+    for (var i = 1; i <= cantEntradasTipoSelec.length; i++) {
+        var nuevoCampo = document.createElement("input");
+        nuevoCampo.name = "cantidadEntradas" + i.toString();
+        nuevoCampo.value = cantEntradasTipoSelec[i - 1];
+        formulario.appendChild(nuevoCampo);
+        console.log(i)
     }
-}
+    var campoPregunta1 = document.createElement("input");
+    var campoPregunta2 = document.createElement("input");
+    var campoPregunta3 = document.createElement("input");
+    campoPregunta1.name = "pregunta1";
+    campoPregunta2.name = "pregunta2";
+    campoPregunta3.name = "pregunta3";
 
-function setBotonValue(value) {
-    document.getElementById('boton').value = value;
-}
+    var selectpreg1 = document.getElementById("pregunta1Sel");
+    var pregSel1 = selectpreg1.options[selectpreg1.selectedIndex].text;
+    campoPregunta1.value = pregSel1;
+    var selectpreg2 = document.getElementById("pregunta2Sel");
+    var pregSel2 = selectpreg2.options[selectpreg2.selectedIndex].text;
+    campoPregunta2.value = pregSel2;
+    var selectpreg3 = document.getElementById("pregunta3Sel");
+    var pregSel3 = selectpreg3.options[selectpreg3.selectedIndex].text;
+    campoPregunta3.value = pregSel3;
 
-function validarCelular() {
-    var celularInput = document.getElementById("celular");
-    var celularValue = celularInput.value.trim();
-    if (celularValue.length !== 9) {
-        alert("El número de celular debe tener 9 dígitos.");
-        return false; // Evita que el formulario se envíe
-    }
-
-    var inputValue = $('#celular').val();
-    $.ajax({
-        type: 'POST',
-        url: '/comprar/',  // Reemplaza esto con la URL de tu vista de Django
-        data: {
-            'boton': 'sms',
-            'celularValue': inputValue,
-            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-        },
-        success: function (response) {
-            // Lógica para manejar la respuesta exitosa
-            console.log(response);
-        },
-        error: function (xhr, status, error) {
-            // Lógica para manejar el error
-            console.error('Error:', error);
-        }
-    });
-}
-
-function comprarFunction(value) {
-    if (document.getElementById("celular").value.trim().length != 9 ||
-        document.getElementById("codigo").value.trim().length != 6 ||
-        document.getElementById("pin").value.trim().length < 4 ||
-        (!document.getElementById("yapeCheckBox").checked && !document.getElementById("plinCheckBox").checked && !document.getElementById("bcpCheckBox").checked)) {
-        alert("Falta completar algun campo");
-        return false; // Evita que el formulario se envíe
-    }
-    for (var i = 1; i < 5; i++) {
-        document.getElementsByName("entradaID" + i.toString()).value = i;
-        document.getElementsByName("entradasFila" + i.toString()).value = parseInt(document.getElementById("entradasFila" + i.toString()).innerText);
-        document.getElementsByName("entradasPrecio" + i.toString()).value = parseInt(document.getElementById("montoFila" + i.toString()).innerText);
-    }
-    if (document.getElementById("yapeCheckBox").checked) document.getElementById("medioPago").value = 1;
-    else if (document.getElementById("plinCheckBox").checked) document.getElementById("medioPago").value = 2;
-    else if (document.getElementById("bcpCheckBox").checked) document.getElementById("medioPago").value = 3;
-    setBotonValue(value);
+    formulario.appendChild(campoPregunta1);
+    formulario.appendChild(campoPregunta2);
+    formulario.appendChild(campoPregunta3);
+    //console.log(document.getElementById("comprarForm"))
+    document.getElementById("boton").value = "comprar"
     document.getElementById("comprarForm").submit();
+
 }
 
-function successFunction(msg) {
-    if (msg.message === 'success') {
-        alert('Success!');
-        form.reset()
-    }
-}
-
-function verificarCodigo() {
-    var inputValue1 = $('#celular').val();
-    var inputValue2 = $('#codigo').val();
+function seleccionBox(seleccionado) {
     $.ajax({
         type: 'POST',
-        url: '/comprar/',  // Reemplaza esto con la URL de tu vista de Django
+        url: '/comprar/',
         data: {
-            'boton': 'verificar',
-            'celular': inputValue1,
-            'codigo': inputValue2,
-            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+            'comando': 'leerCantidadEntradas',
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
+
         success: function (response) {
-            // Lógica para manejar la respuesta exitosa
-            console.log(response);
+            for (var i = 0; i < 6; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i];
+                entradasElegidas = cantEntradasTipoSelec[i];
+                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
+                    cantEntradasTipoSelec[i] = response.entradasRestantes[i];
+                    document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString();
+                    document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0";
+                    if (i >= 3) {
+                        document.getElementById("boxes" + i.toString()).value = "ninguno"
+                        cantidadEntradasTipo[i] = 0
+                    }
+                }
+            }
+
+            boxes = document.getElementsByName("boxseleccionado")
+            if (document.getElementById("box" + seleccionado).className == "boxOcupado") return;
+            if (document.getElementById("box" + seleccionado).className == "boxElegido") {
+                document.getElementById("boxes3").value = 0;
+                document.getElementById("boxes2").value = 0;
+                document.getElementById("boxes1").value = 0;
+                cantEntradasTipoSelec[3] = 0
+                cantEntradasTipoSelec[4] = 0
+                cantEntradasTipoSelec[5] = 0
+                document.getElementById("box" + seleccionado).classList.remove("boxElegido")
+                document.getElementById("box" + seleccionado).classList.add("boxDesocupado")
+                calcularTotal()
+                return;
+            }
+            for (var i = 0; i < boxes.length; i++) {
+                console.log(i + 1)
+                console.log(seleccionado)
+                if (document.getElementById("box" + (i + 1).toString()).className == "boxOcupado") {
+                    continue;
+                }
+                if ((i + 1).toString() == seleccionado.toString()) {
+                    console.log("IGUALES")
+                    document.getElementById("box" + (i + 1).toString()).classList.remove("boxDesocupado")
+                    document.getElementById("box" + (i + 1).toString()).classList.add("boxElegido")
+
+                    if (1 <= seleccionado && seleccionado <= 18) {
+                        document.getElementById("boxes3").value = seleccionado;
+                        document.getElementById("boxes2").value = 0;
+                        document.getElementById("boxes1").value = 0;
+                        cantEntradasTipoSelec[3] = 0
+                        cantEntradasTipoSelec[4] = 0
+                        cantEntradasTipoSelec[5] = 1
+
+                    }
+                    if (19 <= seleccionado && seleccionado <= 23) {
+                        document.getElementById("boxes3").value = 0;
+                        document.getElementById("boxes2").value = 0;
+                        document.getElementById("boxes1").value = seleccionado;
+                        cantEntradasTipoSelec[3] = 1
+                        cantEntradasTipoSelec[4] = 0
+                        cantEntradasTipoSelec[5] = 0
+                    }
+                    if (24 <= seleccionado && seleccionado <= 28) {
+                        document.getElementById("boxes3").value = 0;
+                        document.getElementById("boxes2").value = seleccionado;
+                        document.getElementById("boxes1").value = 0;
+                        cantEntradasTipoSelec[3] = 0
+                        cantEntradasTipoSelec[4] = 1
+                        cantEntradasTipoSelec[5] = 0
+                    }
+                }
+                else {
+                    document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
+                    document.getElementById("box" + (i + 1).toString()).classList.add("boxDesocupado")
+                }
+            }
+
+
+
+            var opcionSeleccionadabox1 = document.getElementById("boxes1").value
+            var opcionSeleccionadabox2 = document.getElementById("boxes2").value
+            var opcionSeleccionadabox3 = document.getElementById("boxes3").value
+            for (var i = 0; i < response.boxes1Restantes.length; i++) {
+                if (response.boxes1Restantes[i] == document.getElementById("boxes1").value) continue;
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes1Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes1Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes1Ocupados[i]).classList.add("boxOcupado")
+            }
+
+            for (var i = 0; i < response.boxes2Restantes.length; i++) {
+                if (response.boxes2Restantes[i] == document.getElementById("boxes2").value) continue;
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes2Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes2Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes2Ocupados[i]).classList.add("boxOcupado")
+            }
+
+            for (var i = 0; i < response.boxes3Restantes.length; i++) {
+                if (response.boxes3Restantes[i] == document.getElementById("boxes3").value) continue;
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.remove("boxOcupado")
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes3Restantes[i]).classList.add("boxDesocupado")
+            }
+            for (var i = 0; i < response.boxes3Ocupados.length; i++) {
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.remove("boxDesocupado")
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.remove("boxElegido")
+                document.getElementById("box" + response.boxes3Ocupados[i]).classList.add("boxOcupado")
+            }
+
+
+
+
+            /*if (!response.boxes1Restantes.includes(parseInt(opcionSeleccionadabox1))) {
+                cantEntradasTipoSelec[3] = 0;
+                document.getElementById("box" + opcionSeleccionadabox1).classList.remove("boxDesocupado")
+                document.getElementById("box" + opcionSeleccionadabox1).classList.remove("boxElegido")
+                document.getElementById("box" + opcionSeleccionadabox1).classList.add("boxOcupado")
+                //console.log("Entro a ningun elemento seleccionado, no matcheo el substring en el arreglo de boxes 1")
+            }
+
+            if (!response.boxes2Restantes.includes(parseInt(opcionSeleccionadabox2))) {
+                cantEntradasTipoSelec[4] = 0;
+                document.getElementById("box" + opcionSeleccionadabox2).classList.remove("boxDesocupado")
+                document.getElementById("box" + opcionSeleccionadabox2).classList.remove("boxElegido")
+                document.getElementById("box" + opcionSeleccionadabox2).classList.add("boxOcupado")
+            }
+
+            if (!response.boxes3Restantes.includes(parseInt(opcionSeleccionadabox3))) {
+                cantEntradasTipoSelec[5] = 0;
+                document.getElementById("box" + opcionSeleccionadabox3).classList.remove("boxDesocupado")
+                document.getElementById("box" + opcionSeleccionadabox3).classList.remove("boxElegido")
+                document.getElementById("box" + opcionSeleccionadabox3).classList.add("boxOcupado")
+            }*/
+
+
+
+            calcularTotal()
+
+            for (var i = 0; i < 6; i++) {
+                document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - cantEntradasTipoSelec[i];
+            }
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
@@ -623,4 +614,3 @@ function verificarCodigo() {
         }
     });
 }
-*/
