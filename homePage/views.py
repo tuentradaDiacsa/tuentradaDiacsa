@@ -34,83 +34,55 @@ from .generaCodigoSeguridad import generacodigoseguridad
 
 import re
 
-
 def reemplazar_letras(cadena):
     # Utilizar expresiones regulares para buscar palabras y reemplazar letras
-    resultado = re.sub(r'\b(\w)(\w+)(\w)\b', lambda match: match.group(1) +
-                       'x' * len(match.group(2)) + match.group(3), cadena)
+    resultado = re.sub(r'\b(\w)(\w+)(\w)\b', lambda match: match.group(1) + 'x' * len(match.group(2)) + match.group(3), cadena)
     return resultado
-
 
 def reemplazar_ultimos_caracteres(cadena):
     longitud = len(cadena)
-    if (longitud == 1):
+    if(longitud==1):
         return "X"
-    if (longitud == 2):
+    if(longitud==2):
         return cadena[0]+"X"
-    if (longitud == 3):
+    if(longitud==3):
         return cadena[0]+"X"+cadena[2]
-    if (longitud == 4):
+    if(longitud==4):
         return cadena[0]+"XX"+cadena[3]
-    if (longitud == 5):
+    if(longitud==5):
         return cadena[0]+"XXX"+cadena[4]
-    if (longitud == 6):
+    if(longitud==6):
         return cadena[0]+"XXXX"+cadena[5]
-    if (longitud >= 7):
+    if(longitud>=7):
         return cadena[:-6]+"XXXX"+cadena[-2:]
     return cadena
 
-    # if len(cadena) >= 9:
-    #    nueva_cadena = cadena[:-6] + "X" * 4 + cadena[-2:]
-    # elif len(cadena) >= 8:
-    #    nueva_cadena = cadena[:-6] + "X" * (len(cadena) - 4) + cadena[-1:]
-    # else:
-    #    nueva_cadena = cadena
-    # return nueva_cadena
-
-
 def generar_qr_code_url(datoencriptado):
-    data = datoencriptado  # "Ticket: {}, CIP: {}".format(ticket, cip)
-    qr = qrcode.QRCode(version=1, box_size=10, border=4)
+    data = datoencriptado#"Ticket: {}, CIP: {}".format(ticket, cip)
+    qr   = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
-    qr_image = qr.make_image(fill="black", back_color="white")
+    qr_image  = qr.make_image(fill="black", back_color="white")
     qr_buffer = io.BytesIO()
     qr_image.save(qr_buffer, format="PNG")
     qr_buffer.seek(0)
     return qr_buffer
 
-
 def descargar_boleto(request, entrada_id):
     try:
         ticket_obj = Tickets.objects.get(ticket=entrada_id)
-        # codigoseguridad  = ticket_obj.codigoseguridad
-        # codigoseguridad_encriptador = encriptador(entrada_id, codigoseguridad)
-        # qr_buffer = generar_qr_code_url(codigoseguridad_encriptador)
-        # qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
-        # qr_url = "data:image/png;base64," + qr_base64
-        if (getattr(ticket_obj, 'numeroBox', '0') != '0'):
-            numeroBox = " - Box "+getattr(ticket_obj, 'numeroBox', '0')
-        else:
-            numeroBox = ""
 
-        if (getattr(ticket_obj, 'nombre', 'No completado') != "No completado"):
-            campoNombreApellido = reemplazar_letras(
-                getattr(ticket_obj, 'nombre', 'No completado'))
-        else:
-            campoNombreApellido = "No completado"
+        if(getattr(ticket_obj, 'numeroBox', '0') !='0'): numeroBox = " - Box "+getattr(ticket_obj, 'numeroBox', '0')
+        else: numeroBox = ""
 
-        if (getattr(ticket_obj, 'dni', 'No completado') != "No completado"):
-            campodni = reemplazar_ultimos_caracteres(
-                getattr(ticket_obj, 'dni', 'No completado'))
-        else:
-            campodni = "No completado"
+        if(getattr(ticket_obj, 'nombre', 'No completado')!="No completado"): campoNombreApellido = reemplazar_letras(getattr(ticket_obj, 'nombre', 'No completado'))
+        else: campoNombreApellido = "No completado"
 
-        if (getattr(ticket_obj, 'celular', 'No completado') != "No completado"):
-            campocelular = reemplazar_ultimos_caracteres(
-                getattr(ticket_obj, 'celular', 'No completado'))
-        else:
-            campocelular = "No completado"
+        if(getattr(ticket_obj, 'dni', 'No completado')!="No completado"): campodni = reemplazar_ultimos_caracteres(getattr(ticket_obj, 'dni', 'No completado'))
+        else: campodni = "No completado"
+        
+        if(getattr(ticket_obj, 'celular', 'No completado')!="No completado"): campocelular = reemplazar_ultimos_caracteres(getattr(ticket_obj, 'celular', 'No completado'))
+        else: campocelular = "No completado"
 
         context = {
             'ID_Ticket': entrada_id,
@@ -123,7 +95,7 @@ def descargar_boleto(request, entrada_id):
             'fecha': "Domingo 25 de Junio 2023",
             'hora': "3:00 pm",
             'Zona': getattr(ticket_obj, 'tipo', 'No completado')+numeroBox,
-            # 'qr_image': qr_url,
+            #'qr_image': qr_url,
         }
 
     except Tickets.DoesNotExist:
@@ -131,90 +103,35 @@ def descargar_boleto(request, entrada_id):
 
     html_content = render_to_string('entradas/plantillaentrada1.html', context)
 
-    # Generar el PDF en un buffer de memoria
-    # pdf_data = generar_pdf_desde_html(html_content)
-
-    # Crear una respuesta de Django con el archivo PDF
-    # response = HttpResponse(content_type='application/pdf')
-    # response['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
-    # response.write(pdf_data)
-
     return HttpResponse(html_content)  # response
-
-
-'''
-def descargar_boleto(request, entrada_id):
-#def obtener_boleto_pdf(entrada_id):
-    # Obtener la entrada correspondiente al entrada_id (tú debes implementar esta lógica)
-    print("Ingreso obtener boleto pdf")
-    entrada = obtener_entrada(entrada_id)
-    #print(entrada)
-    #print(entrada[id])
-    # Crear un objeto BytesIO para almacenar el PDF
-    buffer = io.BytesIO()
-
-    # Crear el documento PDF con tamaño carta/letter y centrado
-    p = canvas.Canvas(buffer, pagesize=letter)
-    p.translate(p._pagesize[0] / 2, p._pagesize[1] / 2)  # Centrar el contenido en el lienzo
-
-    # Calcular las coordenadas del código QR centrado en el lienzo
-    qr_size = 200  # Tamaño del código QR
-    qr_x = -qr_size / 2  # Coordenada X del punto de referencia del código QR
-    qr_y = -qr_size / 2  # Coordenada Y del punto de referencia del código QR
-
-    # Agregar el código QR al documento PDF
-    qr = qrcode.QRCode(version=1, box_size=10, border=4)
-    qr.add_data(entrada[id])  # Puedes ajustar qué información se codificará en el QR
-    qr.make(fit=True)
-    img = qr.make_image(fill="black", back_color="white")
-    img.save("qr_code.png")  # Guardar el código QR como imagen (opcional)
-    p.drawInlineImage("qr_code.png", qr_x, qr_y, qr_size, qr_size)  # Agregar el código QR al documento
-
-    # Agregar otros elementos al documento PDF, como información de la entrada
-    entry_info_x = -100  # Coordenada X del texto de información de la entrada
-    entry_info_y = qr_y - 20  # Coordenada Y del texto de información de la entrada
-    p.drawString(entry_info_x, entry_info_y, f"Número de Entrada: {entrada[id]}")
-    # Agregar más elementos según tus necesidades
-
-    # Finalizar el documento PDF
-    p.showPage()
-    p.save()
-
-    # Reiniciar el cursor del buffer
-    buffer.seek(0)
-
-    # Crear una respuesta de Django con el archivo PDF
-    nombre_archivo="boleto_"+str(entrada[id])+".pdf"
-    return FileResponse(buffer, as_attachment=True, filename=nombre_archivo)#filename=f'boleto_{entrada[id]}.pdf')
-    #response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = f'attachment; filename=boleto_{entrada[id]}.pdf'
-    #response.write(buffer.getvalue())
-
-    # Cerrar el buffer
-    buffer.close()
-
-    return buffer#response
-'''
-
 
 def homePage(request):
     return render(request, "homePage/homePage.html")
 
+def armaEntradas(cipBuscaTickets):
+    ticketSxCIP = Tickets.objects.filter(cip=cipBuscaTickets)
+    entradasArgumento = []
+    for ticketCIP in ticketSxCIP:
+        auxiliar = {}
+        auxiliar["tipo_ticket"]   = ticketCIP.tipo #Tiene la descripcion
+        auxiliar["numero_ticket"] = ticketCIP.ticket
+        entradasArgumento.append(auxiliar)
+    return entradasArgumento
 
 class comprarPage(View):
     def get(self, request):
         preguntas = Preguntas.objects.all()
-        entradas = Tipos.objects.all().order_by('tipo')
+        entradas  = Tipos.objects.all().order_by('tipo')
 
-        boxes1 = boxesRestante1.objects.filter(ocupado=False)
-        boxes2 = boxesRestante2.objects.filter(ocupado=False)
-        boxes3 = boxesRestante3.objects.filter(ocupado=False)
+        boxes1    = boxesRestante1.objects.all().order_by('box')
+        boxes2    = boxesRestante2.objects.all().order_by('box')
+        boxes3    = boxesRestante3.objects.all().order_by('box')
         datos = {
             'preguntas': preguntas,
-            'entradas': entradas,
-            'boxes1': boxes1,
-            'boxes2': boxes2,
-            'boxes3': boxes3
+            'entradas' : entradas,
+            'boxes1'   : boxes1,
+            'boxes2'   : boxes2,
+            'boxes3'   : boxes3
         }
         identifica_compra = request.session.get('compra_redirect', False)
         if (identifica_compra):
@@ -222,6 +139,8 @@ class comprarPage(View):
             del (request.session['compra_redirect'])
             contexto = request.session['contexto']
             del (request.session['contexto'])
+            #ticketsGenerados = request.session['ticketsGenerados']
+            #del (request.session['ticketsGenerados'])
             return render(request, "resumenPage/resumenPage.html", contexto)
         identifica_tickets = request.session.get('tickets_redirect', False)
         if (identifica_tickets):
@@ -234,220 +153,377 @@ class comprarPage(View):
     def post(self, request):
         if request.method == 'POST':
             preguntas = Preguntas.objects.all()
-            entradas = Tipos.objects.all().order_by('tipo')
-            boxes1 = boxesRestante1.objects.filter(ocupado=False)
-            boxes2 = boxesRestante2.objects.filter(ocupado=False)
-            boxes3 = boxesRestante3.objects.filter(ocupado=False)
+            entradas  = Tipos.objects.all().order_by('tipo')
+            boxes1    = boxesRestante1.objects.filter(ocupado=False)
+            boxes2    = boxesRestante2.objects.filter(ocupado=False)
+            boxes3    = boxesRestante3.objects.filter(ocupado=False)
             datos = {
                 'preguntas': preguntas,
-                'entradas': entradas,
-                'boxes1': boxes1,
-                'boxes2': boxes2,
-                'boxes3': boxes3
+                'entradas' : entradas,
+                'boxes1'   : boxes1,
+                'boxes2'   : boxes2,
+                'boxes3'   : boxes3
             }
-            # print("POST COMPRAR ENTRADA")
+            print("POST ")
             if request.POST.get('boton') == 'sms':
-                # print("Boton SMS presionado")
+                print("Boton SMS presionado")
                 celular = request.POST.get('celular')
                 datos['celular'] = celular
                 codigoValidacion = generaCodigoValidacion(6)
                 if codigoValidacion == "":
-                    None
-                    # print(
-                    #    "Error!!! No se pudo generar codigo de validacion NO REPETIDO")
+                    print(
+                        "Error!!! No se pudo generar codigo de validacion NO REPETIDO")
                 else:
                     print("Boton SMS presionado", "Celular:",
                           celular, "Codigo:", codigoValidacion)
                     almacenaCelularValidador(celular, codigoValidacion)
-                # return redirect(request.path)
+                
                 return render(request, "comprarPage/comprarPage.html", datos)
-# Agregado martes 13
+
             elif request.POST.get('comando') == 'leerCantidadEntradas':
-                entradas = Tipos.objects.all().order_by('tipo')
-                boxes1 = boxesRestante1.objects.filter(ocupado=False)
-                boxes2 = boxesRestante2.objects.filter(ocupado=False)
-                boxes3 = boxesRestante3.objects.filter(ocupado=False)
-                entradasRestantes = []
+                entradas  = Tipos.objects.all().order_by('tipo')
+                boxes1    = boxesRestante1.objects.filter(ocupado=False).order_by('box')
+                boxes2    = boxesRestante2.objects.filter(ocupado=False).order_by('box')
+                boxes3    = boxesRestante3.objects.filter(ocupado=False).order_by('box')
+                boxes1N    = boxesRestante1.objects.filter(ocupado=True).order_by('box')
+                boxes2N    = boxesRestante2.objects.filter(ocupado=True).order_by('box')
+                boxes3N    = boxesRestante3.objects.filter(ocupado=True).order_by('box')
+                
+                entradasRestantes   = []
                 entradasDescripcion = []
+
                 for entrada in entradas:
                     entradasRestantes.append(entrada.cantidad)
                     entradasDescripcion.append(entrada.descripcion)
+                
+                boxes1Restantes   = []
+                for box in boxes1:
+                    boxes1Restantes.append(box.box)
+                boxes2Restantes   = []
+                for box in boxes2:
+                    boxes2Restantes.append(box.box)
+                boxes3Restantes   = []
+                for box in boxes3:
+                    boxes3Restantes.append(box.box)    
 
+
+                boxes1Ocupados   = []
+                for box in boxes1N:
+                    boxes1Ocupados.append(box.box)
+                boxes2Ocupados   = []
+                for box in boxes2N:
+                    boxes2Ocupados.append(box.box)
+                boxes3Ocupados   = []
+                for box in boxes3N:
+                    boxes3Ocupados.append(box.box)   
                 responseData = {
-                    'entradasDescripcion': entradasDescripcion,
-                    'entradasRestantes': entradasRestantes,
+                    'entradasDescripcion' : entradasDescripcion,
+                    'entradasRestantes'   : entradasRestantes,
+                    'boxes1Restantes'     : boxes1Restantes,
+                    'boxes2Restantes'     : boxes2Restantes,
+                    'boxes3Restantes'     : boxes3Restantes,
+                    'boxes1Ocupados'     : boxes1Ocupados,
+                    'boxes2Ocupados'     : boxes2Ocupados,
+                    'boxes3Ocupados'     : boxes3Ocupados,
                 }
-                # print(responseData)
                 return JsonResponse(responseData)
-####
+
             elif request.POST.get('boton') == 'verificar':
-               # print("Boton verificar presionado")
+                print("Boton verificar presionado")
                 celular = request.POST.get('celular')
                 datos['celular'] = celular
                 codigoValidacionIngresado = request.POST.get('codigo')
                 datos['codigo'] = codigoValidacionIngresado
                 responseData = {'data': 'Codigo incorrecto'}
                 if (buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado)):
-                   # print("Codigo Correcto!!!")
+                    print("Codigo Correcto!!!")
                     responseData = {'data': 'Codigo correcto'}
                 return JsonResponse(responseData)
-
+            
+##########################################################
             elif request.POST.get('boton') == 'comprar':
-                celular = request.POST.get('celular2')
-                codigo = request.POST.get('codigo2')
-                pin = request.POST.get('pin')
-                nombre = request.POST.get('nombre')
-                dni = request.POST.get('dni')
-                correo = request.POST.get('correo')
-                pregunta1 = request.POST.get('pregunta1')
+                print("POST COMPRAR ENTRADA")
+                
+                celular    = request.POST.get('celular')
+                codigo     = request.POST.get('codigo')
+                pin        = request.POST.get('pin')
+                nombre     = request.POST.get('nombre')
+                dni        = request.POST.get('dni')
+                correo     = request.POST.get('correo')
+                pregunta1  = request.POST.get('pregunta1')
                 respuesta1 = request.POST.get('respuesta1')
-                pregunta2 = request.POST.get('pregunta2')
+                pregunta2  = request.POST.get('pregunta2')
                 respuesta2 = request.POST.get('respuesta2')
-                pregunta3 = request.POST.get('pregunta3')
+                pregunta3  = request.POST.get('pregunta3')
                 respuesta3 = request.POST.get('respuesta3')
-                box1 = request.POST.get('boxes1')
-                box2 = request.POST.get('boxes2')
-                box3 = request.POST.get('boxes3')
-                # print("antes de cip")
-                cip = generaCIP(6)
-                # print(cip)
+                box1       = request.POST.get('boxes1') #Box Izquierdo 4
+                box2       = request.POST.get('boxes2') #Box Derecho Tipo 5
+                box3       = request.POST.get('boxes3') #Box Alimanha Tipo 6
+                cip        = generaCIP(6)
+                arregloEntradas1 = request.POST.get('cantidadEntradas1')
+                arregloEntradas2 = request.POST.get('cantidadEntradas2')
+                arregloEntradas3 = request.POST.get('cantidadEntradas3')
+                print(arregloEntradas1)
+                print(arregloEntradas2)
+                print(arregloEntradas3)
+                print(box1)
+                print(box2)
+                print(box3)
+                cantTiposEntradas =  Tipos.objects.count()
                 entradasCantidad = []
-                for i in range(Tipos.objects.count()):
-                    # print(request.POST.get('cantidadHidden'+str(i+1)))
-                    entradasCantidad.append(
-                        request.POST.get('cantidadHidden'+str(i+1)))
-                # print(entradasCantidad)
-                responseData = {'celular': celular,
-                                'codigo': codigo,
-                                'pin': pin,
-                                'nombre': nombre,
-                                'dni': dni,
-                                'correo': correo,
-                                'respuesta1': respuesta1,
-                                'respuesta2': respuesta2,
-                                'respuesta3': respuesta3,
-                                'cip': cip,
-                                'box1': box1,
-                                'box2': box2,
-                                'box3': box3,
-                                }
-               # print(responseData)
-                entradasElegidas = {}
-                montoPagar = 0
-                j = 0
-                for i in range(Tipos.objects.count()):
-                    if entradasCantidad[i] == str(0):
+                for i in range(cantTiposEntradas):
+                    entradasCantidad.append(request.POST.get('cantidadEntradas'+str(i+1)))
+                print(entradasCantidad)
+                error               = "ninguno"
+                montoPagar          = 0
+                entradasElegidas    = {}
+                idxEntradasElegidas = 0 #Se usa para el key a mostrar
+                for idxTiposEntradas in range(cantTiposEntradas):
+                    descripcionTipo = Tipos.objects.get(tipo=(idxTiposEntradas+1)).descripcion
+                    if entradasCantidad[idxTiposEntradas] == str(0):
                         continue
-                    j = j+1
-                    key = f"entrada{j}"
-                    montoPagar = montoPagar + \
-                        int(entradasCantidad[i]) * \
-                        int(Tipos.objects.get(tipo=i + 1).precio)
+                    idxEntradasElegidas = idxEntradasElegidas+1
+                    #print(idxEntradasElegidas)
+                    key = f"entrada{idxEntradasElegidas}"
                     value = {
-                        "id": Tipos.objects.get(tipo=i + 1).descripcion,
-                        "cantidad": entradasCantidad[i],
-                        "tipo": str(i+1)
+                        "id": descripcionTipo,
+                        "cantidad": entradasCantidad[idxTiposEntradas],
+                        "tipo": str(idxTiposEntradas+1)
                     }
                     entradasElegidas[key] = value
-                # print(entradasElegidas)
+                    montoPagar = montoPagar + int(entradasCantidad[idxTiposEntradas])*int(Tipos.objects.get(tipo=(idxTiposEntradas+1)).precio)
+
+                    ##############################
+                    auxiliarDisminuyeEntradas          = Tipos.objects.get(tipo=(idxTiposEntradas+1))
+                    auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad
+                    if((auxiliarDisminuyeEntradas.cantidad-int(entradasCantidad[idxTiposEntradas]))<0):
+                        error += "No quedan entradas del tipo: "+descripcionTipo
+                        break
+                    if idxTiposEntradas+1 == 4:
+                        print(box1)
+                        auxiliarDisminuyeBox1 = boxesRestante1.objects.get(box=int(box1))
+                        if(auxiliarDisminuyeBox1.ocupado):
+                            error = "El box: "+str(box1)+" ya fue comprado."    
+                            break
+                    if idxTiposEntradas+1 == 5:
+                        print(box2)
+                        auxiliarDisminuyeBox2 = boxesRestante2.objects.get(box=int(box2))
+                        if(auxiliarDisminuyeBox2.ocupado):
+                            error = "No queda el box: "+str(box2)+" ya fue comprado."
+                            break
+                    if idxTiposEntradas+1 == 6:
+                        print(box3)
+                        auxiliarDisminuyeBox3 = boxesRestante3.objects.get(box=int(box3))
+                        if(auxiliarDisminuyeBox3.ocupado):
+                            error = "No queda el box: "+str(box3)+" ya fue comprado."
+                            break    
+
+                if(error != "ninguno"):
+                    responseData = {
+                        'error': error,
+                    }
+                    request.session['compra_redirect'] = "compra"
+                    request.session['contexto'] = {
+                        'response': responseData
+                    }
+                    return redirect(request.path)
+
+
+            #########################################################
+                # PAGO
+                nuevaCompra               = Pagos()
+                nuevaCompra.estado        = 1             #Generado en pagina de compra
+                nuevaCompra.fechaHoraPREP = timezone.now()
+                #Nulo fechaHoraCONF
+                #Nulo fechaHoraPAGO
+                #Nulo fechaHoraSmsTicketsPagados
+
+                nuevaCompra.celular   = celular
+
+                nuevaCompra.cip       = cip
+                nuevaCompra.pin       = pin
+                nuevaCompra.monto     = montoPagar
+                # confirmado
+                # sms tickets pagados
+                nuevaCompra.nombre    = nombre
+                nuevaCompra.correo    = correo
+                nuevaCompra.dni       = dni
+                nuevaCompra.pregunta1 = pregunta1
+                nuevaCompra.pregunta2 = pregunta2
+                nuevaCompra.pregunta3 = pregunta3
+                respuesta1            = respuesta1
+                respuesta2            = respuesta2
+                respuesta3            = respuesta3
+                nuevaCompra.save() 
+            #########################################################
+                #TICKETS
+                error = "ninguno"
+                for numTipo in range(cantTiposEntradas):
+                    #print(request.POST.get('tipoentrada'+str(i+1)))
+                    if (int(entradasCantidad[numTipo]) == 0):
+                        continue
+                    
+                    auxiliarDisminuyeEntradas          = Tipos.objects.get(tipo=(numTipo+1))
+                    auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad
+                    descripcionTipoEntrada             = Tipos.objects.get(tipo=(numTipo+1)).descripcion
+                    if((auxiliarDisminuyeEntradas.cantidad-int(entradasCantidad[numTipo]))<0):
+                        error = "No quedan entradas del tipo: "+Tipos.objects.get(tipo=(numTipo+1)).descripcion
+                        break
+                    auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-int(entradasCantidad[numTipo])
+                    auxiliarDisminuyeEntradas.save()
+                    if numTipo+1 == 4:
+                            ticket.numeroBox = box1
+                            auxiliarDisminuyeBox1 = boxesRestante1.objects.get(box=int(box1))
+                            if(auxiliarDisminuyeBox1.ocupado):
+                                error = "El box: "+box1+" ya fue comprado."
+                                break    
+                            auxiliarDisminuyeBox1.ocupado = True
+                            auxiliarDisminuyeBox1.save()
+                            for _ in range(10):
+                                ticket = Tickets()
+                                ticket.ticket          = generaNumeroTicket()
+                                ticket.codigoseguridad = generacodigoseguridad()
+                                ticket.pin             = pin
+                                ticket.fechaHoraCambio = timezone.now()
+                                ticket.celular         = celular
+                                ticket.tipo            = descripcionTipoEntrada
+                                ticket.numeroBox       = box1
+                                ticket.cip             = cip
+                                ticket.nombre          = nombre
+                                ticket.correo          = correo
+                                ticket.dni             = dni
+                                ticket.pregunta1       = pregunta1
+                                ticket.pregunta2       = pregunta2
+                                ticket.pregunta3       = pregunta3
+                                ticket.respuesta1      = respuesta1
+                                ticket.respuesta2      = respuesta2
+                                ticket.respuesta3      = respuesta3
+                                ticket.save()
+                                
+
+                    if numTipo+1 == 5:
+                        ticket.numeroBox = box2
+                        auxiliarDisminuyeBox2 = boxesRestante2.objects.get(box=int(box2))
+                        if(auxiliarDisminuyeBox2.ocupado):
+                                error = "No queda el box: "+box2+" ya fue comprado."
+                                break    
+                        auxiliarDisminuyeBox2.ocupado = True
+                        auxiliarDisminuyeBox2.save()
+                        for _ in range(10):
+                                ticket = Tickets()
+                                ticket.ticket          = generaNumeroTicket()
+                                ticket.codigoseguridad = generacodigoseguridad()
+                                ticket.pin             = pin
+                                ticket.fechaHoraCambio = timezone.now()
+                                ticket.celular         = celular
+                                ticket.tipo            = descripcionTipoEntrada
+                                ticket.numeroBox       = box2
+                                ticket.cip             = cip
+                                ticket.nombre          = nombre
+                                ticket.correo          = correo
+                                ticket.dni             = dni
+                                ticket.pregunta1       = pregunta1
+                                ticket.pregunta2       = pregunta2
+                                ticket.pregunta3       = pregunta3
+                                ticket.respuesta1      = respuesta1
+                                ticket.respuesta2      = respuesta2
+                                ticket.respuesta3      = respuesta3
+                                ticket.save()
+                                
+                    if numTipo+1 == 6:
+                        ticket.numeroBox = box3
+                        auxiliarDisminuyeBox3 = boxesRestante3.objects.get(box=int(box3))
+                        if(auxiliarDisminuyeBox3.ocupado):
+                                error = "No queda el box: "+box3+" ya fue comprado."
+                                break    
+                        auxiliarDisminuyeBox3.ocupado = True
+                        auxiliarDisminuyeBox3.save()
+                        for _ in range(10):
+                                ticket = Tickets()
+                                ticket.ticket          = generaNumeroTicket()
+                                ticket.codigoseguridad = generacodigoseguridad()
+                                ticket.pin             = pin
+                                ticket.fechaHoraCambio = timezone.now()
+                                ticket.celular         = celular
+                                ticket.tipo            = descripcionTipoEntrada
+                                ticket.numeroBox       = box3
+                                ticket.cip             = cip
+                                ticket.nombre          = nombre
+                                ticket.correo          = correo
+                                ticket.dni             = dni
+                                ticket.pregunta1       = pregunta1
+                                ticket.pregunta2       = pregunta2
+                                ticket.pregunta3       = pregunta3
+                                ticket.respuesta1      = respuesta1
+                                ticket.respuesta2      = respuesta2
+                                ticket.respuesta3      = respuesta3
+                                ticket.save()
+                                                        
+               
+                    for _ in range(int(entradasCantidad[numTipo])): 
+                        if numTipo+1 == 4:
+                            ticket.numeroBox = box1
+                            continue
+                        if numTipo+1 == 5:
+                            ticket.numeroBox = box2
+                            continue
+                        if numTipo+1 == 6:
+                            ticket.numeroBox = box3
+                            continue
+                        ticket = Tickets()
+                        ticket.ticket          = generaNumeroTicket()
+                        ticket.codigoseguridad = generacodigoseguridad()
+                        ticket.pin             = pin
+                        ticket.fechaHoraCambio = timezone.now()
+                        ticket.celular         = celular
+                        ticket.tipo            = descripcionTipoEntrada
+                        ticket.numeroBox       = "0"
+
+                        ticket.cip         = cip
+                        ticket.nombre      = nombre
+                        ticket.correo      = correo
+                        ticket.dni         = dni
+                        ticket.pregunta1   = pregunta1
+                        ticket.pregunta2   = pregunta2
+                        ticket.pregunta3   = pregunta3
+                        ticket.respuesta1  = respuesta1
+                        ticket.respuesta2  = respuesta2
+                        ticket.respuesta3  = respuesta3
+                        ticket.save()
+                    
+                if(error!="ninguno"):
+                    responseData = {
+                        'error': error,
+                    }
+                    request.session['compra_redirect'] = "compra"
+                    request.session['contexto'] = {
+                        'response': responseData
+                    }
+                    return redirect(request.path)
+                
+                responseData = {
+                                'cip': cip,
+                                }
+                print(responseData)
 
                 request.session['compra_redirect'] = "compra"
                 request.session['contexto'] = {
                     'response': responseData, 'entradas': entradasElegidas, 'precioTotal': str(montoPagar)}
                 return redirect(request.path)
 
+##########################################################
             elif request.POST.get('boton') == 'confirmarCompra':
-                # print("Boton confirmar compra presionado")
-                # boxes comprados
-                box1 = request.POST.get('box1')
-                box2 = request.POST.get('box2')
-                box3 = request.POST.get('box3')
-                # PAGO
-                nuevaCompra = Pagos()
-                nuevaCompra.fechaHora = timezone.now()
-                nuevaCompra.celular = request.POST.get('celular')
-                nuevaCompra.cip = request.POST.get('cip')
-                nuevaCompra.pin = request.POST.get('pin')
-                nuevaCompra.monto = request.POST.get('montoaPagar')
-                # confirmado
-                # sms tickets pagados
-                nuevaCompra.nombre = request.POST.get('nombre')
-                nuevaCompra.correo = request.POST.get('correo')
-                nuevaCompra.dni = request.POST.get('dni')
-                nuevaCompra.pregunta1 = request.POST.get('pregunta1')
-                nuevaCompra.pregunta2 = request.POST.get('pregunta2')
-                nuevaCompra.save()
-                # print("Termino de almacenar pago")
-                # TICKET
-                ticketsCantidad = 0
-                ultimoTicket = Tickets.objects.count()
-                # monto = 0
-                entradasArgumento = []
-                for i in range(Tipos.objects.count()):
-                    # print(request.POST.get('tipoentrada'+str(i+1)))
-                    if (request.POST.get('tipoentrada'+str(i+1)) == None):
-                        continue
-                    ticketsCantidad = ticketsCantidad + 1
-                    ultimoTicket = ultimoTicket + 1
-                    for j in range(int(request.POST.get("cantidadentrada"+str(i+1)))):
-                        tipoactualInt = int(
-                            request.POST.get('tipoentrada'+str(i+1)))
-                        auxiliarDisminuyeEntradas = Tipos.objects.get(
-                            tipo=tipoactualInt)
-                        auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-1
-                        auxiliarDisminuyeEntradas.save()
-
-                        # Tipos.objects.get(tipo=k+1).descripcion
-                        # print(j)
-                        # montoPagar = montoPagar + int(entradasCantidad[i])*int(Tipos.objects.get(tipo = tipoactualInt).precio)
-                        ticket = Tickets()
-                        ticket.ticket = generaNumeroTicket()
-                        ticket.codigoseguridad = generacodigoseguridad()
-                        ticket.pin = request.POST.get('pin')
-                        ticket.fechaHoraCambio = timezone.now()
-                        ticket.celular = request.POST.get('celular')
-                        ticket.tipo = Tipos.objects.get(
-                            tipo=tipoactualInt).descripcion
-                        ticket.numeroBox = "0"
-                        if tipoactualInt == 4:
-                            ticket.numeroBox = box1
-                            auxiliarDisminuyeBox1 = boxesRestante1.objects.get(
-                                box=box1)
-                            auxiliarDisminuyeBox1.ocupado = True
-                            auxiliarDisminuyeBox1.save()
-                        if tipoactualInt == 5:
-                            ticket.numeroBox = box2
-                            auxiliarDisminuyeBox2 = boxesRestante2.objects.get(
-                                box=box2)
-                            auxiliarDisminuyeBox2.ocupado = True
-                            auxiliarDisminuyeBox2.save()
-                        if tipoactualInt == 6:
-                            ticket.numeroBox = box3
-                            auxiliarDisminuyeBox3 = boxesRestante3.objects.get(
-                                box=box3)
-                            auxiliarDisminuyeBox3.ocupado = True
-                            auxiliarDisminuyeBox3.save()
-                        ticket.cip = request.POST.get('cip')
-                        ticket.nombre = request.POST.get('nombre')
-                        ticket.correo = request.POST.get('correo')
-                        ticket.dni = request.POST.get('dni')
-                        ticket.pregunta1 = request.POST.get('pregunta1')
-                        ticket.pregunta2 = request.POST.get('pregunta2')
-                        # "id": Tipos.objects.get(tipo = tipoactualInt).descripcion,
-                        ticket.save()
-                        auxiliar = {}
-                        auxiliar["tipo_ticket"] = Tipos.objects.get(
-                            tipo=tipoactualInt).descripcion
-                        auxiliar["numero_ticket"] = ticket.ticket
-                        entradasArgumento.append(auxiliar)
-
+                print("POST confirmarCompra")
+                cipRecibo = request.POST.get('cip')
+                #disminuyeEntradas(cipRecibo)
+                entradasArgumento = armaEntradas(cipRecibo) #Esperado tipo (Arreglo)[] con diccionarios como elementos {} de campos ["tipo_ticket"] y ["numero_ticket"] 
                 datosConfirmar = {
                     'entradas': entradasArgumento,
                 }
 
                 request.session['tickets_redirect'] = "tickets"
-                request.session['contexto'] = datosConfirmar
-                # print("Llega hasta redirect")
+                request.session['contexto']         = datosConfirmar
+                print("Llega hasta redirect confirmar Ticket")
                 return redirect(request.path)
 
         return render(request, "comprarPage/comprarPage.html", datos)
@@ -467,10 +543,9 @@ def administrarPage(request):
     if request.method == 'POST' and request.POST.get('comando') == 'verificarBotonValidarTemplate':
         numero = request.POST.get('ticket')
         apellido = request.POST.get('cip')
-
+        
         try:
-            ticket = Tickets.objects.get(
-                ticket=numero, nombre__icontains=apellido)
+            ticket = Tickets.objects.get(ticket=numero, nombre__icontains=apellido)
             if ticket.confirmado2 is not None:
                 responseData = {'estado': 'Ticket valido'}
             else:
@@ -479,7 +554,6 @@ def administrarPage(request):
             responseData = {'estado': 'Ticket no valido'}
         return JsonResponse(responseData)
     return render(request, "administrarPage.html")
-
 
 def escanerPage(request):
     return render(request, "escanerPage/escanerPage.html")
