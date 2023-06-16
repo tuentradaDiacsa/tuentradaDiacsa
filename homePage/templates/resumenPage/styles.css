@@ -3,36 +3,29 @@ html {
 }
 
 .header {
-    background-color: #FF0043;
+    background: linear-gradient(to right, var(--red), var(--negro));
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     height: 45px;
     width: 100%;
     position: fixed;
     top: 0;
     left: 0;
-    grid-template-columns: 1fr auto;
-    display: grid;
-    justify-content: right;
+    display: flex;
     z-index: 9999;
 }
 
-.imagenHeader {
-    margin-left: 10%;
-}
-
 .footer {
-    background-color: #FF0043;
+    background: linear-gradient(to right, var(--red), var(--negro));
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     height: 45px;
     width: 100%;
     position: fixed;
     bottom: 0;
     left: 0;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr;
     display: grid;
     justify-content: right;
 }
-
 
 body {
     margin: 0;

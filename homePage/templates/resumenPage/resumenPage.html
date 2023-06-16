@@ -6,29 +6,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Tuentrada Pe</title>
+
+
     <!--Custom CSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="{% static 'resumenPage/styles.css' %}">
+    <link rel="shortcut icon" href="{% static 'imagenes/favicon.ico' %}">
 </head>
 
 <body id="bodyTodo">
     <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
         {% csrf_token %}
         <div class="header">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"
-                    onclick="javascript:location.reload(true)"></img></div>
+            <img src="{% static 'comprarPage/headerlogo.png' %}"
+                style="height: 30px; margin-left: 5%; align-self: center;"
+                onclick=" javascript:location.reload(true)" />
         </div>
         <div class="resumenCompraBanner" id="resumenCompraBanner">
             <p>RESUMEN DE COMPRA</p>
         </div>
-        <img class="imagenEnCelular" src="{% static 'resumenPage/banner.jpg' %}" />
+        <img class="imagenEnCelular" src="{% static 'resumenPage/banner.png' %}" />
         <div class="containerTodo" id="containerTodo">
-            <div class="columnaEntradas"><img class="imagenesBanner" src="{% static 'resumenPage/banner.jpg' %}"
+            <div class="columnaEntradas"><img class="imagenesBanner" src="{% static 'resumenPage/banner.png' %}"
                     width="100%"></img>
                 <div class="containerInformacionEvento">
                     <h3 class="tituloEvento">GRUPO 5 EN IQUITOS</h3>
@@ -89,10 +96,10 @@
 
                         <div
                             style="justify-content: center; display: flex; align-items: center; margin-top: 20px; width: 100%;">
-                            <img style="border-radius: 10px;" src="{% static 'comprarPage/yapeicon.png' %}"
+                            <img style="border-radius: 10px;" src="{% static 'resumenPage/yapeicon.png' %}"
                                 width="50px"></img>
                             <div style="min-width: 10%;"></div>
-                            <img style="border-radius: 10px;" src="{% static 'comprarPage/plinicon.png' %}"
+                            <img style="border-radius: 10px;" src="{% static 'resumenPage/plinicon.png' %}"
                                 width="50px"></img>
                         </div>
                         <div
@@ -141,7 +148,7 @@
                         </div>
                     </div>
                     <div class="containerBCP"><img style="border-radius: 10px;"
-                            src="{% static 'comprarPage/bcpicon.png' %}" width="50px"></img></div>
+                            src="{% static 'resumenPage/bcpicon.png' %}" width="50px"></img></div>
                 </div>
                 <div style="margin-top: 20px;">
                     <div>
@@ -188,32 +195,16 @@
                     <i class="fas fa-circle"></i>
                     <p id="Nombre{{key}}"><b>{{ value.id }}</b></p>
                     <p>× {{ value.cantidad }}</p>
-                    <input hidden id="ID{{key}}" name="ID{{key}}" value="ID{{value.id}}">
-                    <input hidden id="cantidad{{key}}" name="cantidad{{key}}" value="{{value.cantidad}}">
                 </div>
                 {% endfor %}
             </div>
 
         </div>
 
-        <input hidden id="celular" name="celular" value="{{response.celular}}">
-        <input hidden id="codigo" name="codigo" value="{{response.codigo}}">
-        <input hidden id="pin" name="pin" value="{{response.pin}}">
-        <input hidden id="nombre" name="nombre" value="{{response.nombre}}">
-        <input hidden id="dni" name="dni" value="{{response.dni}}">
-        <input hidden id="correo" name="correo" value="{{response.correo}}">
-        <input hidden id="respuesta1" name="respuesta1" value="{{response.respuesta1}}">
-        <input hidden id="respuesta2" name="respuesta2," value="{{response.respuesta2}}">
-        <input hidden id="box1" name="box1" value="{{response.box1}}">
-        <input hidden id="box2" name="box2" value="{{response.box2}}">
-        <input hidden id="box3" name="box3" value="{{response.box3}}">
-        {% for key, value in entradas.items %}
-        <input hidden id="cantidad{{key}}" name="cantidad{{key}}" value="{{value.cantidad}}">
-        <input hidden id="tipo{{key}}" name="tipo{{key}}" value="{{value.tipo}}">
-        {% endfor %}
         <div class="footer">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
-            </div>
+            <img src="{% static 'comprarPage/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
         </div>
 
         <!-- Scripts -->
