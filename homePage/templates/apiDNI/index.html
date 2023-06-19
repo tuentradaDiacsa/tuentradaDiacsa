@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuentrada Pe</title>
+    <link rel="stylesheet" href="{% static 'apiDNI/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <form id="comprarForm" action="{% url 'apiPage' %}" method="post">
+        {% csrf_token %}
+        <div class="header">
+            <img src="{% static 'comprarPage/headerlogo.png' %}"
+                style="height: 30px; margin-left: 5%; align-self: center;"
+                onclick=" javascript:location.reload(true)" />
+        </div>
+        <div class="containerButton">
+            <input maxlength="8" placeholder="DNI" id="dni">
+            <button type="button" onclick="enviarCosas()">Consulta</button>
+        </div>
+
+        <div class="containerResultados">
+            <p id="resultado1"></p>
+            <p id="resultado2"></p>
+            <p id="resultado3"></p>
+            <p id="resultado4"></p>
+            <p id="resultado5"></p>
+            <p id="resultado6"></p>
+            <p id="resultado7"></p>
+            <p id="resultado8"></p>
+            <p id="resultado9"></p>
+            <p id="resultado10"></p>
+        </div>
+        <div class="footer">
+            <img src="{% static 'comprarPage/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
+        </div>
+    </form>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script defer src="{% static 'apiDNI/script.js' %}"></script>
+
+</html>
