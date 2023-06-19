@@ -264,10 +264,10 @@ function disminuir(id) {
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (response) {
-            for (var i = 0; i < 6; i++) {
+            for (var i = 0; i < 3; i++) {
                 document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i] - cantEntradasTipoSelec[i];
                 entradasElegidas = cantEntradasTipoSelec[i];
-                if (response.entradasRestantes[i] - entradasElegidas <= 0) {
+                if (response.entradasRestantes[i] - entradasElegidas < 0) {
                     cantEntradasTipoSelec[i] = response.entradasRestantes[i]
                     document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString();
                     document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0";
