@@ -557,3 +557,6 @@ def administrarPage(request):
 
 def escanerPage(request):
     return render(request, "escanerPage/escanerPage.html")
+
+def apiPage(request):
+    return render(request, "apiDNI/index.html")
