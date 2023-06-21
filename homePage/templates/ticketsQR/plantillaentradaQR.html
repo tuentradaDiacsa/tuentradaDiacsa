@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>Entrada</title>
@@ -34,20 +33,17 @@
             border-top: 1px solid gray;
             margin: 10px 0;
         }
-
         .message-text {
-            font-size: 2.5rem;
-            /* Ajusta el valor según tus necesidades */
-            font-weight: bold;
+        font-size: 2.5rem; /* Ajusta el valor según tus necesidades */
+        font-weight: bold;
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <img class="img-fluid" src="{% static 'imagenes/tuentrada.png' %}" alt="Cabecera">
+                <img class="img-fluid" src="{% static 'entradas/tuentrada.png' %}" alt="Cabecera">
             </div>
         </div>
         <div class="row mt-4">
@@ -57,7 +53,7 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-6 text-center">
-                <img src="{% static 'imagenes/logomientrada.png' %}" alt="Código QR" class="img-fluid">
+                <img src="{{qr_imagen}}" alt="Código QR" class="img-fluid">
             </div>
         </div>
         <div class="row">
@@ -71,7 +67,7 @@
                 <h1><strong>Cliente: </strong> {{ nombre_y_apellido }}</h1>
             </div>
         </div>
-
+        
         <hr class="linea-separacion">
 
         <div class="row mt-2">
@@ -80,7 +76,7 @@
                 <span class="d-inline" style="font-size: 25px;">{{ dni }}</span>
             </div>
             <div class="col-4 text-center">
-                <h3 class="font-weight-bold d-inline"><strong>TELÉFONO: </strong></h3>
+                <h3 class="font-weight-bold d-inline"><strong>TELÉFONO:   </strong></h3>
                 <span class="d-inline" style="font-size: 25px;">{{ telefono }}</span>
             </div>
             <div class="col-4 text-right">
@@ -88,9 +84,9 @@
                 <span class="d-inline" style="font-size: 25px;">{{ whatsapp }}</span>
             </div>
         </div>
-
+        
         <hr class="linea-separacion">
-
+        
         <div class="row mt-4">
             <div class="col-12 text-left">
                 <h3 class="font-weight-bold d-inline"><strong>LUGAR: </strong></h3>
@@ -109,7 +105,7 @@
 
         <div class="row">
             <div class="col-12 text-left">
-                <h3 class="font-weight-bold d-inline"><strong>FECHA: </strong></h3>
+                <h3  class="font-weight-bold d-inline"><strong>FECHA: </strong></h3>
                 <span class="d-inline" style="font-size: 30px;">{{ fecha }}</span>
             </div>
         </div>
@@ -122,7 +118,7 @@
                 <span class="d-inline" style="font-size: 30px;">{{ hora }}</span>
             </div>
         </div>
-
+        
         <hr class="linea-separacion">
 
         <div class="row mt-4">
@@ -131,45 +127,38 @@
                 <span class="d-inline" style="font-size: 30px;">{{ Zona }}</span>
             </div>
         </div>
-
-
+        
+        
         <hr class="my-4">
 
         <div class="row mt-4">
             <div class="col-12">
                 <h3 class="font-weight-bold"><strong>Recuerda:</strong></h3>
-                <p style="font-size: 30px; text-align: justify;">Llega unas horas antes del evento para ubicar
-                    correctamente tu zona. ¡Sin colas! Dirígete directamente a la puerta de entrada de tu zona. Muestra
-                    tu QR directamente desde tu celular, no es necesario imprimir.</p>
+                <p style="font-size: 30px; text-align: justify;">Llega unas horas antes del evento para ubicar correctamente tu zona. ¡Sin colas! Dirígete directamente a la puerta de entrada de tu zona. Muestra tu QR directamente desde tu celular, no es necesario imprimir.</p>
             </div>
         </div>
-
+        
         <div class="row mt-4">
             <div class="col-12">
                 <h3 class="font-weight-bold"><strong>Ubicación del evento:</strong></h3>
-                <p style="font-size: 30px; text-align: justify;">Si no encuentra la dirección del evento, puede
-                    dirigirse al enlace:</p>
-                <p style="font-size: 18px; text-align: justify; color: red;"><a>
-                        https://www.google.com/maps/search/centro+conveciones+el+pardo/@-3.7508029,-73.2560195,18.6z?authuser=0&entry=ttu</a>
-                </p>
+                <p style="font-size: 30px; text-align: justify;">Si no encuentra la dirección del evento, puede dirigirse al enlace:</p>
+                <p style="font-size: 18px; text-align: justify; color: red;"><a> https://www.google.com/maps/search/centro+conveciones+el+pardo/@-3.7508029,-73.2560195,18.6z?authuser=0&entry=ttu</a></p>
             </div>
         </div>
-
+        
         <div class="row mt-4">
             <div class="col-12">
                 <h3 class="font-weight-bold" style="color: purple;"><strong>Estimado Cliente:</strong></h3>
-                <p style="font-size: 30px; text-align: justify;">Si tiene problemas con su entrada, escríbanos al
-                    WhatsApp 965 636 153, que lo ayudaremos inmediatamente.</p>
+                <p style="font-size: 30px; text-align: justify;">Si tiene problemas con su entrada, escríbanos al WhatsApp 965 636 153, que lo ayudaremos inmediatamente.</p>
             </div>
         </div>
 
         <div class="row mt-4">
             <div class="col-12 text-center">
-                <img src="{% static 'imagenes/soloBordeInferior.png' %}" alt="Imagen fija" class="pie-pagina">
+                <img src="{% static 'entradas/soloBordeInferior.png' %}" alt="Imagen fija" class="pie-pagina">
             </div>
         </div>
         <hr class="my-4">
     </div>
 </body>
-
 </html>

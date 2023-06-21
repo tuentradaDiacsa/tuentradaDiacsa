@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="{% static 'ticketsCompradosPage/styles.css' %}">
-    <link rel="shortcut icon" href="{% static 'imagenes/favicon.ico' %}" >
+    <link rel="shortcut icon" href="{% static 'imagenes/favicon.png' %}">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Expires" content="0">
 </head>
@@ -20,8 +20,8 @@
     <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
         {% csrf_token %}
         <div class="header">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}"
-                    onclick="javascript:location.reload(true)" height="40px"></img></div>
+            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center;"
+                onclick=" javascript:location.reload(true)" />
         </div>
 
         <div class="seleccionarFechaBanner">
@@ -68,8 +68,9 @@
             -->
         </div>
         <div class="footer">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
-            </div>
+            <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
         </div>
         <!-- Scripts -->
         <script src="https://unpkg.com/scrollreveal"></script>

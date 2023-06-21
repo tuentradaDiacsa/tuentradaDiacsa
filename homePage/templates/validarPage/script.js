@@ -1,12 +1,3 @@
-ScrollReveal().reveal('.header', { delay: 1000 });
-ScrollReveal().reveal('.footer', { delay: 1000 });
-ScrollReveal().reveal('.todoEntradas', { delay: 1000 });
-ScrollReveal().reveal('.ticketLabel', { delay: 1000 });
-ScrollReveal().reveal('.cipLabel', { delay: 1000 });
-ScrollReveal().reveal('.textInput', { delay: 1000 });
-ScrollReveal().reveal('.verificarBtn', { delay: 1000 });
-ScrollReveal().reveal('.footer', { delay: 1000 });
-
 function soloNumeros(event) {
     var charCode = event.which ? event.which : event.keyCode;
     if (charCode < 48 || charCode > 57) {

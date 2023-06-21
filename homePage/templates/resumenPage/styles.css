@@ -1,6 +1,16 @@
-html {
-    scroll-behavior: smooth;
+:root {
+    --red: #FF0043;
+    --white: #ffffff;
+    --verde: #07A781;
+    --morado: #7643F6;
+    --negro: #000000;
+    --gris: #858484;
+    --yelow: #d9e806;
+    --azul: #01A0E2;
+    --rosado: #EC1074;
+    --naraja: #F9970E;
 }
+
 
 .header {
     background: linear-gradient(to right, var(--red), var(--negro));

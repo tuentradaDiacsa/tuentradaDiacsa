@@ -1,17 +1,10 @@
 
 
-var precioEntradasTipoResumen   = new Array(6)
+var precioEntradasTipoResumen = new Array(6)
 
 window.onbeforeunload = function () {
     location.reload(true);
 }
-
-ScrollReveal().reveal('.resumenCompraBanner, .containerTodo', {
-    delay: 200, // Retraso en milisegundos antes de que aparezca cada elemento
-    distance: '50px', // Distancia de desplazamiento desde la posición original
-    duration: 800, // Duración de la animación en milisegundos
-    easing: 'ease-out', // Curva de animación
-});
 
 function copiarAlPortapapeles(texto) {
     var elementoTemporal = document.createElement('textarea');

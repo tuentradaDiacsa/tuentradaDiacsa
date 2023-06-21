@@ -18,11 +18,11 @@
 </head>
 
 <body>
-    <form id="comprarForm" action="{% url 'comprarPage' %}" method="post" autocomplete="off">
+    <form id="comprarForm" action="{% url 'administrarPage' %}" method="post" autocomplete="off">
         {% csrf_token %}
         <div class="header">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/logo.png' %}" height="40px"
-                    onclick="javascript:location.reload(true)"></img></div>
+            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center;"
+                onclick=" javascript:location.reload(true)" />
         </div>
         <div class="todoEntradas">
             <div class="seleccionarFechaBanner">Valida tu entrada</div>
@@ -50,14 +50,11 @@
         <div class="blankspace2"></div>
 
         <div class="footer">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
-            </div>
+            <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
         </div>
         <!-- Scripts -->
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            var comprarPageUrl = "{% url 'comprarPage' %}";
-        </script>
         <script src="https://code.jquery.com/jquery-3.5.1.js"
             integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
         <script src="{% static 'validarPage/script.js' %}"></script>

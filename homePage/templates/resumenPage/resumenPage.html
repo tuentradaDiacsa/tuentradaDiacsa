@@ -17,25 +17,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="{% static 'resumenPage/styles.css' %}">
-    <link rel="shortcut icon" href="{% static 'imagenes/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'imagenes/favicon.png' %}">
 </head>
 
 <body id="bodyTodo">
     <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
         {% csrf_token %}
         <div class="header">
-            <img src="{% static 'comprarPage/headerlogo.png' %}"
-                style="height: 30px; margin-left: 5%; align-self: center;"
+            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center;"
                 onclick=" javascript:location.reload(true)" />
         </div>
         <div class="resumenCompraBanner" id="resumenCompraBanner">
             <p>RESUMEN DE COMPRA</p>
         </div>
-        <img class="imagenEnCelular" src="{% static 'resumenPage/banner.png' %}" />
+        <img class="imagenEnCelular" src="{% static 'imagenes/banner.png' %}" />
         <div class="containerTodo" id="containerTodo">
-            <div class="columnaEntradas"><img class="imagenesBanner" src="{% static 'resumenPage/banner.png' %}"
+            <div class="columnaEntradas"><img class="imagenesBanner" src="{% static 'imagenes/banner2.png' %}"
                     width="100%"></img>
                 <div class="containerInformacionEvento">
                     <h3 class="tituloEvento">GRUPO 5 EN IQUITOS</h3>
@@ -90,16 +88,16 @@
                     <div class="pagarConColumna1">
                         <div><b>Pagar con:</b></div>
                         <div style="justify-content: center; display: flex;margin-top: 10px; height: auto;"><img
-                                class="qrimage" src="{% static 'resumenPage/qr.png' %}" width="150px"></img></div>
+                                class="qrimage" src="{% static 'imagenes/qr.png' %}" width="150px"></img></div>
                     </div>
                     <div class="pagarConColumna2">
 
                         <div
                             style="justify-content: center; display: flex; align-items: center; margin-top: 20px; width: 100%;">
-                            <img style="border-radius: 10px;" src="{% static 'resumenPage/yapeicon.png' %}"
+                            <img style="border-radius: 10px;" src="{% static 'imagenes/yapeicon.png' %}"
                                 width="50px"></img>
                             <div style="min-width: 10%;"></div>
-                            <img style="border-radius: 10px;" src="{% static 'resumenPage/plinicon.png' %}"
+                            <img style="border-radius: 10px;" src="{% static 'imagenes/plinicon.png' %}"
                                 width="50px"></img>
                         </div>
                         <div
@@ -148,7 +146,7 @@
                         </div>
                     </div>
                     <div class="containerBCP"><img style="border-radius: 10px;"
-                            src="{% static 'resumenPage/bcpicon.png' %}" width="50px"></img></div>
+                            src="{% static 'imagenes/bcpicon.png' %}" width="50px"></img></div>
                 </div>
                 <div style="margin-top: 20px;">
                     <div>
@@ -202,16 +200,12 @@
         </div>
 
         <div class="footer">
-            <img src="{% static 'comprarPage/footerlogo.png' %}" height="30px"
+            <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
                 style="display: flex; justify-self: center;  align-self: center;"
                 onclick="javascript:location.reload(true)" />
         </div>
 
         <!-- Scripts -->
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            var comprarPageUrl = "{% url 'comprarPage' %}";
-        </script>
         <script src="https://code.jquery.com/jquery-3.5.1.js"
             integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
         <script src="{% static 'resumenPage/script.js' %}"></script>

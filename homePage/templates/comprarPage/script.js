@@ -81,7 +81,6 @@ function ActBotSMSValidar() {
 }
 setInterval(ActBotSMSValidar, 999);
 
-
 function enviarCodigo() {
     //console.log(document.getElementById("codigo").value.trim().length)
     if (document.getElementById("codigo").value.trim().length !== 6) {
@@ -343,7 +342,7 @@ function aumentar(id) {
                     document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0";
                 }
             }
-            if (cantEntradasTipoSelec[id - 1] + 1 > 20) { calcularTotal(); return }
+            if (cantEntradasTipoSelec[id - 1] + 1 > 20) { cantEntradasTipoSelec[id - 1] = 19 }
             entradasElegidas = cantEntradasTipoSelec[id - 1] + 1;
             cantEntradasTipoSelec[id - 1] = entradasElegidas;
             document.getElementById("cantidadVisible" + id).innerText = entradasElegidas.toString();
@@ -413,12 +412,9 @@ function calcularTotal() {
 }
 
 function comprar() {
-    //document.getElementById("celular2").value = document.getElementById("celular").value;
-    //document.getElementById("codigo2").value  = document.getElementById("codigo").value;
     if (!verificarDatosCompletos()) {
         return
     }
-    console.log("holad")
     var formulario = document.getElementById("comprarForm");
     for (var i = 1; i <= cantEntradasTipoSelec.length; i++) {
         var nuevoCampo = document.createElement("input");
@@ -463,82 +459,110 @@ function seleccionBox(seleccionado) {
         },
 
         success: function (response) {
-            for (var i = 0; i < 6; i++) {
+            for (var i = 0; i < 3; i++) {
                 document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = response.entradasRestantes[i];
                 entradasElegidas = cantEntradasTipoSelec[i];
                 if (response.entradasRestantes[i] - entradasElegidas <= 0) {
                     cantEntradasTipoSelec[i] = response.entradasRestantes[i];
                     document.getElementById("cantidadVisible" + (i + 1).toString()).innerText = response.entradasRestantes[i].toString();
                     document.getElementById("entradasRestantes" + (i + 1).toString()).innerText = "0";
-                    if (i >= 3) {
-                        document.getElementById("boxes" + i.toString()).value = "ninguno"
-                        cantidadEntradasTipo[i] = 0
-                    }
                 }
             }
 
             boxes = document.getElementsByName("boxseleccionado")
+            console.log(boxes)
             if (document.getElementById("box" + seleccionado).className == "boxOcupado") return;
             if (document.getElementById("box" + seleccionado).className == "boxElegido") {
-                document.getElementById("boxes3").value = 0;
-                document.getElementById("boxes2").value = 0;
-                document.getElementById("boxes1").value = 0;
-                cantEntradasTipoSelec[3] = 0
-                cantEntradasTipoSelec[4] = 0
-                cantEntradasTipoSelec[5] = 0
-                document.getElementById("box" + seleccionado).classList.remove("boxElegido")
-                document.getElementById("box" + seleccionado).classList.add("boxDesocupado")
+                if (1 <= seleccionado && seleccionado <= 18) {
+                    document.getElementById("entradasRestantes6").innerText = response.entradasRestantes[5].toString();
+                    cantEntradasTipoSelec[5] = 0
+                    document.getElementById("boxes3").value = 0;
+                    document.getElementById("box" + seleccionado.toString()).classList.remove("boxElegido")
+                    document.getElementById("box" + seleccionado.toString()).classList.add("boxDesocupado")
+
+                }
+                if (19 <= seleccionado && seleccionado <= 23) {
+                    document.getElementById("entradasRestantes4").innerText = response.entradasRestantes[3].toString();
+                    cantEntradasTipoSelec[3] = 0
+                    document.getElementById("boxes1").value = 0;
+                    document.getElementById("box" + seleccionado.toString()).classList.remove("boxElegido")
+                    document.getElementById("box" + seleccionado.toString()).classList.add("boxDesocupado")
+                }
+                if (24 <= seleccionado && seleccionado <= 28) {
+                    document.getElementById("entradasRestantes5").innerText = response.entradasRestantes[4].toString();
+                    cantEntradasTipoSelec[4] = 0
+                    document.getElementById("boxes2").value = 0;
+                    document.getElementById("box" + seleccionado.toString()).classList.remove("boxElegido")
+                    document.getElementById("box" + seleccionado.toString()).classList.add("boxDesocupado")
+                }
+
                 calcularTotal()
+                console.log("debe regresar")
                 return;
             }
             for (var i = 0; i < boxes.length; i++) {
-                console.log(i + 1)
-                console.log(seleccionado)
+                //console.log(i + 1)
+                //console.log(seleccionado)
                 if (document.getElementById("box" + (i + 1).toString()).className == "boxOcupado") {
                     continue;
                 }
-                if ((i + 1).toString() == seleccionado.toString()) {
+                if ((i + 1) == seleccionado) {
                     console.log("IGUALES")
                     document.getElementById("box" + (i + 1).toString()).classList.remove("boxDesocupado")
                     document.getElementById("box" + (i + 1).toString()).classList.add("boxElegido")
 
                     if (1 <= seleccionado && seleccionado <= 18) {
                         document.getElementById("boxes3").value = seleccionado;
-                        document.getElementById("boxes2").value = 0;
-                        document.getElementById("boxes1").value = 0;
-                        cantEntradasTipoSelec[3] = 0
-                        cantEntradasTipoSelec[4] = 0
+                        //document.getElementById("boxes2").value = 0;
+                        //document.getElementById("boxes1").value = 0;
+                        //cantEntradasTipoSelec[3] = 0
+                        //cantEntradasTipoSelec[4] = 0
                         cantEntradasTipoSelec[5] = 1
 
                     }
                     if (19 <= seleccionado && seleccionado <= 23) {
-                        document.getElementById("boxes3").value = 0;
-                        document.getElementById("boxes2").value = 0;
+                        //document.getElementById("boxes3").value = 0;
+                        //document.getElementById("boxes2").value = 0;
                         document.getElementById("boxes1").value = seleccionado;
                         cantEntradasTipoSelec[3] = 1
-                        cantEntradasTipoSelec[4] = 0
-                        cantEntradasTipoSelec[5] = 0
+                        //cantEntradasTipoSelec[4] = 0
+                        //cantEntradasTipoSelec[5] = 0
                     }
                     if (24 <= seleccionado && seleccionado <= 28) {
-                        document.getElementById("boxes3").value = 0;
+                        //document.getElementById("boxes3").value = 0;
                         document.getElementById("boxes2").value = seleccionado;
-                        document.getElementById("boxes1").value = 0;
-                        cantEntradasTipoSelec[3] = 0
+                        //document.getElementById("boxes1").value = 0;
+                        //cantEntradasTipoSelec[3] = 0
                         cantEntradasTipoSelec[4] = 1
-                        cantEntradasTipoSelec[5] = 0
+                        //cantEntradasTipoSelec[5] = 0
                     }
                 }
                 else {
-                    document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
-                    document.getElementById("box" + (i + 1).toString()).classList.add("boxDesocupado")
+                    console.log(seleccionado)
+                    if (1 <= seleccionado && seleccionado <= 18 && 1 <= i && i <= 18) {
+                        console.log("boxes 1")
+                        console.log("box" + (i + 1).toString())
+                        document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
+                        document.getElementById("box" + (i + 1).toString()).classList.add("boxDesocupado")
+
+                    }
+                    if (19 <= seleccionado && seleccionado <= 23 && 19 <= i && i <= 23) {
+                        console.log("boxes 2")
+                        console.log("box" + (i + 1).toString())
+                        document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
+                        document.getElementById("box" + (i + 1).toString()).classList.add("boxDesocupado")
+                    }
+
+                    if (24 <= seleccionado && seleccionado <= 28 && 24 <= i && i <= 28) {
+                        console.log("boxes 3")
+                        console.log("box" + (i + 1).toString())
+                        document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
+                        document.getElementById("box" + (i + 1).toString()).classList.add("boxDesocupado")
+                    }
                 }
             }
 
 
-
-            var opcionSeleccionadabox1 = document.getElementById("boxes1").value
-            var opcionSeleccionadabox2 = document.getElementById("boxes2").value
-            var opcionSeleccionadabox3 = document.getElementById("boxes3").value
             for (var i = 0; i < response.boxes1Restantes.length; i++) {
                 if (response.boxes1Restantes[i] == document.getElementById("boxes1").value) continue;
                 document.getElementById("box" + response.boxes1Restantes[i]).classList.remove("boxOcupado")
@@ -574,33 +598,6 @@ function seleccionBox(seleccionado) {
                 document.getElementById("box" + response.boxes3Ocupados[i]).classList.remove("boxElegido")
                 document.getElementById("box" + response.boxes3Ocupados[i]).classList.add("boxOcupado")
             }
-
-
-
-
-            /*if (!response.boxes1Restantes.includes(parseInt(opcionSeleccionadabox1))) {
-                cantEntradasTipoSelec[3] = 0;
-                document.getElementById("box" + opcionSeleccionadabox1).classList.remove("boxDesocupado")
-                document.getElementById("box" + opcionSeleccionadabox1).classList.remove("boxElegido")
-                document.getElementById("box" + opcionSeleccionadabox1).classList.add("boxOcupado")
-                //console.log("Entro a ningun elemento seleccionado, no matcheo el substring en el arreglo de boxes 1")
-            }
-
-            if (!response.boxes2Restantes.includes(parseInt(opcionSeleccionadabox2))) {
-                cantEntradasTipoSelec[4] = 0;
-                document.getElementById("box" + opcionSeleccionadabox2).classList.remove("boxDesocupado")
-                document.getElementById("box" + opcionSeleccionadabox2).classList.remove("boxElegido")
-                document.getElementById("box" + opcionSeleccionadabox2).classList.add("boxOcupado")
-            }
-
-            if (!response.boxes3Restantes.includes(parseInt(opcionSeleccionadabox3))) {
-                cantEntradasTipoSelec[5] = 0;
-                document.getElementById("box" + opcionSeleccionadabox3).classList.remove("boxDesocupado")
-                document.getElementById("box" + opcionSeleccionadabox3).classList.remove("boxElegido")
-                document.getElementById("box" + opcionSeleccionadabox3).classList.add("boxOcupado")
-            }*/
-
-
 
             calcularTotal()
 

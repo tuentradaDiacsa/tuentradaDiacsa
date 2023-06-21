@@ -42,7 +42,6 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="{% static 'comprarPage/styles.css' %}">
 </head>
 
@@ -55,23 +54,17 @@
         <div style="margin-top: 100px;"></div>
         <div class="button-container">
             <button class="button" type="submit" name="submit" value="validar">Valida tu entrada</button>
-            <button class="button" type="submit" name="submit" value="actualizar">Transfiere tu entrada</button>
-            <button class="button" type="submit" name="submit" value="vender" hidden>VENDER TICKET</button>
+            <button class="button" type="submit" name="submit" value="transferir">Transfiere tu entrada</button>
+            <button class="button" type="submit" name="submit" value="recibir">Recibe tu transferencia</button>
             <button class="button" type="submit" name="submit" value="comprar" hidden>COMPRAR TICKET</button>
         </div>
 
         <div class="footer">
-            <div class="imagenHeader"><img src="{% static 'comprarPage/footerlogo.png' %}" height="40px"></img>
-            </div>
+            <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
         </div>
         <!-- Scripts -->
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            var comprarPageUrl = "{% url 'comprarPage' %}";
-        </script>
-        <script src="https://code.jquery.com/jquery-3.5.1.js"
-            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-        <script src="{% static 'comprarPage/script.js' %}"></script>
     </form>
 
 </body>
