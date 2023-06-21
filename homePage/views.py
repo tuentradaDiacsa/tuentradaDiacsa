@@ -653,7 +653,9 @@ class comprarPage(View):
                     print("Llega hasta redirect devolver Tickets")
                     return redirect(request.path)
                 
-                print("Han pasado menos de 2 minutos ") 
+                print("Han pasado menos de 2 minutos ")
+                confirmarPago(cipRecibo)
+                confirmarentradas(cipRecibo)
 
                 #disminuyeEntradas(cipRecibo)
                 entradasArgumento = armaEntradas(cipRecibo) #Esperado tipo (Arreglo)[] con diccionarios como elementos {} de campos ["tipo_ticket"] y ["numero_ticket"] 
