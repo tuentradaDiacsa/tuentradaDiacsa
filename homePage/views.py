@@ -841,3 +841,24 @@ def escanerPage(request):
         return JsonResponse(responseData)
     
     return render(request, "escanerPage/escanerPage.html")
+
+def descargarQRPage(request):
+    responseData = {'estado': "Llene sus datos"}
+    if request.method == 'POST':
+        ticket = request.POST.get("ticket")
+        descarga = request.POST.get("descarga")
+        pin = request.POST.get("pin")
+        print(ticket)
+        print(descarga)
+        print(pin)
+        try:
+            entrada = Tickets.objects.get(ticket = ticket, codigoDescarga = descarga, pin = pin, estado = 3, intentosIngresoOK = 0)
+            print("OKA2")
+            enlaceEncriptado = encriptador(keyCrypto, entrada.ticket, entrada.codigoseguridad)
+            print("OKA")
+            return descargar_boletoQREncriptado(request, enlaceEncriptado)
+        except:
+            print("NOPE")
+            responseData = {'estado': "¡¡Datos invalidos!!"}
+            return render(request, "descargarQRPage/descargarQRPage.html", responseData)
+    return render(request, "descargarQRPage/descargarQRPage.html", responseData)
