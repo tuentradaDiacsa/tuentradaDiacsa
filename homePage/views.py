@@ -673,6 +673,7 @@ def administrarPage(request):
     if request.POST.get('submit') == "validar":
         return render(request, "validarPage/validarPage.html")
     elif request.POST.get('submit') == "transferir":
+        print("entro a transferir")
         return render(request, "transferirPage/transferirPage.html")
     elif request.POST.get('submit') == "recibir":
         preguntas = Preguntas.objects.all()
