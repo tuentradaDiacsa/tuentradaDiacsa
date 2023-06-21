@@ -20,6 +20,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.timezone import activate
 import pytz
+from datetime import timedelta
 
 import base64
 from django.conf import settings
@@ -29,10 +30,11 @@ import os
 from django.contrib.sites.shortcuts import get_current_site
 from django.views import View
 
-from .encripdecripEntradas import encriptador
+from .encripdecripEntradas import encriptador, desencriptador
 from .generaCodigoSeguridad import generacodigoseguridad
 
 import re
+
 
 def reemplazar_letras(cadena):
     # Utilizar expresiones regulares para buscar palabras y reemplazar letras
@@ -105,6 +107,41 @@ def descargar_boleto(request, entrada_id):
 
     return HttpResponse(html_content)  # response
 
+def descargar_boletoQREncriptado(request, entrada_id):
+    ticket_obj = Tickets.objects.get(ticket=entrada_id)
+    codigoSeguridad = ticket_obj.codigoseguridad
+    datoencriptado = encriptador(keyCrypto,entrada_id,codigoSeguridad)
+    qr_buffer = generar_qr_code_url(datoencriptado)
+    qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode('utf-8')
+    qr_url = "data:image/png;base64," + qr_base64
+    if(getattr(ticket_obj, 'numeroBox', '0') !='0'): numeroBox = " - Box "+getattr(ticket_obj, 'numeroBox', '0')
+    else: numeroBox = ""
+
+    if(getattr(ticket_obj, 'nombre', 'No completado')!="No completado"): campoNombreApellido = getattr(ticket_obj, 'nombre', 'No completado')
+    else: campoNombreApellido = "No completado"
+
+    if(getattr(ticket_obj, 'dni', 'No completado')!="No completado"): campodni = getattr(ticket_obj, 'dni', 'No completado')
+    else: campodni = "No completado"
+    
+    if(getattr(ticket_obj, 'celular', 'No completado')!="No completado"): campocelular = getattr(ticket_obj, 'celular', 'No completado')
+    else: campocelular = "No completado"
+    
+    contexto = {
+        'ID_Ticket': entrada_id,
+        'nombre_y_apellido': campoNombreApellido,
+        'dni': campodni,
+        'telefono': campocelular,
+        'whatsapp': campocelular,
+        'Lugar': "Centro Convenciones del Pardo",
+        'Ubicacion': "Calle Alzamora / Av. Mariscal Cáceres",
+        'fecha': "Domingo 25 de Junio 2023",
+        'hora': "3:00 pm",
+        'Zona': getattr(ticket_obj, 'tipo', 'No completado')+numeroBox,
+        'qr_imagen': qr_url,
+    }
+    return render(request, "ticketsQR/plantillaentradaQR.html", contexto)    
+    
+
 def homePage(request):
     return render(request, "homePage/homePage.html")
 
@@ -112,20 +149,78 @@ def armaEntradas(cipBuscaTickets):
     ticketSxCIP = Tickets.objects.filter(cip=cipBuscaTickets)
     entradasArgumento = []
     for ticketCIP in ticketSxCIP:
+        ticketCIP.fechaHoraConfirmado = timezone.now()
+        ticketCIP.save()
         auxiliar = {}
         auxiliar["tipo_ticket"]   = ticketCIP.tipo #Tiene la descripcion
         auxiliar["numero_ticket"] = ticketCIP.ticket
         entradasArgumento.append(auxiliar)
     return entradasArgumento
 
+def devolverEntradas(cipTimeOut):
+    PagoxCIP = Pagos.objects.get(cip=cipTimeOut)
+    PagoxCIP.estado = 4
+    PagoxCIP.save()
+    
+    boxes2Recuperar = []
+    
+    ticketSxCIP = Tickets.objects.filter(cip=cipTimeOut)
+    
+    for ticket in ticketSxCIP:
+        if ticket.estado != 1:
+            continue 
+        ticket.estado = 4
+        ticket.save()
+        tipoEntradaDescripcion   = ticket.tipo
+        auxiliarDevuelveEntradas = Tipos.objects.get(descripcion=tipoEntradaDescripcion)
+        if(auxiliarDevuelveEntradas.tipo < 4):
+            auxiliarDevuelveEntradas.cantidad = auxiliarDevuelveEntradas.cantidad+1
+            auxiliarDevuelveEntradas.save()
+            continue
+        if(ticket.numeroBox not in boxes2Recuperar):
+            boxes2Recuperar.append(ticket.numeroBox)
+            auxiliarDevuelveEntradas.cantidad = auxiliarDevuelveEntradas.cantidad+1
+            auxiliarDevuelveEntradas.save()
+            try:
+                boxClass = boxesRestante1.objects.get(box=ticket.numeroBox)
+                boxClass.ocupado = False
+                boxClass.save()
+            except boxesRestante1.DoesNotExist:
+                boxClass = None
+            try:
+                boxClass = boxesRestante2.objects.get(box=ticket.numeroBox)
+                boxClass.ocupado = False
+                boxClass.save()
+            except boxesRestante2.DoesNotExist:
+                boxClass = None
+            try:
+                boxClass = boxesRestante3.objects.get(box=ticket.numeroBox)
+                boxClass.ocupado = False
+                boxClass.save()
+            except boxesRestante3.DoesNotExist:
+                boxClass = None
+
+def confirmarPago(cipRecibo):
+    PagoxCIP = Pagos.objects.get(cip=cipRecibo)
+    PagoxCIP.estado = 2
+    PagoxCIP.fechaHoraCONF = timezone.now()
+    PagoxCIP.save()
+
+def confirmarentradas(cipRecibo):
+    ticketSxCIP = Tickets.objects.filter(cip=cipRecibo)
+    for ticket in ticketSxCIP:
+        ticket.estado = 2
+        ticket.fechaHoraConfirmado = timezone.now()
+        ticket.save()
+
 class comprarPage(View):
     def get(self, request):
         preguntas = Preguntas.objects.all()
         entradas  = Tipos.objects.all().order_by('tipo')
 
-        boxes1    = boxesRestante1.objects.all().order_by('box')
-        boxes2    = boxesRestante2.objects.all().order_by('box')
-        boxes3    = boxesRestante3.objects.all().order_by('box')
+        boxes1    = boxesRestante1.objects.order_by('box')
+        boxes2    = boxesRestante2.objects.order_by('box')
+        boxes3    = boxesRestante3.objects.order_by('box')
         datos = {
             'preguntas': preguntas,
             'entradas' : entradas,
@@ -176,7 +271,7 @@ class comprarPage(View):
                 else:
                     print("Boton SMS presionado", "Celular:",
                           celular, "Codigo:", codigoValidacion)
-                    almacenaCelularValidador(celular, codigoValidacion)
+                    almacenaCelularValidador(celular, codigoValidacion, 1)
                 
                 return render(request, "comprarPage/comprarPage.html", datos)
 
@@ -216,6 +311,14 @@ class comprarPage(View):
                 boxes3Ocupados   = []
                 for box in boxes3N:
                     boxes3Ocupados.append(box.box)   
+                
+                print(boxes1Restantes)
+                print(boxes2Restantes)
+                print(boxes3Restantes)
+                print(boxes1Ocupados)
+                print(boxes2Ocupados)
+                print(boxes3Ocupados)
+
                 responseData = {
                     'entradasDescripcion' : entradasDescripcion,
                     'entradasRestantes'   : entradasRestantes,
@@ -235,7 +338,7 @@ class comprarPage(View):
                 codigoValidacionIngresado = request.POST.get('codigo')
                 datos['codigo'] = codigoValidacionIngresado
                 responseData = {'data': 'Codigo incorrecto'}
-                if (buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado)):
+                if (buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado, 1)):
                     print("Codigo Correcto!!!")
                     responseData = {'data': 'Codigo correcto'}
                 return JsonResponse(responseData)
@@ -372,6 +475,7 @@ class comprarPage(View):
                     auxiliarDisminuyeEntradas.cantidad = auxiliarDisminuyeEntradas.cantidad-int(entradasCantidad[numTipo])
                     auxiliarDisminuyeEntradas.save()
                     if numTipo+1 == 4:
+                            ticket = Tickets()
                             ticket.numeroBox = box1
                             auxiliarDisminuyeBox1 = boxesRestante1.objects.get(box=int(box1))
                             if(auxiliarDisminuyeBox1.ocupado):
@@ -382,6 +486,7 @@ class comprarPage(View):
                             for _ in range(10):
                                 ticket = Tickets()
                                 ticket.ticket          = generaNumeroTicket()
+                                ticket.estado          = 1
                                 ticket.codigoseguridad = generacodigoseguridad()
                                 ticket.pin             = pin
                                 ticket.fechaHoraCambio = timezone.now()
@@ -402,6 +507,7 @@ class comprarPage(View):
                                 
 
                     if numTipo+1 == 5:
+                        ticket = Tickets()
                         ticket.numeroBox = box2
                         auxiliarDisminuyeBox2 = boxesRestante2.objects.get(box=int(box2))
                         if(auxiliarDisminuyeBox2.ocupado):
@@ -412,6 +518,7 @@ class comprarPage(View):
                         for _ in range(10):
                                 ticket = Tickets()
                                 ticket.ticket          = generaNumeroTicket()
+                                ticket.estado          = 1
                                 ticket.codigoseguridad = generacodigoseguridad()
                                 ticket.pin             = pin
                                 ticket.fechaHoraCambio = timezone.now()
@@ -431,6 +538,7 @@ class comprarPage(View):
                                 ticket.save()
                                 
                     if numTipo+1 == 6:
+                        ticket = Tickets()
                         ticket.numeroBox = box3
                         auxiliarDisminuyeBox3 = boxesRestante3.objects.get(box=int(box3))
                         if(auxiliarDisminuyeBox3.ocupado):
@@ -441,6 +549,7 @@ class comprarPage(View):
                         for _ in range(10):
                                 ticket = Tickets()
                                 ticket.ticket          = generaNumeroTicket()
+                                ticket.estado          = 1
                                 ticket.codigoseguridad = generacodigoseguridad()
                                 ticket.pin             = pin
                                 ticket.fechaHoraCambio = timezone.now()
@@ -472,6 +581,7 @@ class comprarPage(View):
                             continue
                         ticket = Tickets()
                         ticket.ticket          = generaNumeroTicket()
+                        ticket.estado          = 1
                         ticket.codigoseguridad = generacodigoseguridad()
                         ticket.pin             = pin
                         ticket.fechaHoraCambio = timezone.now()
@@ -515,6 +625,36 @@ class comprarPage(View):
             elif request.POST.get('boton') == 'confirmarCompra':
                 print("POST confirmarCompra")
                 cipRecibo = request.POST.get('cip')
+                
+                PagoxCIP = Pagos.objects.get(cip=cipRecibo)
+                fechahoraPREP = str(PagoxCIP.fechaHoraPREP)
+                #print(PagoxCIP.fechaHoraPREP)
+                campos = fechahoraPREP.split(' ')
+                fecha  = campos[0]
+                hora   = campos[1]
+                hora   = hora.split('+')[0]
+                anho_CIP_PRE, mes_CIP_PRE, dia_CIP_PRE = map(int, fecha.split('-'))
+                hora_CIP_PRE, minuto_CIP_PRE, segundo_CIP_PRE = map(int, map(float, hora.split(':')))
+
+                fechaHoraActual = timezone.now()
+                #print(fechaHoraActual)
+                campo_fecha_hora = timezone.datetime(anho_CIP_PRE, mes_CIP_PRE, dia_CIP_PRE, hora_CIP_PRE, minuto_CIP_PRE, segundo_CIP_PRE, tzinfo=timezone.utc)
+                #print(campo_fecha_hora)
+                tiempo_pasado_2_minutos = campo_fecha_hora + timedelta(minutes=2) #tiempo_pasado_2_horas = campo_fecha_hora + timedelta(hours=2)
+                #print(tiempo_pasado_2_minutos)
+                if (fechaHoraActual >= tiempo_pasado_2_minutos):
+                    print("Han pasado mas de 2 minutos desde 'campo_fecha_hora'.")
+                    request.session['tickets_redirect'] = "tickets"
+                    devolverEntradas(cipRecibo)
+                    datosConfirmar = {
+                        'entradas': {},
+                    }
+                    request.session['contexto']         = datosConfirmar
+                    print("Llega hasta redirect devolver Tickets")
+                    return redirect(request.path)
+                
+                print("Han pasado menos de 2 minutos ") 
+
                 #disminuyeEntradas(cipRecibo)
                 entradasArgumento = armaEntradas(cipRecibo) #Esperado tipo (Arreglo)[] con diccionarios como elementos {} de campos ["tipo_ticket"] y ["numero_ticket"] 
                 datosConfirmar = {
@@ -534,8 +674,12 @@ def administrarPage(request):
         return render(request, "validarPage/validarPage.html")
     elif request.POST.get('submit') == "transferir":
         return render(request, "transferirPage/transferirPage.html")
-    elif request.POST.get('submit') == "vender":
-        None
+    elif request.POST.get('submit') == "recibir":
+        preguntas = Preguntas.objects.all()
+        datos = {
+            'preguntas': preguntas,
+        }
+        return render(request, "recibirPage/recibirPage.html", datos)
     elif request.POST.get('submit') == "comprar":
         None
 
@@ -546,17 +690,151 @@ def administrarPage(request):
         
         try:
             ticket = Tickets.objects.get(ticket=numero, nombre__icontains=apellido)
-            if ticket.confirmado2 is not None:
+            if ticket.estado == 3:
                 responseData = {'estado': 'Ticket valido'}
-            else:
+            elif ticket.estado == 2:
                 responseData = {'estado': 'Ticket en validacion'}
+            else: responseData = {'estado': 'Ticket no valido'}
         except Tickets.DoesNotExist or Tickets.MultipleObjectsReturned:
             responseData = {'estado': 'Ticket no valido'}
         return JsonResponse(responseData)
-    return render(request, "administrarPage.html")
+    
+    # Transferir
+    if request.method == 'POST' and request.POST.get('comando') == 'generarTransferencia':
+        entrada = request.POST.get("numeroEntrada")
+        dni = request.POST.get("dni")
+        celular = request.POST.get("celular")
+        pin = request.POST.get("pin")
+        print("ENTRADA: ",entrada, "DNI: ",dni, "CELULAR: ",celular, "PIN: ",pin)
+        if entrada == None or dni == None or celular == None or pin == None or len(entrada) == 0 or len(dni) == 0 or len(celular) == 0 or len(pin) == 0:
+            responseData = {'estado': 'Llenar datos'}
+        else:
+            try:
+                ticket1 = Tickets.objects.get(ticket = entrada,
+                                              dni = dni,
+                                              pin = pin,
+                                              celular = celular,
+                                              estado = 3,
+                                              fechaHoraIngresoExitoso = None,
+                                              intentosIngresoOK = 0)
+                print("a")
+                if(ticket1.codigoTransferencia == None or len(ticket1.codigoTransferencia) != 8):
+                    print("b")
+                    ticket1.codigoTransferencia = generacodigoseguridad()
+                    ticket1.save()
+                    responseData = {'estado': 'Correcto', 'codigo': ticket1.codigoTransferencia}
+                
+                else:   
+                    print("c") 
+                    responseData = {'estado': 'Correcto', 'codigo': ticket1.codigoTransferencia}
+            except:
+                print("excepcion")
+                responseData = {'estado': "No encontrado"}
+        return JsonResponse(responseData)
+    
+    # RecibirPage
+    if request.method == 'POST' and request.POST.get('comando') == 'verificarTransferencia':
+        codigoTransferencia = request.POST.get("codigoTransferencia")
+        dniTransferencia = request.POST.get("dniTransferencia")
+        print("CODIGO: ",codigoTransferencia, "DNI: ",dniTransferencia)
+        if codigoTransferencia == None or dniTransferencia == None or len(codigoTransferencia) != 8:
+            responseData = {'estado': 'Incorrecto'}
+        else:
+            try:
+                ticket1 = Tickets.objects.get(codigoTransferencia = codigoTransferencia, dni=dniTransferencia)
+                print(ticket1)
+                ticket1.save()
+                tipoEntrada = ticket1.tipo
+                if(ticket1.numeroBox != "0"): tipoEntrada = ticket1.tipo + " - Box " + ticket1.numeroBox
+                responseData = {'estado': 'Correcto', 'tipoEntrada': tipoEntrada}
+            except:
+                print("excepcion")
+                responseData = {'estado': "Incorrecto"}
+        return JsonResponse(responseData)
+    if request.method == 'POST' and request.POST.get('comando') == 'solicitarCodigo':
+        print("Boton SMS presionado")
+        celular = request.POST.get('celular')
+        codigoValidacion = generaCodigoValidacion(6)
+        if codigoValidacion == "":
+            print(
+                "Error!!! No se pudo generar codigo de validacion NO REPETIDO")
+            responseData = {'estado': 'Incorrecto'}
+            return JsonResponse(responseData)
+        else:
+            print("Boton SMS presionado", "Celular:",
+                    celular, "Codigo:", codigoValidacion)
+            almacenaCelularValidador(celular, codigoValidacion, 3)
+            responseData = {'estado': 'Correcto'}
+            return JsonResponse(responseData)
+            
+    if request.method == 'POST' and request.POST.get('comando') == 'verificarCodigo':
+        print("Verificar codigo ingresado")
+        celular = request.POST.get('celular')
+        codigoValidacionIngresado = request.POST.get('codigo')
+        responseData = {'data': 'Codigo incorrecto'}
+        if (buscarCodigoEnBaseDatos(celular, codigoValidacionIngresado, 3)):
+            print("Codigo Correcto!!!")
+            responseData = {'estado': 'Correcto'}
+        return JsonResponse(responseData)
+    
+    if request.method == 'POST' and request.POST.get('boton') == 'transferirEntrada':
+        codigoTransferencia = request.POST.get("codigoTransferencia")
+        dniTransferencia = request.POST.get("dniTransferencia")
+        celular = request.POST.get("celular")
+        dni = request.POST.get("dni")
+        nombre = request.POST.get("nombre")
+        pin = request.POST.get("pin")
+        correo = request.POST.get("correo")
+        pregunta1 = request.POST.get("pregunta1")
+        pregunta2 = request.POST.get("pregunta2")
+        pregunta3 = request.POST.get("pregunta3")
+        respuesta1 = request.POST.get("respuesta1")
+        respuesta2 = request.POST.get("respuesta2")
+        respuesta3 = request.POST.get("respuesta3")
+        print("CODIGO: ",codigoTransferencia, "DNI: ",dniTransferencia)
+        print("Nuevos datos:",celular,dni,nombre,pin)
+        if codigoTransferencia == None or dniTransferencia == None or len(codigoTransferencia) != 8:
+            return render(request, "administrarPage.html")
+        else:
+            try:
+                ticketNuevo = Tickets.objects.get(codigoTransferencia = codigoTransferencia, dni=dniTransferencia)
+                entrada = ticketNuevo.ticket
+                ticketNuevo.nombre = nombre
+                ticketNuevo.fechaHoraCambio = timezone.now()
+                ticketNuevo.pin = pin
+                ticketNuevo.dni = dni
+                ticketNuevo.celular = celular
+                ticketNuevo.codigoTransferencia = ""
+                ticketNuevo.correo = correo
+                ticketNuevo.pregunta1 = pregunta1
+                ticketNuevo.pregunta2 = pregunta2
+                ticketNuevo.pregunta3 = pregunta3
+                ticketNuevo.respuesta1 = respuesta1
+                ticketNuevo.respuesta2 = respuesta2
+                ticketNuevo.respuesta3 = respuesta3
+                ticketNuevo.save()
+                print("oktry")
+                return redirect("/descargar_boleto/" + entrada)
+            except:
+                print("excepcion")
+                return render(request, "administrarPage.html")
+    
+    return render(request, "administrarPage.html")  
 
+keyCrypto="1234567890abcdef"
 def escanerPage(request):
+    if request.method == 'POST' and request.POST.get('comando') == "QRenviado":
+        data = request.POST.get('data')
+        print(data)
+        responseData = {'estado': "INCORRECTO"}
+        try:
+            entrada_id, codigoseguridad = desencriptador(keyCrypto, data)
+            print("ID: ", entrada_id,"   Codigo: ",codigoseguridad)
+        except:
+            None
+        
+        if data == "DIACSA":  # if tickervalido(desencriptar(data))
+            responseData = {'estado': "CORRECTO"}
+        return JsonResponse(responseData)
+    
     return render(request, "escanerPage/escanerPage.html")
-
-def apiPage(request):
-    return render(request, "apiDNI/index.html")

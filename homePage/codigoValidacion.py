@@ -21,26 +21,33 @@ def generaCodigoValidacion(longitud):
     return codigo
 
 
-def almacenaCelularValidador(celular, codigoValidacion):
+def almacenaCelularValidador(celular, codigoValidacion, estado):
     registro = smsValidacionCelular()
     registro.celular = celular
     registro.codigoValidacion = codigoValidacion
     registro.fechaSolicitud = timezone.now()
-    registro.estado = 1 #Default 0
+    registro.estado = estado #Default 0
     registro.save()
     return
 
 
-def buscarCodigoEnBaseDatos(celularIngresado, codigoValidacionIngresado):
+def buscarCodigoEnBaseDatos(celularIngresado, codigoValidacionIngresado, estado):
     ultimo_registro = smsValidacionCelular.objects.filter(
-        celular=celularIngresado).latest('correlativo')
+        celular=celularIngresado, estado=estado).latest('correlativo')
 
     if ultimo_registro.codigoValidacion == codigoValidacionIngresado and ultimo_registro.estado == 1:
         ultimo_registro.estado = 21
         ultimo_registro.save()
         return True
+    
+    elif ultimo_registro.codigoValidacion == codigoValidacionIngresado and ultimo_registro.estado == 2:
+        ultimo_registro.estado = 22
+        ultimo_registro.save()
+        return True
 
-    elif codigoValidacionIngresado == 'DIAC54':
+    elif ultimo_registro.codigoValidacion == codigoValidacionIngresado and ultimo_registro.estado == 3:
+        ultimo_registro.estado = 23
+        ultimo_registro.save()
         return True
 
     else:

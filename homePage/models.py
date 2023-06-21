@@ -3,6 +3,7 @@ from django.db import models
 
 class Pagos(models.Model):
     # key = models.ForeignKey()
+    
     estado = models.IntegerField(blank=True, null=True, default='0')
     fechaHoraPREP  = models.DateTimeField(blank=True, null=True)  # Boton de Comprar en pagina de seleccion tickets #Comprador en Web+Server
     fechaHoraCONF  = models.DateTimeField(blank=True, null=True)  # Boton de Confirmar en pagina resumen #Comprador en Web+Server
@@ -31,6 +32,7 @@ class Pagos(models.Model):
 
 
 class Tickets(models.Model):
+    estado          = models.IntegerField(blank=True, null=True)
     ticket          = models.TextField()  # XYZ(CIUDAD)XYZ(EVENTO)-ABCDE
     codigoseguridad = models.TextField()  # Aleatorio 8 alfanumericos
     
@@ -46,6 +48,7 @@ class Tickets(models.Model):
     
     celular = models.TextField()
 
+    codigoTransferencia = models.TextField(blank=True, null=True)
     tipo      = models.TextField()
     numeroBox = models.TextField(max_length=5, default='0')
     cip       = models.TextField()  # Usado para pagos
@@ -64,7 +67,9 @@ class Tickets(models.Model):
     intentosIngresoFallido  = models.PositiveIntegerField(blank=True, null=True, default=0)
     fechaHoraIngresoExitoso = models.DateTimeField(blank=True, null=True)
     intentosIngresoOK       = models.PositiveIntegerField(blank=True, null=True, default=0)
-
+    
+    codigoDescarga          = models.TextField(blank=True, null=True) # codigo Descarga
+    
     def __str__(self):
         return str(self.cip)+" "+str(self.tipo)+" "+str(self.ticket)
 
