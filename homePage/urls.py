@@ -13,6 +13,7 @@ urlpatterns = [
     #path('descargar_boleto/(?P<entrada_id>\d+)/$', views.descargar_boleto, name='descargar_boleto'),
     path("escaner/", views.escanerPage, name="escanerPage"),
     path('descargar_boletoQREncriptado/<entrada_id>/', views.descargar_boletoQREncriptado, name='descargar_boletoQREncriptado'),
+    path('qr', views.descargarQRPage, name='descargarQRPage'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
