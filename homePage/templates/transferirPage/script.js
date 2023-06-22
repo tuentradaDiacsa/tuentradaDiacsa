@@ -25,3 +25,11 @@ function enviarFormulario() {
         }
     });
 }
+
+function ActivacionBotonComprar() {
+    document.getElementById('celular').value = document.getElementById('celular').value.replace(/\D/g, '');
+    document.getElementById('dni').value = document.getElementById('dni').value.replace(/\D/g, '');
+    document.getElementById('pin').value = document.getElementById('pin').value.replace(/\D/g, '');
+    // document.getElementById('celular').setAttribute('value', document.getElementById('celular').value.replace(/\D/g, ''))
+}
+setInterval(ActivacionBotonComprar, 100);

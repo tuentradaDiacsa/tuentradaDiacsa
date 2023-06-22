@@ -30,21 +30,23 @@
                 Entrada Nro
             </div>
             <div class="containerInput0">
-                <input type="text" placeholder="Ingresa numero de entrada" id="numeroEntrada">
+                <input type="text" placeholder="Ingresa numero de entrada" id="numeroEntrada" pattern="\d{6}-\d{5}"
+                    maxlength="12">
                 <button type="button"> No recuerdo</button>
             </div>
             <div class="containeriTexto">
                 DNI
             </div>
             <div class="containerInput1">
-                <input type="text" placeholder="Ingresa tu DNI" id="dni">
+                <input type="text" placeholder="Ingresa tu DNI" maxlength="8" id="dni" inputmode="numeric">
             </div>
             <div class="containeriTexto">
                 Numero de contacto
             </div>
             <div class="containerInput2">
                 <p> +51 </p>
-                <input type="text" placeholder="Ingresa numero de contacto" id="celular">
+                <input type="text" placeholder="Ingresa numero de contacto" id="celular" inputmode="numeric"
+                    maxlength="9">
                 <button type="button" hidden>Validar</button>
             </div>
 
@@ -52,7 +54,8 @@
                 Pin secreto de seguridad
             </div>
             <div class="containerInput1">
-                <input type="text" placeholder="Ingresa su codigo de 6 a 10 digitos" id="pin">
+                <input type="text" placeholder="Ingresa su codigo de 6 a 10 digitos" id="pin" pattern="\d{6,10}"
+                    title="Debe contener entre 6 y 10 dígitos." minlength="6" maxlength="10" required>
             </div>
 
             <div class="containerButton0"> Presione en caso no recordar su pin secreto</div>
