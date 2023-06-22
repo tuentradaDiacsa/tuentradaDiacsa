@@ -61,5 +61,23 @@ function confirmarPre() {
 }
 
 function cancelarPre() {
-    location.reload(true)
+    $.ajax({
+        type: 'POST',
+        url: '/comprar/',  // Reemplaza esto con la URL de tu vista de Django
+        data: {
+            'comando': 'cancelarCompra',
+            'cip': $('#cip').val(),
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (response) {
+            if (response.estado == "Cancelado") {
+                alert("Compra cancelada")
+                location.reload(true)
+            }
+        },
+        error: function (xhr, status, error) {
+            // Lógica para manejar el error
+            console.error('Error:', error);
+        }
+    });
 }
