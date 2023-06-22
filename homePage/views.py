@@ -776,6 +776,13 @@ class comprarPage(View):
                 responseData = {"estado": "Confirmado"}
                 return JsonResponse(responseData)
 
+        elif request.POST.get("comando") == "cancelarCompra":
+                print("POST cancelarCompra")
+                cipRecibo = request.POST.get("cip")
+                devolverEntradas(cipRecibo)
+                responseData = {"estado": "Cancelado"}
+                return JsonResponse(responseData)
+
         return render(request, "comprarPage/comprarPage.html", datos)
 
 
