@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tuentrada Pe</title>
+    <title>Transferencia de entradas</title>
     <!--Custom CSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://unpkg.com/scrollreveal"></script>
@@ -18,36 +18,70 @@
 </head>
 
 <body>
-    <form id="comprarForm" action="{% url 'administrarPage' %}" method="post" autocomplete="off">
+<form name="transferirForm" id="transferirForm" method="post">
         {% csrf_token %}
         <div class="header">
-            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center;"
-                onclick=" javascript:location.reload(true)" />
+            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center; "onclick=" javascript:location.reload(true)" />
         </div>
-        <div class="todoEntradas">
-            <div class="seleccionarFechaBanner">Valida tu entrada</div>
-            <div class="contenedorPin" id="contenedorPin">
-                <div>Entrada Nro</div>
-                <input type="text" placeholder="Numero de ticket" maxlength="20" id="ticket" name="ticket"
-                    oninput="inicial()" autocomplete="off">
-            </div>
-            <div class="contenedorDNI" id="contenedorDNI">
-                <div>Primer apellido del cliente</div>
-                <input type="text" placeholder="Ingresar Apellido" maxlength="20" id="cip" name="cip"
-                    oninput="inicial()" autocomplete="nope">
+        <div class="containerTodo">
+            <div class="containerTitulo">Transfiere tu entrada</div>
 
+            <!-- <div class="containerTexto">
+                Tomate una foto con tu DNI para verificar tu identidad
             </div>
-            <div class="comprarBotonFinal" id="comprarBotonFinal" onclick="verificar()">Validar</div>
-            <div class="datosCompradorTexto" id="datosCompradorTexto">
-                <p id="resultado"> </p>
+
+            <div class="containerCamera">
+                <img src="{%static 'transferirPage/camera.png'%}" height="100%" width="100%" />
+            </div> -->
+
+            <div class="containeriTexto">
+                Entrada Nro
             </div>
-            <div class="notasAlFinal" id="notasAlFinal">
-                <p id="notas"> </p>
-                <p id="notas2"> </p>
+            <div class="containerInput0">
+                <input type="text" placeholder="Ingresa numero de entrada" id="numeroEntrada">
+                <button type="button"> No recuerdo</button>
             </div>
+            <div class="containeriTexto">
+                DNI
+            </div>
+            <div class="containerInput1">
+                <input type="text" placeholder="Ingresa tu DNI" id="dni">
+            </div>
+
+            <!-- <div class="containeriTexto">
+                Primer apellido del cliente
+            </div>
+            <div class="containerInput1"> -->
+            <!-- <input type="text" placeholder="Ingresa tu apellido">
+            </div> -->
+
+            <div class="containeriTexto">
+                Numero de contacto
+            </div>
+            <div class="containerInput2">
+                <p> +51 </p>
+                <input type="text" placeholder="Ingresa numero de contacto" id="celular">
+                <button type="button" hidden>Validar</button>
+            </div>
+
+            <div class="containeriTexto">
+                Pin secreto de seguridad
+            </div>
+            <div class="containerInput1">
+                <input type="text" placeholder="Ingresa su codigo de 6 a 10 digitos" id="pin">
+            </div>
+
+            <div class="containerButton0"> Presione en caso no recordar su pin secreto</div>
+            <div class="containerButton1" onclick="enviarFormulario()"> Transferir</div>
+            <div class="containerCodigo">
+                <p id="codigoTransferencia">Llenar datos</p> <i class="far fa-copy">
+                    <p>Copiar codigo </p>
+                </i>
+            </div>
+
         </div>
 
-        <div class="blankspace2"></div>
+
 
         <div class="footer">
             <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
