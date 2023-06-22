@@ -726,7 +726,7 @@ body {
         display: grid;
         visibility: visible;
         align-items: start;
-        height: 30px;
+        height: auto;
     }
 
     .containerInformacionEvento h3 {
