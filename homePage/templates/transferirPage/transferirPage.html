@@ -21,7 +21,7 @@
 <form name="transferirForm" id="transferirForm" method="post">
         {% csrf_token %}
         <div class="header">
-            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center; "onclick=" javascript:location.reload(true)" />
+            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center; " />
         </div>
         <div class="containerTodo">
             <div class="containerTitulo">Transfiere tu entrada</div>
@@ -72,7 +72,7 @@
             </div>
 
             <div class="containerButton0"> Presione en caso no recordar su pin secreto</div>
-            <div class="containerButton1" onclick="enviarFormulario()"> Transferir</div>
+            <div class="containerButton1"> Transferir</div>
             <div class="containerCodigo">
                 <p id="codigoTransferencia">Llenar datos</p> <i class="far fa-copy">
                     <p>Copiar codigo </p>
@@ -85,8 +85,7 @@
 
         <div class="footer">
             <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
-                style="display: flex; justify-self: center;  align-self: center;"
-                onclick="javascript:location.reload(true)" />
+                style="display: flex; justify-self: center;  align-self: center;/>
         </div>
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.5.1.js"
