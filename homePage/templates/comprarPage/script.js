@@ -31,6 +31,11 @@ function enviarSMS() {
         alert("El número de celular debe tener 9 dígitos.");
         return false;
     }
+    SMSenviado = true;
+    document.getElementById("buttonSMS").style.display = "none";
+    document.getElementById("buttonSMSenEspera").style.display = "block";
+    document.getElementById("containerCodigo").style.display = "flex"
+    document.getElementById("celular").readOnly = true
     $.ajax({
         type: 'POST',
         url: '/comprar/',
@@ -40,10 +45,10 @@ function enviarSMS() {
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (response) {
-            SMSenviado = true;
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
+            SMSenviado = false;
             console.error('Error:', error);
         }
     });
@@ -81,12 +86,15 @@ function ActBotSMSValidar() {
 }
 setInterval(ActBotSMSValidar, 999);
 
+onetime = false
 function enviarCodigo() {
     //console.log(document.getElementById("codigo").value.trim().length)
     if (document.getElementById("codigo").value.trim().length !== 6) {
         alert("El codigo de verificacion debe tener 6 caracteres.");
         return false; // Evita que el formulario se envíe
     }
+    if (onetime) return;
+    onetime = true
     $.ajax({
         type: 'POST',
         url: '/comprar/',  // Reemplaza esto con la URL de tu vista de Django
@@ -103,6 +111,7 @@ function enviarCodigo() {
             }
             else {
                 alert("El codigo ingresado no es correcto.");
+                onetime = false
             }
         },
         error: function (xhr, status, error) {
@@ -416,11 +425,13 @@ function calcularTotal() {
         document.getElementById("buttonComprar").style.display = "block"
     }
 }
-
+compraronetime = false
 function comprar() {
     if (!verificarDatosCompletos()) {
         return
     }
+    if (compraronetime) return;
+    compraronetime = true;
     var formulario = document.getElementById("comprarForm");
     for (var i = 1; i <= cantEntradasTipoSelec.length; i++) {
         var nuevoCampo = document.createElement("input");
