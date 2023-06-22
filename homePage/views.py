@@ -960,6 +960,7 @@ def administrarPage(request):
                 ticketNuevo.dni = dni
                 ticketNuevo.celular = celular
                 ticketNuevo.codigoTransferencia = ""
+                ticketNuevo.codigoDescarga = ""
                 ticketNuevo.correo = correo
                 ticketNuevo.pregunta1 = pregunta1
                 ticketNuevo.pregunta2 = pregunta2
