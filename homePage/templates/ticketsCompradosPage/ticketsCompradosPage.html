@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuentrada Pe</title>
+    <!--Custom CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="stylesheet" href="{% static 'ticketsCompradosPage/styles.css' %}">
+    <link rel="shortcut icon" href="{% static 'imagenes/favicon.png' %}">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+
+<body>
+    <form id="comprarForm" action="{% url 'comprarPage' %}" method="post">
+        {% csrf_token %}
+        <div class="header">
+            <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center;"
+                onclick="window.location.href = '/'" />
+        </div>
+
+        <div class="seleccionarFechaBanner">
+            <p>TICKETS COMPRADOS</p>
+        </div>
+        <div class="blankspace"></div>
+
+        <div class="containerTicketsDescargar">
+
+            {% for entrada in entradas %}
+            <div id="entradaContainer" class="containerDescarga">
+                <i class="fas fa-circle" style="font-size: 12px;"></i>
+                <p id="Nombre{{ forloop.counter }}" style="font-size: 12px;"><b>{{ entrada.tipo_ticket }} <br> N°
+                        {{entrada.numero_ticket}}</b></p>
+                <i id="download{{ entrada.numero_ticket}}" class="fas fa-download downloadIcono"
+                    style="font-size: 20px; margin-left: 15px;"
+                    data-url="{% url 'descargar_boleto' entrada.numero_ticket %}"
+                    onclick="download2('{{ entrada.numero_ticket}}', '{{ forloop.counter }}')"></i>
+            </div>
+            {% endfor %}
+
+            <!--
+            <div class="container3Items">
+                <ul>
+                    
+                    {% for entrada in entradas %}
+                    <li>
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Entrada {{ entrada.numero_ticket }}           
+                        </div>
+                        <div class="card-body">
+                            Zona: {{ entrada.tipo_ticket }}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'descargar_boleto' entrada.numero_ticket %}" class="btn btn-primary" >Descargar Boleto {{ entrada.numero_ticket }}</a>
+                        </div>
+        
+                    </div>
+                </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            -->
+        </div>
+        <div class="footer">
+            <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
+        </div>
+        <!-- Scripts -->
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            var comprarPageUrl = "{% url 'comprarPage' %}";
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="{% static 'ticketsCompradosPage/script.js' %}"></script>
+    </form>
+
+    <script>
+        function download2(cadena, contador) {
+            console.log(cadena.toString());
+
+            // Redirigir a otra URL
+            console.log('download' + cadena.toString());
+            var url = document.getElementById('download' + cadena.toString()).getAttribute('data-url');
+            //window.location.href = url;
+
+
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+
+            var iframeDocument = iframe.contentWindow.document;
+
+            // Cargar el contenido HTML de la URL en el iframe
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    iframeDocument.open();
+                    iframeDocument.write(xhr.responseText);
+                    iframeDocument.close();
+                    iframeDocument.querySelector('style').textContent += '@page { size: 210mm 460mm; }';
+                    // Imprimir el contenido del iframe
+                    iframe.onload = function () {
+                        // Imprimir el contenido del iframe una vez cargado completamente
+                        iframe.contentWindow.print();
+                    };
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>

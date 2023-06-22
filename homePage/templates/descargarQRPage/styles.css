@@ -1,0 +1,149 @@
+:root {
+    --red: #FF0043;
+    --white: #ffffff;
+    --verde: #07A781;
+    --morado: #7643F6;
+    --negro: #000000;
+    --gris: #858484;
+    --yelow: #d9e806;
+    --azul: #01A0E2;
+    --rosado: #EC1074;
+    --naraja: #F9970E;
+}
+
+
+.header {
+    background: linear-gradient(to right, var(--red), var(--negro));
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    height: 45px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 9999;
+}
+
+.footer {
+    background: linear-gradient(to right, var(--red), var(--negro));
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    height: 45px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    grid-template-columns: 1fr;
+    display: grid;
+    justify-content: right;
+}
+
+body {
+    margin: 0;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    width: 100%;
+    font-size: 30px;
+    font-family: "Poppins", sans-serif;
+}
+
+.containerTodo {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 25%;
+    width: 100%;
+}
+
+.containerTitulo {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    border-radius: 12px;
+    border-color: var(--red);
+    background-color: var(--red);
+    color: var(--white);
+    border-width: 2px;
+    border-style: solid;
+}
+
+.containerInput {
+    margin-top: 20px;
+    display: grid;
+    width: 100%;
+}
+
+.containerInput p {
+    margin: 0;
+    font-size: 0.8em;
+    width: 100%;
+}
+
+.containerInput input {
+    margin: 0;
+    font-size: 0.8em;
+    height: 40px;
+    text-align: center;
+}
+
+.containerBoton {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    width: 100%;
+}
+
+.containerBoton button {
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.8em;
+    background-color: var(--white);
+    color: var(--red);
+    border-color: var(--red);
+
+}
+
+.containerBoton button:hover {
+    background-color: var(--red);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.containerBoton button:active {
+    opacity: 0.5;
+}
+
+.containerRespuesta {
+    margin-top: 30px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    border-radius: 12px;
+    border-color: var(--morado);
+    background-color: var(--morado);
+    color: var(--white);
+    border-width: 2px;
+    border-style: solid;
+}
+
+
+@media (max-width:1400px) {
+    .containerTodo {
+        grid-template-columns: 40%;
+    }
+}
+
+@media (max-width:900px) {
+    .containerTodo {
+        grid-template-columns: 60%;
+    }
+}
+
+@media (max-width:600px) {
+    .containerTodo {
+        grid-template-columns: 90%;
+    }
+}

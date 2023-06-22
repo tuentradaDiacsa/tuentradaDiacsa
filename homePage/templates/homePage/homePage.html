@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuentrada Pe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static  'homePage/styles.css' %}">
+</head>
+
+<body>
+    <div class="header">
+        <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center;"
+            onclick=" javascript:location.reload(true)" />
+    </div>
+    <div class="containerBotones">
+        <a href="{% url 'comprarPage' %}">Comprar entradas</a>
+        <a href="{% url 'administrarPage' %}">Administrar entradas</a>
+    </div>
+
+    <div class="containerBanner">
+        <div class="containerBanner1">
+            <img src="{%static 'imagenes/footerlogo.png'%}" />
+        </div>
+        <div class="containerBanner2">
+            <p>Conócenos</p>
+            <p>Libro de reclamaciones</p>
+        </div>
+        <div class="containerBanner3">
+            <div class="containerReferencias">
+                <a href="#">Acerca de nosotros</a>
+                <a href="#">Preguntas frecuentes</a>
+                <a href="#">Terminos y condiciones</a>
+                <a href="#">Politica de privacidad</a>
+            </div>
+            <div class="containerImagen">
+                <img src="{%static 'imagenes/libro.png' %}" />
+            </div>
+        </div>
+        <div class="containerBanner4">
+            <p>Contactanos</p>
+            <div class="containerContacto">
+                <img src="{%static 'imagenes/whatsapp.png' %}" />
+                <img src="{%static 'imagenes/telegram.png' %}" />
+                <img src="{%static 'imagenes/correo.png' %}" />
+            </div>
+        </div>
+    </div>
+
+    <div class="containerRedes">
+        <p>Siguenos</p>
+        <div class="containerRedesLogos">
+            <div class="containerRed">
+                <img src="{%static 'imagenes/facebook.png' %}" />
+            </div>
+            <div class="containerRed">
+                <img src="{%static 'imagenes/instagram.png' %}" />
+            </div>
+            <div class="containerRed">
+                <img src="{%static 'imagenes/linkedin.png' %}" />
+            </div>
+            <div class="containerRed">
+                <img src="{%static 'imagenes/twitter.png' %}" />
+            </div>
+            <div class="containerRed">
+                <img src="{%static 'imagenes/youtube.png' %}" />
+            </div>
+        </div>
+
+        <div class="footer">
+            <img src="{% static 'imagenes/footerlogo.png' %}" height="30px"
+                style="display: flex; justify-self: center;  align-self: center;"
+                onclick="javascript:location.reload(true)" />
+        </div>
+    </div>
+
+</body>
+
+</html>
