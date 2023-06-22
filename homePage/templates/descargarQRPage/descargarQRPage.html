@@ -24,7 +24,8 @@
             <div class="containerTitulo">Descarga tu entrada</div>
             <div class="containerInput">
                 <p># Ticket</p>
-                <input name="ticket" placeholder="Numero de ticket">
+                <input name="ticket" placeholder="Numero de ticket" maxlength="12" minlength="12" pattern="\d{6}-\d{5}"
+                    title="123456-12345" required>
             </div>
             <!-- <div class="containerInput">
                 <p>Codigo de seguridad</p>
@@ -32,12 +33,13 @@
             </div> -->
             <div class="containerInput">
                 <p>Codigo de descarga</p>
-                <input name="descarga" placeholder="Codigo de descarga">
+                <input name="descarga" placeholder="Codigo de descarga" maxlength="8" minlength="8" id="descarga"
+                    required>
             </div>
 
             <div class="containerInput">
                 <p>PIN</p>
-                <input name="pin" placeholder="PIN">
+                <input name="pin" placeholder="PIN" maxlength="10" id="pin" inputmode="numeric">
             </div>
             <div class="containerBoton">
                 <button type="submit" onclic>DESCARGAR</button>
