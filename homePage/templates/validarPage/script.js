@@ -57,3 +57,11 @@ function inicial() {
     document.getElementById("datosCompradorTexto").style.display = "flex"
     document.getElementById("notasAlFinal").style.display = "none"
 }
+
+function ActivacionBotonComprar() {
+
+    document.getElementById('cip').value = document.getElementById('cip').value.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
+
+    // document.getElementById('celular').setAttribute('value', document.getElementById('celular').value.replace(/\D/g, ''))
+}
+setInterval(ActivacionBotonComprar, 100);
