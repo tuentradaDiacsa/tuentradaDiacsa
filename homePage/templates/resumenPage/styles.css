@@ -524,7 +524,7 @@ body {
         justify-content: center;
         margin-left: -10%;
         grid-template-columns: 80%;
-        grid-template-rows: 450px auto auto;
+        grid-template-rows: 500px auto auto;
         grid-column-gap: 0px;
         grid-row-gap: 0px;
 
@@ -715,6 +715,7 @@ body {
         display: grid;
         visibility: visible;
         width: 112%;
+        height: auto;
     }
 
     .columnaEntradas img {
@@ -726,7 +727,7 @@ body {
         display: grid;
         visibility: visible;
         align-items: start;
-        height: auto;
+        height: 250px;
     }
 
     .containerInformacionEvento h3 {
