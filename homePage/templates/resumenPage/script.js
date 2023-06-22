@@ -49,6 +49,7 @@ function confirmarPre() {
             }
             if (response.estado == "Timeout") {
                 alert("Se acabo su tiempo de espera")
+                location.reload(true)
             }
             console.log(response)
         },
