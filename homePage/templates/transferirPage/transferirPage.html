@@ -18,67 +18,13 @@
 </head>
 
 <body>
-<form name="transferirForm" id="transferirForm" method="post">
+    <form name="transferirForm" id="transferirForm" method="post">
         {% csrf_token %}
         <div class="header">
             <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center; " />
         </div>
         <div class="containerTodo">
             <div class="containerTitulo">Transfiere tu entrada</div>
-
-            <!-- <div class="containerTexto">
-                Tomate una foto con tu DNI para verificar tu identidad
-            </div>
-
-            <div class="containerCamera">
-                <img src="{%static 'transferirPage/camera.png'%}" height="100%" width="100%" />
-            </div> -->
-
-            <div class="containeriTexto">
-                Entrada Nro
-            </div>
-            <div class="containerInput0">
-                <input type="text" placeholder="Ingresa numero de entrada" id="numeroEntrada">
-                <button type="button"> No recuerdo</button>
-            </div>
-            <div class="containeriTexto">
-                DNI
-            </div>
-            <div class="containerInput1">
-                <input type="text" placeholder="Ingresa tu DNI" id="dni">
-            </div>
-
-            <!-- <div class="containeriTexto">
-                Primer apellido del cliente
-            </div>
-            <div class="containerInput1"> -->
-            <!-- <input type="text" placeholder="Ingresa tu apellido">
-            </div> -->
-
-            <div class="containeriTexto">
-                Numero de contacto
-            </div>
-            <div class="containerInput2">
-                <p> +51 </p>
-                <input type="text" placeholder="Ingresa numero de contacto" id="celular">
-                <button type="button" hidden>Validar</button>
-            </div>
-
-            <div class="containeriTexto">
-                Pin secreto de seguridad
-            </div>
-            <div class="containerInput1">
-                <input type="text" placeholder="Ingresa su codigo de 6 a 10 digitos" id="pin">
-            </div>
-
-            <div class="containerButton0"> Presione en caso no recordar su pin secreto</div>
-            <div class="containerButton1"> Transferir</div>
-            <div class="containerCodigo">
-                <p id="codigoTransferencia">Llenar datos</p> <i class="far fa-copy">
-                    <p>Copiar codigo </p>
-                </i>
-            </div>
-
         </div>
 
 
