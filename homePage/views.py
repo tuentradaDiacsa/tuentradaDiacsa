@@ -1003,7 +1003,7 @@ def escanerPage(request):
                 entrada.save()
                 responseData = {
                     "estado": "Entrada usada",
-                    "fecha": entrada.fechaHoraIngresoExitoso.astimezone(pytz.timezone('America/New_York')),
+                    "fecha": entrada.fechaHoraIngresoExitoso.astimezone(pytz.timezone('America/Lima')),
                 }
                 return JsonResponse(responseData)
             else:
