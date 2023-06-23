@@ -1048,3 +1048,6 @@ def descargarQRPage(request):
             responseData = {"estado": "¡¡Datos invalidos!!"}
             return render(request, "descargarQRPage/descargarQRPage.html", responseData)
     return render(request, "descargarQRPage/descargarQRPage.html", responseData)
+    
+def loaderio_verification(request):
+    return HttpResponse("loaderio-068c49c7628e466db6843e532472ccfa")
