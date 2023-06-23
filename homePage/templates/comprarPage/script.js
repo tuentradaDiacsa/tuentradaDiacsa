@@ -556,21 +556,21 @@ function seleccionBox(seleccionado) {
                 }
                 else {
                     console.log(seleccionado)
-                    if (1 <= seleccionado && seleccionado <= 18 && 1 <= i && i <= 18) {
+                    if (1 <= seleccionado && seleccionado <= 18 && 0 <= i && i <= 17) {
                         console.log("boxes 1")
                         console.log("box" + (i + 1).toString())
                         document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
                         document.getElementById("box" + (i + 1).toString()).classList.add("boxDesocupado")
 
                     }
-                    if (19 <= seleccionado && seleccionado <= 23 && 19 <= i && i <= 23) {
+                    if (19 <= seleccionado && seleccionado <= 23 && 18 <= i && i <= 22) {
                         console.log("boxes 2")
                         console.log("box" + (i + 1).toString())
                         document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
                         document.getElementById("box" + (i + 1).toString()).classList.add("boxDesocupado")
                     }
 
-                    if (24 <= seleccionado && seleccionado <= 28 && 24 <= i && i <= 28) {
+                    if (24 <= seleccionado && seleccionado <= 28 && 23 <= i && i <= 27) {
                         console.log("boxes 3")
                         console.log("box" + (i + 1).toString())
                         document.getElementById("box" + (i + 1).toString()).classList.remove("boxElegido")
