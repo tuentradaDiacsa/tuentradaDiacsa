@@ -25,17 +25,15 @@ function soloNumeros(event) {
     return true;
 }
 
+onetimeenviarsms = false
 function enviarSMS() {
     //console.log(document.getElementById("celular").value.trim().length)
     if (document.getElementById("celular").value.trim().length !== 9) {
         alert("El número de celular debe tener 9 dígitos.");
         return false;
     }
-    SMSenviado = true;
-    document.getElementById("buttonSMS").style.display = "none";
-    document.getElementById("buttonSMSenEspera").style.display = "block";
-    document.getElementById("containerCodigo").style.display = "flex"
-    document.getElementById("celular").readOnly = true
+    if(onetimeenviarsms) return
+    onetimeenviarsms = true
     $.ajax({
         type: 'POST',
         url: '/comprar/',
@@ -45,10 +43,12 @@ function enviarSMS() {
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (response) {
+            SMSenviado = true;
         },
         error: function (xhr, status, error) {
             // Lógica para manejar el error
             SMSenviado = false;
+            onetimeenviarsms = false
             console.error('Error:', error);
         }
     });
