@@ -415,7 +415,7 @@ class comprarPage(View):
                 box1 = request.POST.get("boxes1")  # Box Izquierdo 4
                 box2 = request.POST.get("boxes2")  # Box Derecho Tipo 5
                 box3 = request.POST.get("boxes3")  # Box Alimanha Tipo 6
-                cip = generaCIP(6)
+                cip = generaCIP(9)
                 arregloEntradas1 = request.POST.get("cantidadEntradas1")
                 arregloEntradas2 = request.POST.get("cantidadEntradas2")
                 arregloEntradas3 = request.POST.get("cantidadEntradas3")
