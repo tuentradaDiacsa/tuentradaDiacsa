@@ -32,7 +32,7 @@ function enviarSMS() {
         alert("El número de celular debe tener 9 dígitos.");
         return false;
     }
-    if(onetimeenviarsms) return
+    if (onetimeenviarsms) return
     onetimeenviarsms = true
     $.ajax({
         type: 'POST',
@@ -75,6 +75,7 @@ function ActBotSMSValidar() {
         if (tiempo <= 0) {
             SMSenviado = false;
             tiempo = 60;
+            onetimeenviarsms = false;
         }
     }
     else {
@@ -156,10 +157,16 @@ function verificarDatosCompletos() {
         alert("Falta ingresar su nombre completo")
         return false
     }
-    if (document.getElementById("pin").value.length < 3) {
-        alert("Falta ingresar su pin")
+    if (document.getElementById("pin").value.length < 6) {
+        alert("Falta ingresar su pin (6 digitos minimo)")
         return false
     }
+
+    if (CaracteresRepetidosConsecutivos(document.getElementById("pin").value.toString())) {
+        alert("El PIN no puede tener numeros repetidos o consecutivos (111) o (1234)")
+        return false;
+    }
+
     if (!document.getElementById("Privacidad").checked) {
         alert("Debe aceptar la politica de privacidad")
         return false
@@ -177,6 +184,34 @@ function verificarDatosCompletos() {
     document.getElementById("buttonContinuar").style.display = "none"
     document.getElementById("buttonContinuar_1").style.display = "flex"
     return true
+}
+
+function CaracteresRepetidosConsecutivos(str) {
+    var consecutivos = 0;
+    for (var i = 1; i < str.length; i++) {
+        if (parseInt(str[i]) == parseInt(str[i - 1]) + 1) {
+            consecutivos++
+        }
+        else consecutivos = 0
+        if (consecutivos >= 3) return true;
+    }
+    consecutivos = 0;
+    for (var i = 1; i < str.length; i++) {
+        if (parseInt(str[i]) == parseInt(str[i - 1]) - 1) {
+            consecutivos++
+        }
+        else consecutivos = 0
+        if (consecutivos >= 3) return true;
+    }
+    consecutivos = 0;
+    for (var i = 1; i < str.length; i++) {
+        if (parseInt(str[i]) == parseInt(str[i - 1])) {
+            consecutivos++
+        }
+        else consecutivos = 0
+        if (consecutivos >= 3) return true;
+    }
+    return false;
 }
 
 function continuar() {
@@ -227,10 +262,16 @@ function ActivacionBotonComprar() {
 setInterval(ActivacionBotonComprar, 100);
 
 function verificarDatosOpcional() {
-    if (document.getElementById("correo").value.length < 12) {
+    if (document.getElementById("correo").value.length < 12 || !document.getElementById("correo").value.toString().includes('@') || !document.getElementById("correo").value.toString().includes('.')) {
         alert("Ingrese un correo valido")
         return
     }
+
+    if (document.getElementById("correo2").value != document.getElementById("correo").value) {
+        alert("Los correos ingresados deben coincidir")
+        return
+    }
+
     if (document.getElementById("respuesta1").value.length < 3) {
         alert("Ingresar respuesta 1 valida")
         return
@@ -245,6 +286,8 @@ function verificarDatosOpcional() {
         alert("Ingresar respuesta 3 valida")
         return
     }
+
+
 
     document.getElementById("buttonContinuarOpcional").style.display = "none"
     document.getElementById("buttonContinuarOpcional_1").style.display = "flex"
