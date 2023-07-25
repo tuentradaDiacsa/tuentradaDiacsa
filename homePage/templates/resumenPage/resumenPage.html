@@ -28,6 +28,7 @@
             <img src="{% static 'imagenes/headerlogo.png' %}" style="height: 30px; margin-left: 5%; align-self: center;"
                 onclick="window.location.href = '/'" />
         </div>
+
         <div class="resumenCompraBanner" id="resumenCompraBanner">
             <p>RESUMEN DE COMPRA</p>
         </div>
@@ -61,11 +62,19 @@
                     </div>
 
                 </div>
+
+                <div class="TimerClass">
+                    <i class="fas fa-clock"></i>
+                    <p id="timeout" name="timeout">9:59</p>
+                </div>
+
                 <div class="containerConfirmarCancelar" id="containerConfirmarCancelar">
                     <div class="ConfirmarBoton" onclick="confirmarPre()">CONFIRMAR</div>
                     <div class="CancelarBoton" onclick="cancelarPre()">CANCELAR</div>
                     <input hidden id="boton" name="boton" value="">
                 </div>
+
+
             </div>
             <div class="dummy"></div>
             <div class="columnaPago" id="columnaPago">

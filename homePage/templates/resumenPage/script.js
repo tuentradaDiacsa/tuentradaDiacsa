@@ -1,4 +1,18 @@
 
+var Minutos = 10
+var Segundos = 0
+function DisminuirTimeout() {
+    Segundos = Segundos - 1
+    if (Segundos <= -1 && Minutos > 0) {
+        Segundos = 59
+        Minutos = Minutos - 1
+    } else if (Segundos <= -1 && Minutos <= 0) {
+        return;
+    }
+    document.getElementById("timeout").innerText = Minutos.toString().padStart(2, '0') + ":" + Segundos.toString().padStart(2, '0')
+
+}
+setInterval(DisminuirTimeout, 1000);
 
 var precioEntradasTipoResumen = new Array(6)
 
@@ -46,6 +60,7 @@ function confirmarPre() {
             if (response.estado == "Confirmado") {
                 document.getElementById("columnaPago").style.display = "grid"
                 document.getElementById("containerConfirmarCancelar").style.display = "none"
+                document.getElementsByClassName("TimerClass")[0].style.display = "none";
             }
             if (response.estado == "Timeout") {
                 alert("Se acabo su tiempo de espera")

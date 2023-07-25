@@ -37,6 +37,8 @@
     justify-content: right;
 }
 
+
+
 body {
     margin: 0;
     padding: 0;
@@ -338,6 +340,33 @@ body {
 
 .mensajes {
     visibility: visible;
+}
+
+.TimerClass {
+    justify-self: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 40px;
+    width: 70%;
+    margin-left: 15%;
+    display: flex;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    background-color: var(--red);
+    border-radius: 12px;
+    border-width: 2px;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.TimerClass i {
+    color: var(--white);
+}
+
+.TimerClass p {
+    margin-left: 15px;
+    color: var(--white);
 }
 
 @media (pointer: coarse) or (max-width: 700px) {
