@@ -117,7 +117,7 @@ class Preguntas(models.Model):
 class smsValidacionCelular(models.Model):
     correlativo = models.AutoField(primary_key=True)
     celular = models.CharField(max_length=9)
-    codigoValidacion = models.CharField(max_length=6)
+    codigoValidacion = models.CharField(max_length=8, default="12345678")
     # Lo llena el script en la computadora
     fechaSolicitud = models.DateTimeField(blank=True, null=True)
     fechaEnvio = models.DateTimeField(blank=True, null=True)

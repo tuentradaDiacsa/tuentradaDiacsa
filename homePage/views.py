@@ -8,7 +8,7 @@ from homePage.models import (
     boxesRestante2,
     boxesRestante3,
 )
-from .codigoValidacion import generaCodigoValidacion
+from .codigoValidacion import generaCodigoValidacion, generaCodigoValidacionNumeros
 from .codigoValidacion import almacenaCelularValidador, buscarCodigoEnBaseDatos
 from .generaTickets import generaNumeroTicket
 from .generaCIP import generaCIP
@@ -312,7 +312,7 @@ class comprarPage(View):
                 print("Boton SMS presionado")
                 celular = request.POST.get("celular")
                 datos["celular"] = celular
-                codigoValidacion = generaCodigoValidacion(6)
+                codigoValidacion = generaCodigoValidacionNumeros(8)
                 if codigoValidacion == "":
                     print(
                         "Error!!! No se pudo generar codigo de validacion NO REPETIDO"
@@ -698,9 +698,10 @@ class comprarPage(View):
                     request.session["compra_redirect"] = "compra"
                     request.session["contexto"] = {"response": responseData}
                     return redirect(request.path)
-
+                cip2 = str(cip)
                 responseData = {
                     "cip": cip,
+                    "cip2": (cip2[0:3]+"-"+cip2[3:6]+"-"+cip2[6:9])
                 }
                 print(responseData)
 
