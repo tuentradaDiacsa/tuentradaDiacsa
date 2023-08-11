@@ -33,6 +33,7 @@ function copiarAlPortapapeles(texto) {
     document.execCommand('copy');
     document.body.removeChild(elementoTemporal);
 
+
     alert('Texto copiado al portapapeles: ' + texto);
 }
 

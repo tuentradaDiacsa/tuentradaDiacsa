@@ -90,8 +90,8 @@ setInterval(ActBotSMSValidar, 999);
 onetime = false
 function enviarCodigo() {
     //console.log(document.getElementById("codigo").value.trim().length)
-    if (document.getElementById("codigo").value.trim().length !== 6) {
-        alert("El codigo de verificacion debe tener 6 caracteres.");
+    if (document.getElementById("codigo").value.trim().length !== 8) {
+        alert("El codigo de verificacion debe tener 8 caracteres.");
         return false; // Evita que el formulario se envíe
     }
     if (onetime) return;
@@ -277,12 +277,12 @@ function verificarDatosOpcional() {
         return
     }
 
-    if (document.getElementById("respuesta2").value.length < 3) {
+    if (visibles >= 1 && document.getElementById("respuesta2").value.length < 3) {
         alert("Ingresar respuesta 2 valida")
         return
     }
 
-    if (document.getElementById("respuesta3").value.length < 3) {
+    if (visibles >= 2 && document.getElementById("respuesta3").value.length < 3) {
         alert("Ingresar respuesta 3 valida")
         return
     }
@@ -298,6 +298,22 @@ function verificarDatosOpcional() {
     document.getElementById("respuesta1").readOnly = true;
     document.getElementById("respuesta2").readOnly = true;
     document.getElementById("respuesta3").readOnly = true;
+    document.getElementById("AgregarPreguntas").readOnly = true;
+    document.getElementById("AgregarPreguntas").style.display = "none";
+}
+
+visibles = 0
+function AgregarPreguntaF() {
+    visibles = visibles + 1;
+    if (visibles == 1) {
+        document.getElementById("P2a").style.display = "flex"
+        document.getElementById("P2b").style.display = "flex"
+    }
+    else if (visibles == 2) {
+        document.getElementById("P3a").style.display = "flex"
+        document.getElementById("P3b").style.display = "flex"
+        document.getElementById("AgregarPregunta").style.display = "none"
+    }
 }
 
 var cantEntradasTipoSelec = new Array(6)

@@ -53,7 +53,7 @@ body {
 
 .containerBotones a {
     margin-top: 30px;
-    margin-left: 20%;
+    margin-left: 10%;
     display: flex;
     border-style: 2px;
     background-color: white;
@@ -62,7 +62,7 @@ body {
     color: var(--white);
     background-color: var(--red);
     border-radius: 12px;
-    width: 60%;
+    width: 80%;
     height: 50px;
     text-decoration: none;
     justify-content: center;
@@ -225,13 +225,18 @@ body {
 @media(min-width:600px) {
     body {
         margin-top: 60px;
-        margin-left: 20%;
-        margin-right: 20%;
+        margin-left: 10%;
+        margin-right: 10%;
         border-radius: 15px;
         border-color: var(--red);
         border-width: 2px;
         border-style: solid;
         margin-bottom: 60px;
+    }
+
+    .containerBotones a {
+        width: 80%;
+        margin-left: 10%;
     }
 }
 

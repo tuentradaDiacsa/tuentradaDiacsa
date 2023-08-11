@@ -40,7 +40,7 @@
             </div>
             <div class="containerInput1" id="containerCodigo">
                 <p></p>
-                <input type="text" placeholder="Codigo de validacion" maxlength="6" pattern="[A-Z0-9]{6}"
+                <input type="text" placeholder="Codigo de validacion" maxlength="8" pattern="[A-Z0-9]{8}"
                     value="{{ codigo }}" id="codigo" name="codigo" inputmode="text">
                 <button type="button" id="buttonValidar" onclick="enviarCodigo()">Verificar</button>
             </div>
@@ -116,7 +116,7 @@
                 <button type="button">Validar</button>
             </div> -->
             <div class="containeriText">Preguntas de seguridad</div>
-            <div class="containerInput7">
+            <div class="containerInput7" id="pregunta1div">
                 <select id="pregunta1Sel" name="mi_combobox" placeholder="Pregunta de seguridad"
                     onchange="preguntaseleccionada()">
                     {% for pregunta in preguntas %}
@@ -128,7 +128,7 @@
                 <input type="text" placeholder="Respuesta a la pregunta 1" maxlength="59" id="respuesta1"
                     name="respuesta1">
             </div>
-            <div class="containerInput7">
+            <div class="containerInput7" id="P2a" style="display:none;">
                 <select id="pregunta2Sel" name="mi_combobox" placeholder="Pregunta de seguridad"
                     onchange="preguntaseleccionada()">
                     {% for pregunta in preguntas %}
@@ -136,11 +136,11 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="containerInput3">
+            <div class="containerInput3" style="display: none;" id="P2b">
                 <input type="text" placeholder="Respuesta a la pregunta 2" maxlength="59" id="respuesta2"
                     name="respuesta2">
             </div>
-            <div class="containerInput7">
+            <div class="containerInput7" id="P3a" style="display:none;">
                 <select id="pregunta3Sel" name="mi_combobox" placeholder="Pregunta de seguridad"
                     onchange="preguntaseleccionada()">
                     {% for pregunta in preguntas %}
@@ -148,9 +148,13 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="containerInput3">
+            <div class="containerInput3" style="display:none;" id="P3b">
                 <input type="text" placeholder="Respuesta a la pregunta 3" maxlength="59" id="respuesta3"
                     name="respuesta3">
+            </div>
+            <div style="display: flex;align-content: center;flex-wrap: wrap;flex-direction: column; width: 100%;">
+                <button type="button" class="AgregarPregunta" id="AgregarPregunta" onclick="AgregarPreguntaF()">Agregar
+                    pregunta</button>
             </div>
             <div class="containerInput8">
                 <button type="button" id="buttonContinuarOpcional" onclick="verificarDatosOpcional()">Continuar</button>

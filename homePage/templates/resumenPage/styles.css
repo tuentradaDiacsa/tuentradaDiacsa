@@ -1,4 +1,4 @@
-:root {
+containerCIPMonto:root {
     --red: #FF0043;
     --white: #ffffff;
     --verde: #07A781;
@@ -263,11 +263,11 @@ body {
     height: 35px;
     border-radius: 10px;
     font-size: 15px;
-    width: 290px;
+    width: 310px;
 }
 
 .containerCuenta1 {
-    width: 270px;
+    width: 310px;
 }
 
 .containerConfirmarCancelar {
@@ -335,7 +335,7 @@ body {
     justify-content: center;
     display: flex;
     margin-top: -20px;
-    font-size: 25px;
+    font-size: 20px;
 }
 
 .mensajes {
