@@ -20,6 +20,21 @@ def generaCodigoValidacion(longitud):
         codigo = ""
     return codigo
 
+def generaCodigoValidacionNumeros(longitud):
+    existe = True
+    intentos = 0
+    while (existe == True and intentos < 10):
+        intentos = intentos + 1
+        caracteres = string.digits  # Letras mayúsculas y dígitos
+        codigo = ''.join(random.choice(caracteres) for _ in range(longitud))
+        if smsValidacionCelular.objects.filter(codigoValidacion=codigo).exists():
+            existe = True
+        else:
+            existe = False
+    if existe == True:
+        codigo = ""
+    return codigo
+
 
 def almacenaCelularValidador(celular, codigoValidacion, estado):
     registro = smsValidacionCelular()
